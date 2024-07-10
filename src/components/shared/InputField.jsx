@@ -1,7 +1,8 @@
 // components/InputField.js
 import React from 'react';
+import { BiSolidErrorAlt } from "react-icons/bi";
 
-const InputField = ({ label, type = 'text', name, value, onChange, placeholder, error, icon }) => {
+const InputField = ({ label, type = 'text', name, value, onChange, placeholder, error, icon, emailSuccess }) => {
   return (
     <div className="mb-4">
       <label className="block text-sm font-semibold mb-2" htmlFor={name}>
@@ -15,8 +16,8 @@ const InputField = ({ label, type = 'text', name, value, onChange, placeholder, 
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-            error ? 'border-red-500' : 'border-gray-300'
+          className={`w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none   ${
+            error ? 'border-custom-red' : 'border-black'
           }`}
         />
         {icon && (
@@ -25,7 +26,14 @@ const InputField = ({ label, type = 'text', name, value, onChange, placeholder, 
           </span>
         )}
       </div>
-      {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+      {error && <div className='flex justify-start items-start gap-1 mt-2'>
+        <BiSolidErrorAlt className=''/>
+        <p className="text-custom-red text-xs ">{error}</p>
+        </div>}
+      {emailSuccess && <div className='flex justify-start items-start gap-1 mt-2'>
+        <BiSolidErrorAlt className=''/>
+        <p className="text-custom-green text-xs ">Your Email is available.</p>
+        </div>}
     </div>
   );
 };
