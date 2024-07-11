@@ -1,12 +1,13 @@
 import Button from "@/components/shared/button";
 import accountActivation from "@/components/authComponent/AccountActivation";
 import { FaUserEdit, FaKey, FaTrashAlt, FaBell } from 'react-icons/fa';
-import Abd from "@/components/authComponent/Abd";
 import AccountActivation from "@/components/authComponent/AccountActivation";
+import Logo from "@/components/shared/Logo";
 
 export default function Home() {
   return (
    <main>
+    
     <AccountActivation/>                                      
   <div className="p-4 space-y-4">
     
