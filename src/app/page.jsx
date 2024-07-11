@@ -1,10 +1,15 @@
 import Button from "@/components/shared/button";
+import accountActivation from "@/components/authComponent/AccountActivation";
 import { FaUserEdit, FaKey, FaTrashAlt, FaBell } from 'react-icons/fa';
+import Abd from "@/components/authComponent/Abd";
+import AccountActivation from "@/components/authComponent/AccountActivation";
 
 export default function Home() {
   return (
    <main>
+    <AccountActivation/>                                      
   <div className="p-4 space-y-4">
+    
       <Button variant="primary" icon={<FaBell />}>Create Account</Button>
       <div className="flex space-x-2">
         <Button variant="secondary" icon={<FaUserEdit />}>Edit Profile</Button>
@@ -14,6 +19,7 @@ export default function Home() {
       <div className="flex space-x-2">
         <Button variant="default">Cancel</Button>
         <Button variant="save">Save</Button>
+        <Button variant="save">UnSave</Button>
       </div>
     </div>
    </main>

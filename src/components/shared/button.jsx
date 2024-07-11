@@ -3,9 +3,9 @@
 import React from 'react';
 
 const Button = ({ children, type = 'button', variant = 'default', onClick = () => {}, icon, className = '', ...props }) => {
-  const baseStyles = 'rounded-full text-sm font-semibold py-2 px-4 flex items-center justify-center';
+  const baseStyles = 'flex items-center justify-center';
   const variantStyles = {
-    primary: 'bg-orange-500 hover:bg-orange-600 text-white',
+    primary: 'bg-custom-orange-1 hover:bg-custom-orange-2 text-white',
     secondary: 'bg-teal-700 hover:bg-teal-800 text-white',
     danger: 'bg-red-600 hover:bg-red-700 text-white',
     default: 'bg-blue-800 hover:bg-blue-900 text-white',
