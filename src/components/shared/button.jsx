@@ -5,11 +5,15 @@ import React from 'react';
 const Button = ({ children, type = 'button', variant = 'default', onClick = () => {}, icon, className = '', ...props }) => {
   const baseStyles = 'flex items-center justify-center';
   const variantStyles = {
-    primary: 'bg-custom-orange-1 hover:bg-custom-orange-2 text-white',
-    secondary: 'bg-teal-700 hover:bg-teal-800 text-white',
-    danger: 'bg-red-600 hover:bg-red-700 text-white',
-    default: 'bg-blue-800 hover:bg-blue-900 text-white',
-    save: 'bg-teal-600 hover:bg-teal-700 text-white',
+    primary: 'bg-custom-orange-1 text-white',
+    secondary: 'bg-custom-teal text-white',
+    danger: 'bg-red-600 text-white',
+    default: 'bg-custom-dark-blue-1  text-white',
+    save: 'bg-custom-teal text-white',
+    cancel: 'bg-custom-dark-blue-2 text-white',
+    plain: 'bg-white text-custom-dark-blue-2',
+    closed: 'bg-custom-gray-3 text-white',
+    open: 'custom-ligt-blue-1 text-white'
   };
 
   const classes = `${baseStyles} ${variantStyles[variant]} ${className}`;

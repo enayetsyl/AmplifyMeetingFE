@@ -7,6 +7,7 @@ import logo from '../../../../public/logo.jpg';
 
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { BiSolidErrorAlt } from "react-icons/bi";
+import Logo from '@/components/shared/Logo';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -44,12 +45,12 @@ const Register = () => {
   return (
     <div>
       {/* Top div for lg*/}
-      <div className="hidden justify-center items-start lg:flex bg-white h-20">
+      <div className="hidden justify-center items-start lg:flex bg-white h-10">
         {/* left image div */}
-        <div className="flex-1 flex items-center w-full h-full ">
-          <Image src={logo} alt="logo" height={120} width={180} className='pl-10' />
+        <div className="flex-1 flex items-center w-full h-full">
+          <div className='pl-10 pt-8'><Logo/></div>
         </div>
-        <div className="flex-1 bg-custom-gray-2 h-20"></div>
+        <div className="flex-1 bg-custom-gray-2 h-10"></div>
       </div>
       {/* Top div for mobile */}
       <div className="lg:hidden bg-white flex justify-center items-center pt-10">

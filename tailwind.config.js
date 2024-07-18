@@ -15,6 +15,7 @@ module.exports = {
         'custom-orange-1': '#FF6600',
         'custom-dark-blue-1': '#00293C',
         'custom-dark-blue-2': '#031F3A',
+        'custom-ligt-blue-1': '#2976a5',
         'custom-pink': '#FF7E296E',
         'custom-light-blue-1': '#369CFF',
         'custom-light-blue-2': '#559FFB',
@@ -27,9 +28,13 @@ module.exports = {
         'custom-yellow': '#FCD860',
         'custom-orange-3': '#E39906',
         'custom-gray-5': '#A8A8A8',
+        'custom-gray-6': '#AFAFAF',
       },
       fontFamily: {
         montserrat: ['Montserrat', 'sans-serif'],
+      },
+      backgroundImage: {
+        'sidebar-gradient': 'linear-gradient(28deg, #FC6E15 0%, #031f3a 100%) 0% 0% no-repeat',
       },
     },
   },

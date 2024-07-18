@@ -7,3 +7,23 @@
 body {
   font-family: 'Montserrat', sans-serif;
 }
+
+.shadow_primary {
+  box-shadow: 0px 3px 19px #00000029;
+}
+.dashboard_sidebar_bg {
+  background:  linear-gradient(180deg, #D3D6D8 , #E5DCD6 ) 
+    no-repeat padding-box;
+}
+
+.profile_dropdown_shadow{
+  box-shadow: 0px 3px 6px #0000004A;
+}
+
+.user_info_div_shadow{
+  box-shadow: 0px 3px 6px #00000029;
+}
+
+.my_profile_main_section_shadow{
+  box-shadow: 0px 0px 26px #00000029;
+}

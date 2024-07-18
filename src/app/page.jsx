@@ -3,6 +3,7 @@ import accountActivation from "@/components/authComponent/AccountActivation";
 import { FaUserEdit, FaKey, FaTrashAlt, FaBell } from 'react-icons/fa';
 import AccountActivation from "@/components/authComponent/AccountActivation";
 import Logo from "@/components/shared/Logo";
+import Footer from "@/components/shared/Footer";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
         <Button variant="save">UnSave</Button>
       </div>
     </div>
+    <Footer/>
    </main>
   );
 }

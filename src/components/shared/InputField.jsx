@@ -27,7 +27,7 @@ const InputField = ({ label, type = 'text', name, value, onChange, placeholder, 
         )}
       </div>
       {error && <div className='flex justify-start items-start gap-1 mt-2'>
-        <BiSolidErrorAlt className=''/>
+        <BiSolidErrorAlt className='text-custom-red'/>
         <p className="text-custom-red text-xs ">{error}</p>
         </div>}
       {emailSuccess && <div className='flex justify-start items-start gap-1 mt-2'>
