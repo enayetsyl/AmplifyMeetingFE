@@ -11,32 +11,9 @@ import ViewModeratorModal from './ViewModeratorModal';
 import EditModeratorModal from './EditModeratorModal';
 
 const ModeratorTable = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
-  const [isModeratorModalOpen, setIsModeratorModalOpen] = useState(true);
-  const [isEditModeratorModalOpen, setIsEditModeratorModalOpen] = useState(true);
-  
-  const handleEditModeratorOpenModal = (moderator) => {
-    closeModal();
-    setIsEditModeratorModalOpen(true);
-  };
-
-  const handleEditModeratorCloseModal = () => {
-    setIsEditModeratorModalOpen(false);
-  };
-  const handleModeratorOpenModal = (moderator) => {
-    closeModal();
-    setIsModeratorModalOpen(true);
-  };
-
-  const handleModeratorCloseModal = () => {
-    setIsModeratorModalOpen(false);
-  };
-  const modalRef = useRef();
-
-  const moderators = [
-    // Array of moderator objects, extracted from the image
+  const [moderators, setModerators] = useState([
     {
+      id: 1,
       firstName: 'Juliet',
       lastName: 'Frazier',
       email: 'julietfrazier123@gmail.com',
@@ -45,6 +22,7 @@ const ModeratorTable = () => {
       action: 'Delete',
     },
     {
+      id: 2,
       firstName: 'Juliet',
       lastName: 'Frazier',
       email: 'julietfrazier123@gmail.com',
@@ -53,6 +31,7 @@ const ModeratorTable = () => {
       action: 'Delete',
     },
     {
+      id: 3,
       firstName: 'Juliet',
       lastName: 'Frazier',
       email: 'julietfrazier123@gmail.com',
@@ -61,6 +40,7 @@ const ModeratorTable = () => {
       action: 'Delete',
     },
     {
+      id: 4,
       firstName: 'Juliet',
       lastName: 'Frazier',
       email: 'julietfrazier123@gmail.com',
@@ -68,9 +48,15 @@ const ModeratorTable = () => {
       status: 'Active',
       action: 'Delete',
     },
+  ]);
 
-    // Add other moderator objects here...
-  ];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+  const [isModeratorModalOpen, setIsModeratorModalOpen] = useState(false);
+  const [isEditModeratorModalOpen, setIsEditModeratorModalOpen] = useState(false);
+  const [currentModerator, setCurrentModerator] = useState(null);
+
+  const modalRef = useRef();
 
   const renderStatus = (status) => {
     const statusStyles = {
@@ -81,9 +67,7 @@ const ModeratorTable = () => {
 
     return (
       <div className="flex justify-start">
-        <span
-          className={`w-20 text-[12px] text-center py-1 rounded-full ${statusStyles[status]}`}
-        >
+        <span className={`w-20 text-[12px] text-center py-1 rounded-full ${statusStyles[status]}`}>
           {status}
         </span>
       </div>
@@ -98,9 +82,30 @@ const ModeratorTable = () => {
     return actionVariants[action] || 'default';
   };
 
-  const toggleModal = (event) => {
+  const handleEditModeratorOpenModal = (moderator) => {
+    closeModal();
+    setCurrentModerator(moderator);
+    setIsEditModeratorModalOpen(true);
+  };
+
+  const handleEditModeratorCloseModal = () => {
+    setIsEditModeratorModalOpen(false);
+  };
+
+  const handleModeratorOpenModal = (moderator) => {
+    closeModal();
+    setCurrentModerator(moderator);
+    setIsModeratorModalOpen(true);
+  };
+
+  const handleModeratorCloseModal = () => {
+    setIsModeratorModalOpen(false);
+  };
+
+  const toggleModal = (event, moderator) => {
     const { top, left } = event.currentTarget.getBoundingClientRect();
     setModalPosition({ top, left });
+    setCurrentModerator(moderator);
     setIsModalOpen(!isModalOpen);
   };
 
@@ -126,6 +131,22 @@ const ModeratorTable = () => {
     };
   }, [isModalOpen]);
 
+  const handleSaveModerator = (updatedModerator) => {
+    setModerators((prevModerators) =>
+      prevModerators.map((moderator) =>
+        moderator.id === updatedModerator.id ? updatedModerator : moderator
+      )
+    );
+    setIsEditModeratorModalOpen(false);
+  };
+
+  const handleDeleteModerator = (moderatorId) => {
+    setModerators((prevModerators) =>
+      prevModerators.filter((moderator) => moderator.id !== moderatorId)
+    );
+   
+  };
+
   return (
     <div className="overflow-x-auto px-10 pt-10 w-full">
       <div className="border-[0.5px] border-custom-dark-blue-1 rounded-lg w-full">
@@ -142,10 +163,7 @@ const ModeratorTable = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200 rounded-lg w-full">
             {moderators.map((moderator, index) => (
-              <tr
-                key={index}
-                className="shadow-[0px_0px_26px_#00000029] w-full"
-              >
+              <tr key={index} className="shadow-[0px_0px_26px_#00000029] w-full">
                 <TableData>{moderator.firstName}</TableData>
                 <TableData>{moderator.lastName}</TableData>
                 <TableData>{moderator.email}</TableData>
@@ -155,50 +173,53 @@ const ModeratorTable = () => {
                   <Button
                     variant={getButtonVariant(moderator.action)}
                     className="w-16 text-center text-[12px] rounded-xl py-1"
+                    onClick={() => handleDeleteModerator(moderator.id)}
                   >
                     {moderator.action}
                   </Button>
-                  <BsThreeDotsVertical
-                    onClick={toggleModal}
-                    className="cursor-pointer"
-                  />
+                  <BsThreeDotsVertical onClick={(event) => toggleModal(event, moderator)} className="cursor-pointer" />
                 </td>
-                {isModalOpen && (
-                  <div
-                    ref={modalRef}
-                    className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg"
-                    style={{
-                      top: modalPosition.top + 20,
-                      left: modalPosition.left - 30,
-                    }}
-                  >
-                    <ul className="text-[12px]">
-                      <li
-                        className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-                        onClick={() => handleModeratorOpenModal(moderator)}
-                      >
-                        <FaUser />
-                        <span>View</span>
-                      </li>
-                        { isModeratorModalOpen && <ViewModeratorModal user={moderator} onClose={handleModeratorCloseModal}/>}
-                      <li
-                        className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-                        onClick={() => handleEditModeratorOpenModal(moderator)}
-                      >
-                        <RiPencilFill />
-                        <span>Edit</span>
-                      </li>
-                      { isEditModeratorModalOpen && <EditModeratorModal user={moderator} onClose={handleEditModeratorCloseModal}/>}
-                    </ul>
-                  </div>
-                )}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {isModalOpen && (
+        <div
+          ref={modalRef}
+          className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg"
+          style={{ top: modalPosition.top + 20, left: modalPosition.left - 30 }}
+        >
+          <ul className="text-[12px]">
+            <li
+              className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
+              onClick={() => handleModeratorOpenModal(currentModerator)}
+            >
+              <FaUser />
+              <span>View</span>
+            </li>
+            <li
+              className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
+              onClick={() => handleEditModeratorOpenModal(currentModerator)}
+            >
+              <RiPencilFill />
+              <span>Edit</span>
+            </li>
+          </ul>
+        </div>
+      )}
+      {isModeratorModalOpen && <ViewModeratorModal user={currentModerator} onClose={handleModeratorCloseModal} />}
+      {isEditModeratorModalOpen && (
+        <EditModeratorModal
+          user={currentModerator}
+          onClose={handleEditModeratorCloseModal}
+          onSave={handleSaveModerator}
+        />
+      )}
     </div>
   );
 };
 
 export default ModeratorTable;
+
+

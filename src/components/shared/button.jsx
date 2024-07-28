@@ -13,7 +13,8 @@ const Button = ({ children, type = 'button', variant = 'default', onClick = () =
     cancel: 'bg-custom-dark-blue-2 text-white',
     plain: 'bg-white text-custom-dark-blue-2',
     closed: 'bg-custom-gray-3 text-white',
-    open: 'custom-ligt-blue-1 text-white'
+    open: 'bg-custom-ligt-blue-1 text-white',
+    meeting: 'bg-custom-gray-7 text-black'
   };
 
   const classes = `${baseStyles} ${variantStyles[variant]} ${className}`;

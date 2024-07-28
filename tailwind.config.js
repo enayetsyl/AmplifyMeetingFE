@@ -29,6 +29,8 @@ module.exports = {
         'custom-orange-3': '#E39906',
         'custom-gray-5': '#A8A8A8',
         'custom-gray-6': '#AFAFAF',
+        'custom-gray-7': '#EAEAEA',
+        'custom-gray-8': '#EBEBEB',
       },
       fontFamily: {
         montserrat: ['Montserrat', 'sans-serif'],

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { CiSearch } from "react-icons/ci";
 
-const Search = ({ placeholder, onSearch }) => {
+const Search = ({ placeholder, onSearch, inputClassName, iconClassName }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleChange = (e) => {
@@ -17,9 +17,9 @@ const Search = ({ placeholder, onSearch }) => {
         placeholder={placeholder}
         value={searchTerm}
         onChange={handleChange}
-        className="w-full px-4 py-2 border rounded-lg pl-14 bg-[#eaeaea]"
+        className={`w-full px-4 py-2 border rounded-lg pl-14 bg-[#eaeaea] ${inputClassName}`}
       />
-      <div className='absolute top-1/2 left-1 -translate-y-1/2 bg-[#f3f4f5] rounded-lg p-2'>
+      <div className={`absolute top-1/2 left-1 -translate-y-1/2 bg-[#f3f4f5] rounded-lg p-2 ${iconClassName}`}>
       <CiSearch />
       </div>
     </div>
