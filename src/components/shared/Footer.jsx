@@ -6,7 +6,7 @@ const Footer = () => {
   return (
   <div>
     {/* for large screen */}
-      <div className='h-20 bg-custom-dark-blue-1 w-full lg:flex justify-center items-center space-x-4 hidden '>
+      <div className='h-20 bg-custom-dark-blue-1 w-full lg:flex justify-center items-center space-x-4 hidden z-10'>
       <div className="flex justify-center items-center gap-2">
         <FaEnvelope className="text-white"/> 
         <p className="text-white text-sm">info@amplifyresearch.com</p>
