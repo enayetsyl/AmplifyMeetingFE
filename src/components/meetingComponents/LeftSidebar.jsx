@@ -13,7 +13,7 @@ import LeftSidebarCloseUi from "./LeftSidebarCloseUi";
 const LeftSidebar = ({ users, setUsers }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("participantChat");
+  const [activeTab, setActiveTab] = useState("participantList");
   const [currentUser, setCurrentUser] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
   const [isWaiting, setIsWaiting] = useState([
@@ -24,15 +24,7 @@ const LeftSidebar = ({ users, setUsers }) => {
     {
       name: 'Mark Berg',
       image: userImage,
-    },
-    {
-      name: 'Brendan Steven',
-      image: userImage,
-    },
-    {
-      name: 'Mark Berg',
-      image: userImage,
-    },
+    }
   ])
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

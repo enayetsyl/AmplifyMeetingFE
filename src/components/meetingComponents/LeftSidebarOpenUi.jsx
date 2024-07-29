@@ -11,10 +11,12 @@ import userImage from "../../../public/user.jpg";
 import groupChatImage from "../../../public/group-chat.png";
 import { IoClose, IoRemoveCircle, IoSend } from 'react-icons/io5'
 import { MdInsertEmoticon, MdMoveDown } from 'react-icons/md'
+import RemoveUserModal from '../singleComponent/RemoveUserModal'
 
 const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUser, setCurrentUser, selectedChat, setSelectedChat, isWaiting, setIsWaiting, handleTabClick, chatParticipants}) => {
- 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false)
+  const [isModeratorPopupModalOpen, setIsModeratorPopupModalOpen] = useState(false);
+  const [userToRemove, setUserToRemove] = useState(null)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
  
   const modalRef = useRef()
@@ -24,15 +26,25 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
     // Write search functionality here
   };
 
-  const toggleModal = (event, user) => {
+  const toggleRemoveAndWaitingOptionModal = (event, user) => {
     const { top, left } = event.currentTarget.getBoundingClientRect();
     setModalPosition({ top, left });
     setCurrentUser(user);
-    setIsModalOpen(!isModalOpen);
+    setUserToRemove(user)
+    setIsModeratorPopupModalOpen(!isModeratorPopupModalOpen);
   };
 
+  const openRemoveUserModal = (event, user) => {
+    // console.log(event)
+    // console.log(user)
+    setUserToRemove(user)
+    setIsRemoveModalOpen(true)
+  }
+  const closeRemoveUserModal = () => {
+    setIsRemoveModalOpen(false);
+  };
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsModeratorPopupModalOpen(false);
   };
 
   const handleClickOutside = (event) => {
@@ -42,7 +54,7 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
   };
 
   useEffect(() => {
-    if (isModalOpen) {
+    if (isModeratorPopupModalOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -51,10 +63,12 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isModalOpen]);
+  }, [isModeratorPopupModalOpen]);
 
   const handleRemoveUser = (userId) => {
+    console.log('usedr id', userId)
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+    setIsRemoveModalOpen(false)
   };
 
   
@@ -149,12 +163,12 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
                       <IoMdMic />
                       <BsChatSquareDotsFill />
                       <BsThreeDotsVertical
-                        onClick={(event) => toggleModal(event, user)}
+                        onClick={(event) => toggleRemoveAndWaitingOptionModal(event, user)}
                         className="cursor-pointer"
                       />
                     </div>
                   ))}
-                  {isModalOpen && currentUser && (
+                  {isModeratorPopupModalOpen && currentUser && (
                     <div
                       ref={modalRef}
                       className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg w-44"
@@ -166,7 +180,7 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
                       <ul className="text-[12px]">
                         <li
                           className="py-2 px-2 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-                          onClick={() => handleRemoveUser(currentUser.id)}
+                          onClick={(e) => openRemoveUserModal(e, userToRemove)}
                         >
                           <IoRemoveCircle />
                           <span>Remove</span>
@@ -319,6 +333,13 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
                   ))}
                 </div>
               )}
+              {
+                isRemoveModalOpen && (<RemoveUserModal
+                onClose={closeRemoveUserModal}
+                handleRemoveUser={()=>handleRemoveUser(userToRemove.id)}
+                userToRemove={userToRemove}
+                />)
+              }
           </>
   )
 }
