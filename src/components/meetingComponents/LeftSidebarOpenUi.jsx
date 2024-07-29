@@ -12,11 +12,14 @@ import groupChatImage from "../../../public/group-chat.png";
 import { IoClose, IoRemoveCircle, IoSend } from 'react-icons/io5'
 import { MdInsertEmoticon, MdMoveDown } from 'react-icons/md'
 import RemoveUserModal from '../singleComponent/RemoveUserModal'
+import MoveToWaitingRoomModal from '../singleComponent/MoveToWaitingRoomModal'
 
 const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUser, setCurrentUser, selectedChat, setSelectedChat, isWaiting, setIsWaiting, handleTabClick, chatParticipants}) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false)
+  const [isMoveModalOpen, setIsMoveModalOpen] = useState(false)
   const [isModeratorPopupModalOpen, setIsModeratorPopupModalOpen] = useState(false);
   const [userToRemove, setUserToRemove] = useState(null)
+  const [userToMove, setUserToMove] = useState(null)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
  
   const modalRef = useRef()
@@ -35,14 +38,23 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
   };
 
   const openRemoveUserModal = (event, user) => {
-    // console.log(event)
-    // console.log(user)
     setUserToRemove(user)
     setIsRemoveModalOpen(true)
   }
   const closeRemoveUserModal = () => {
     setIsRemoveModalOpen(false);
   };
+
+  const openMoveUserModal = (event, user) => {
+    console.log('user in open move user modal', user)
+    setUserToMove(user)
+    setIsMoveModalOpen(true)
+  }
+  const closeMoveUserModal = () => {
+    setIsMoveModalOpen(false);
+  };
+
+
   const closeModal = () => {
     setIsModeratorPopupModalOpen(false);
   };
@@ -66,9 +78,13 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
   }, [isModeratorPopupModalOpen]);
 
   const handleRemoveUser = (userId) => {
-    console.log('usedr id', userId)
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
     setIsRemoveModalOpen(false)
+  };
+
+  const handleMoveUser = (userId) => {
+    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+    setIsMoveModalOpen(false)
   };
 
   
@@ -187,7 +203,7 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
                         </li>
                         <li
                           className="py-2 px-2 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-                          //  onClick={() => handleEditModeratorOpenModal(currentModerator)}
+                          onClick={(e) => openMoveUserModal(e, currentUser)}
                         >
                           <MdMoveDown />
                           <span>Move to Waiting Room</span>
@@ -338,6 +354,13 @@ const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUse
                 onClose={closeRemoveUserModal}
                 handleRemoveUser={()=>handleRemoveUser(userToRemove.id)}
                 userToRemove={userToRemove}
+                />)
+              }
+              {
+                isMoveModalOpen && (<MoveToWaitingRoomModal
+                onClose={closeMoveUserModal}
+                handleMoveUser={()=>handleMoveUser(userToMove.id)}
+                userToMove={userToMove}
                 />)
               }
           </>
