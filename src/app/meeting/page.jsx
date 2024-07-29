@@ -34,6 +34,8 @@ const page = () => {
     }, 
     
   ])
+
+  
   
   return (
     <div className='flex justify-center items-center bg-custom-gray-3'>
