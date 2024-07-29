@@ -12,35 +12,13 @@ import groupChatImage from "../../../public/group-chat.png";
 import { IoClose, IoRemoveCircle, IoSend } from 'react-icons/io5'
 import { MdInsertEmoticon, MdMoveDown } from 'react-icons/md'
 
-const LeftSidebarOpenUi = ({users, setUsers}) => {
-  const [activeTab, setActiveTab] = useState("participantChat");
+const LeftSidebarOpenUi = ({users, setUsers, activeTab, setActiveTab, currentUser, setCurrentUser, selectedChat, setSelectedChat, isWaiting, setIsWaiting, handleTabClick, chatParticipants}) => {
+ 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
-  const [currentUser, setCurrentUser] = useState(null);
-  const [selectedChat, setSelectedChat] = useState(null);
-  const [isWaiting, setIsWaiting] = useState([
-    {
-      name: 'Brendan Steven',
-      image: userImage,
-    },
-    {
-      name: 'Mark Berg',
-      image: userImage,
-    },
-    {
-      name: 'Brendan Steven',
-      image: userImage,
-    },
-    {
-      name: 'Mark Berg',
-      image: userImage,
-    },
-  ])
+ 
   const modalRef = useRef()
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    setSelectedChat(null);
-  };
+ 
 
   const handleSearch = () => {
     // Write search functionality here
@@ -79,84 +57,12 @@ const LeftSidebarOpenUi = ({users, setUsers}) => {
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
   };
 
-  const chatParticipants = [
-    {
-      id: 1,
-      name: "Group Chat",
-      image: groupChatImage,
-      messagePreview: "Johnny Silver: Good morning!",
-      time: "9:31",
-      unreadCount: 4,
-      type: "group",
-      messages: [
-        { sender: "Johnny Silver", content: "Good morning!", time: "9:30 PM" },
-        {
-          sender: "Rebecca Nitin",
-          content: "Always fun to follow up",
-          time: "9:31 PM",
-        },
-        {
-          sender: "Raina Smith",
-          content: "Always fun to follow up on the question by watching",
-          time: "9:31 PM",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Victoria Armstrong",
-      image: userImage,
-      messagePreview: "Always fun to follow up",
-      time: "9:31",
-      unreadCount: 1,
-      type: "individual",
-      messages: [
-        {
-          sender: "Victoria Armstrong",
-          content: "Always fun to follow up",
-          time: "9:31 PM",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Raina Smith",
-      image: userImage,
-      messagePreview: "Always fun to follow up",
-      time: "9:31",
-      unreadCount: 1,
-      type: "individual",
-      messages: [
-        {
-          sender: "Raina Smith",
-          content: "Always fun to follow up",
-          time: "9:31 PM",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Rebecca Nitin",
-      image: userImage,
-      messagePreview: "Always fun to follow up",
-      time: "9:30",
-      unreadCount: 0,
-      type: "individual",
-      messages: [
-        {
-          sender: "Rebecca Nitin",
-          content: "Always fun to follow up",
-          time: "9:31 PM",
-        },
-        { sender: "Johnny Silver", content: "Good morning!", time: "9:30 PM" },
-      ],
-    },
-  ];
+  
 
   return (
     <>
             {/* Whiteboard and local recording */}
-            <div className=" lg:pt-10">
+            <div className=" lg:pt-10 px-4">
               <Button
                 children="Whiteboard"
                 variant="meeting"
@@ -178,13 +84,13 @@ const LeftSidebarOpenUi = ({users, setUsers}) => {
             </div>
 
             {/* Backroom chat and icon */}
-            <div className="flex justify-start items-center gap-2 lg:pt-4">
+            <div className="flex justify-start items-center gap-2 lg:py-4 mx-4">
               <BsChatSquareFill className="text-custom-dark-blue-1" />
               <HeadingLg children="BACKROOM CHAT" />
             </div>
 
             {/* chat container */}
-            <div className="flex flex-col flex-grow px-4 pb-2 pt-4 bg-custom-gray-8 mb-4 rounded-xl overflow-y-auto">
+            <div className="flex flex-col flex-grow px-4 pb-2 pt-4 bg-custom-gray-8 mb-4 rounded-xl overflow-y-auto mx-4">
               <div className="flex justify-center items-center gap-2 pb-2 ">
                 <Button
                   children="Participants List"
@@ -369,7 +275,7 @@ const LeftSidebarOpenUi = ({users, setUsers}) => {
             </div>
               {/* waiting list */}
               {isWaiting && activeTab === 'participantList' &&  (
-                <div className="flex-grow pt-2 bg-custom-gray-8 p-4 rounded-xl mb-4 overflow-y-auto">
+                <div className="flex-grow pt-2 bg-custom-gray-8 p-4 rounded-xl mb-4 overflow-y-auto mx-4">
                   <div className="flex justify-between items-center py-2">
                     <h1 className="font-bold text-sm ">Waiting ({isWaiting.length})</h1>
                     <Button

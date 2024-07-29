@@ -7,16 +7,15 @@ import {
 import userImage from "../../../public/user.jpg";
 import groupChatImage from "../../../public/group-chat.png";
 import LeftSidebarOpenUi from "./LeftSidebarOpenUi";
+import LeftSidebarCloseUi from "./LeftSidebarCloseUi";
 
 
 const LeftSidebar = ({ users, setUsers }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState("participantChat");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+  const [activeTab, setActiveTab] = useState("participantChat");
   const [currentUser, setCurrentUser] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
-
   const [isWaiting, setIsWaiting] = useState([
     {
       name: 'Brendan Steven',
@@ -35,52 +34,12 @@ const LeftSidebar = ({ users, setUsers }) => {
       image: userImage,
     },
   ])
- 
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     setSelectedChat(null);
-  };
-
-  const handleSearch = () => {
-    // Write search functionality here
-  };
-
-  const toggleModal = (event, user) => {
-    const { top, left } = event.currentTarget.getBoundingClientRect();
-    setModalPosition({ top, left });
-    setCurrentUser(user);
-    setIsModalOpen(!isModalOpen);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleClickOutside = (event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
-      closeModal();
-    }
-  };
-
-  useEffect(() => {
-    if (isModalOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isModalOpen]);
-
-  const handleRemoveUser = (userId) => {
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
   };
 
   const chatParticipants = [
@@ -156,12 +115,42 @@ const LeftSidebar = ({ users, setUsers }) => {
       ],
     },
   ];
+  const toggleModal = (event, user) => {
+    const { top, left } = event.currentTarget.getBoundingClientRect();
+    setModalPosition({ top, left });
+    setCurrentUser(user);
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      closeModal();
+    }
+  };
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isModalOpen]);
+
+ 
 
   return (
     <div
       className={`flex ${
-        isSidebarOpen ? "w-80" : "w-16"
-      } transition-width duration-300 bg-white h-screen rounded-r-xl relative px-4`}
+        isSidebarOpen ? "w-80" : "w-24"
+      } transition-width duration-300 bg-white h-screen rounded-r-xl relative`}
     >
       {isSidebarOpen ? (
         <LuArrowLeftToLine
@@ -177,13 +166,39 @@ const LeftSidebar = ({ users, setUsers }) => {
 
       <div className="flex flex-col w-full ">
         {/*  */}
-        {isSidebarOpen && (
+        {isSidebarOpen ? (
           // If side bar open
           <LeftSidebarOpenUi
           users={users}
           setUsers={setUsers}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
+          selectedChat={selectedChat}
+          setSelectedChat={setSelectedChat}
+          isWaiting={isWaiting}
+          setIsWaiting={setIsWaiting}
+          handleTabClick={handleTabClick}
+          chatParticipants={chatParticipants}
           />
-        )}
+        ) : (
+          <LeftSidebarCloseUi
+          users={users}
+          setUsers={setUsers}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
+          selectedChat={selectedChat}
+          setSelectedChat={setSelectedChat}
+          isWaiting={isWaiting}
+          setIsWaiting={setIsWaiting}
+          handleTabClick={handleTabClick}
+          chatParticipants={chatParticipants}
+          />
+        )
+      }
       </div>
     </div>
   );
