@@ -33,28 +33,26 @@ const LeftSidebar = ({ users, setUsers }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [currentUser, setCurrentUser] = useState(null);
-  const [selectedChat, setSelectedChat] = useState({
-    id: 1,
-    name: "Group Chat",
-    image: groupChatImage,
-    messagePreview: "Johnny Silver: Good morning!",
-    time: "9:31",
-    unreadCount: 4,
-    type: "group",
-    messages: [
-      { sender: "Johnny Silver", content: "Good morning!", time: "9:30 PM" },
-      {
-        sender: "Rebecca Nitin",
-        content: "Always fun to follow up",
-        time: "9:31 PM",
-      },
-      {
-        sender: "Raina Smith",
-        content: "Always fun to follow up on the question by watching",
-        time: "9:31 PM",
-      },
-    ],
-  });
+  const [selectedChat, setSelectedChat] = useState(null);
+
+  const [isWaiting, setIsWaiting] = useState([
+    {
+      name: 'Brendan Steven',
+      image: userImage,
+    },
+    {
+      name: 'Mark Berg',
+      image: userImage,
+    },
+    {
+      name: 'Brendan Steven',
+      image: userImage,
+    },
+    {
+      name: 'Mark Berg',
+      image: userImage,
+    },
+  ])
   const modalRef = useRef();
 
   const toggleSidebar = () => {
@@ -180,7 +178,7 @@ const LeftSidebar = ({ users, setUsers }) => {
   return (
     <div
       className={`flex ${
-        isSidebarOpen ? "w-72" : "w-16"
+        isSidebarOpen ? "w-80" : "w-16"
       } transition-width duration-300 bg-white h-screen rounded-r-xl relative px-4`}
     >
       {isSidebarOpen ? (
@@ -201,7 +199,7 @@ const LeftSidebar = ({ users, setUsers }) => {
           // If side bar open
           <>
             {/* Whiteboard and local recording */}
-            <div className=" pt-16">
+            <div className=" lg:pt-10">
               <Button
                 children="Whiteboard"
                 variant="meeting"
@@ -223,7 +221,7 @@ const LeftSidebar = ({ users, setUsers }) => {
             </div>
 
             {/* Backroom chat and icon */}
-            <div className="flex justify-start items-center gap-2 pt-5">
+            <div className="flex justify-start items-center gap-2 lg:pt-4">
               <BsChatSquareFill className="text-custom-dark-blue-1" />
               <HeadingLg children="BACKROOM CHAT" />
             </div>
@@ -321,14 +319,10 @@ const LeftSidebar = ({ users, setUsers }) => {
                     </div>
                   )}
 
-                  <div>
-                    <h3 className="text-white">Waiting</h3>
-                    {/* Add waiting list content here */}
-                  </div>
+                 
                 </div>
               )}
 
-              {/* Participant chat */}
 
               {/* Participant chat */}
               {activeTab === "participantChat" &&
@@ -416,6 +410,52 @@ const LeftSidebar = ({ users, setUsers }) => {
                 </div>
               )}
             </div>
+              {/* waiting list */}
+              {isWaiting && activeTab === 'participantList' &&  (
+                <div className="flex-grow pt-2 bg-custom-gray-8 p-4 rounded-xl mb-4 overflow-y-auto">
+                  <div className="flex justify-between items-center py-2">
+                    <h1 className="font-bold text-sm ">Waiting ({isWaiting.length})</h1>
+                    <Button
+                    variant="primary"
+                    type="submit"
+                    children='Admit All'
+                    className="text-xs px-2 py-1 rounded-lg text-white"
+                    />
+                  </div>
+                  {/* participant continer */}
+                  {isWaiting?.map((user) => (
+                    <div
+                      className="flex justify-center items-center gap-2 py-1"
+                      key={user.name}
+                    >
+                      <Image
+                        src={user.image}
+                        alt="user image"
+                        height={40}
+                        width={40}
+                        className="rounded-2xl border-[3px] border-white border-solid"
+                      />
+                      <p className="text-[#1a1a1a] text-[10px] flex-grow">
+                        {user.name}
+                      </p>
+                      <div className="flex justify-center items-center gap-1">
+                      <Button
+                    variant="primary"
+                    type="submit"
+                    children='Admit'
+                    className="text-xs px-2 py-1 rounded-lg text-white"
+                    />
+                     <Button
+                    
+                    type="submit"
+                    children='Remove'
+                    className="text-xs px-2 py-1 rounded-lg text-white"
+                    />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
           </>
         )}
       </div>
