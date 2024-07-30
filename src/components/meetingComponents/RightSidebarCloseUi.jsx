@@ -1,96 +1,84 @@
 import React from "react";
 import Button from "../shared/button";
 import { LuClipboardSignature } from "react-icons/lu";
-import { FaVideo } from "react-icons/fa";
+import { FaEye, FaFolder, FaTrash, FaVideo } from "react-icons/fa";
 import { BsChatSquareFill } from "react-icons/bs";
 import { MdMoveDown } from "react-icons/md";
 import Image from "next/image";
+import { IoIosDocument } from "react-icons/io";
 
 const RightSidebarCloseUi = ({
-  users,
-  setUsers,
+  observers,
+  setObservers,
   activeTab,
   setActiveTab,
-  currentUser,
-  setCurrentUser,
+  currentObserver,
+  setCurrentObserver,
   selectedChat,
   setSelectedChat,
   isWaiting,
   setIsWaiting,
   handleTabClick,
   chatParticipants,
+  files,
 }) => {
   return (
     <>
-      {/* Whiteboard and local recording */}
-      <div className=" lg:pt-10 px-6">
-        <Button
-          variant="meeting"
-          type="submit"
-          className="w-full  rounded-xl justify-center py-2 pl-1.5  mb-2"
-          icon={
-            <LuClipboardSignature className="bg-[#fcd860] p-1 text-white text-2xl rounded-md font-bold" />
-          }
-        />
-        <Button
-          variant="meeting"
-          type="submit"
-          className="w-full  rounded-xl justify-center py-2 pl-1.5 mb-2"
-          icon={
-            <FaVideo className="bg-custom-orange-1 p-1 text-white text-2xl rounded-md font-bold" />
-          }
-        />
-      </div>
       {/* Backroom chat and icon */}
-      <div className="flex justify-center items-center py-4 ">
+      <div className="flex flex-col justify-center items-center gap-2 pt-10  lg:pb-2 px-2">
+        <div className="bg-custom-black flex justify-center items-center gap-1 px-2 py-1 rounded-xl text-[10px]">
+          <FaEye className="text-custom-orange-1" />
+          <p className=" text-white">Viewers</p>
+          <p className=" text-white">{observers.length}</p>
+        </div>
         <BsChatSquareFill className="text-custom-dark-blue-1" />
       </div>
 
-
-     {/* chat container */}
-     <div className="flex flex-col pb-2 pt-4 bg-custom-gray-8 mb-2 rounded-xl overflow-y-auto mx-1">
-        <div className="flex flex-col justify-center items-center gap-2 pb-2 ">
+      {/* chat container */}
+      <div className="flex flex-col pb-2 pt-4 bg-custom-gray-8 mb-2 rounded-xl overflow-y-auto mx-1">
+        {/* Tab buttons */}
+        <div className="flex flex-col justify-center items-center gap-2 pb-2 px-2 ">
           <Button
-            children="Participants List"
+            children="Observers List"
             variant="default"
             type="submit"
             className={`w-full py-2 rounded-xl  text-[8px] text-center px-0.5  ${
-              activeTab === "participantList"
+              activeTab === "observersList"
                 ? "shadow-[0px_4px_6px_#1E656D4D]"
                 : "bg-custom-gray-8 border  border-custom-teal !text-custom-teal "
             }  `}
-            onClick={() => handleTabClick("participantList")}
+            onClick={() => handleTabClick("observersList")}
           />
           <div className="w-full relative">
             <Button
-              children="Participants Chat"
+              children="Observers Chat"
               variant="default"
               type="submit"
               className={`w-full py-2 rounded-xl text-[8px] text-center px-0.5  ${
-                activeTab === "participantChat"
+                activeTab === "observersChat"
                   ? "shadow-[0px_4px_6px_#1E656D4D]"
                   : "bg-custom-gray-8 border  border-custom-teal !text-custom-teal "
               }  `}
-              onClick={() => handleTabClick("participantChat")}
+              onClick={() => handleTabClick("observersChat")}
             />
             <div className="absolute -top-1 right-1 w-2 h-2 rounded-lg bg-[#ff2b2b] shadow-[0px_1px_3px_#00000036]"></div>
           </div>
         </div>
 
-        {/* participants container */}
+        {/* observers container */}
 
-        {/* participants list */}
-        {activeTab === "participantList" && (
-          <div className="flex-grow pt-2 overflow-y-scroll">
-            {/* participant continer */}
-            {users?.map((user) => (
+        {/* observers list */}
+        {activeTab === "observersList" && (
+          <div className="flex-grow pt-2 overflow-y-auto">
+            {/* observers continer */}
+            {observers?.map((observer) => (
               <div
                 className="flex justify-center items-center gap-2 py-1"
-                key={user.id}
+                key={observer.id}
               >
                 <Image
-                  src={user.image}
-                  alt="user image"
+                  src={observer.image}
+                  alt="observer image"
                   height={40}
                   width={40}
                   className="rounded-2xl border-[3px] border-white border-solid"
@@ -100,8 +88,8 @@ const RightSidebarCloseUi = ({
           </div>
         )}
 
-        {/* Participant chat */}
-        {activeTab === "participantChat" &&
+        {/* Observer chat */}
+        {activeTab === "observersChat" &&
           !selectedChat &&
           chatParticipants.map((chat) => (
             <div
@@ -125,32 +113,37 @@ const RightSidebarCloseUi = ({
             </div>
           ))}
       </div>
-      {/* waiting list */}
-      {isWaiting && activeTab === "participantList" && (
-        <div className="pt-2 bg-custom-gray-8 py-4 rounded-xl mb-2 overflow-y-scroll mx-1">
-          <div className="flex justify-center items-center py-2">
-            <h1 className="font-bold text-[9px] ">
-              Waiting ({isWaiting.length})
-            </h1>
-          </div>
-          {/* participant continer */}
-          {isWaiting?.map((user) => (
-            <div
-              className="flex justify-center items-center gap-2 py-1"
-              key={user.name}
-            >
-              <Image
-                src={user.image}
-                alt="user image"
-                height={40}
-                width={40}
-                className="rounded-2xl border-[3px] border-white border-solid"
-              />
-            </div>
-          ))}
+
+      <div className="mb-2">
+        {/* heading */}
+        <div className="flex flex-col justify-center items-center pb-2 space-y-2 ">
+          <IoIosDocument className="text-custom-dark-blue-1 text-xl" />
+
+          <Button
+            children="Upload File"
+            variant="primary"
+            type="submit"
+            className="bg-custom-orange-1 text-white rounded-xl py-1 px-2 text-[12px]"
+          />
         </div>
-      )}
- 
+        {/* Upload file div */}
+        <div className="bg-custom-gray-8 rounded-xl mx-1 p-1 overflow-y-auto">
+          {/* title */}
+          <div className="flex justify-between items-center border-b border-solid border-custom-gray-3 pb-1">
+            <p className="text-[10px] text-custom-gray-3">Name</p>
+          </div>
+          {/* files */}
+          <div className="flex items-center justify-between bg-gray-200 py-3 rounded">
+            <div className="flex items-center space-x-1">
+              <FaFolder className="h-2 w-2 text-custom-gray-3" />
+              <span className="text-[10px]  text-custom-gray-3 truncate w-12">
+                {files[0].name}
+              </span>
+            </div>
+       
+          </div>
+        </div>
+      </div>
     </>
   );
 };

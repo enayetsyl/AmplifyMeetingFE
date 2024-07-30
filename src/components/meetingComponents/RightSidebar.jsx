@@ -6,7 +6,7 @@ import RightSidebarCloseUi from './RightSidebarCloseUi';
 import RightSidebarOpenUi from './RightSidebarOpenUi';
 
 const RightSidebar = ({observers, setObservers}) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("observersList");
   const [currentObserver, setCurrentObserver] = useState(null);
@@ -131,7 +131,10 @@ const RightSidebar = ({observers, setObservers}) => {
     };
   }, [isModalOpen]);
 
- 
+  const files = [{ name: "PRO FILES_01: Introduction...", size: "5.2MB" }];
+  const handleSearch = () => {
+    // Write search functionality here
+  };
 
   return (
     <div
@@ -168,6 +171,8 @@ const RightSidebar = ({observers, setObservers}) => {
           setIsWaiting={setIsWaiting}
           handleTabClick={handleTabClick}
           chatParticipants={chatParticipants}
+          files={files}
+          handleSearch={handleSearch}
           />
         ) : (
           <RightSidebarCloseUi
@@ -183,6 +188,7 @@ const RightSidebar = ({observers, setObservers}) => {
           setIsWaiting={setIsWaiting}
           handleTabClick={handleTabClick}
           chatParticipants={chatParticipants}
+          files={files}
           />
         )
       }
