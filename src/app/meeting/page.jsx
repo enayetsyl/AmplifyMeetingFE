@@ -34,6 +34,34 @@ const page = () => {
     }, 
     
   ])
+  const [observers, setObservers] = useState([
+    {
+      id: 10, 
+      name: 'Victoria Armstrong',
+      image: userImage
+    }, 
+    {
+      id: 20, 
+      name: 'Rebecca Nitin',
+      image: userImage
+    }, 
+    {
+      id: 30, 
+      name: 'Juliet Frazier',
+      image: userImage
+    }, 
+    {
+      id: 40, 
+      name: 'Hohnny Lewis',
+      image: userImage
+    }, 
+    {
+      id: 50, 
+      name: 'Raina Smith',
+      image: userImage
+    }, 
+    
+  ])
 
   
   
@@ -46,7 +74,7 @@ const page = () => {
             <MeetingView/>
         </div>
         <div>
-            <RightSidebar/>
+            <RightSidebar observers={observers} setObservers={setObservers}  />
         </div>
     </div>
   )
