@@ -19,6 +19,8 @@ const LeftSidebarCloseUi = ({
   setIsWaiting,
   handleTabClick,
   chatParticipants,
+  role,
+  toggleWhiteBoard
 }) => {
   return (
     <>
@@ -31,6 +33,7 @@ const LeftSidebarCloseUi = ({
           icon={
             <LuClipboardSignature className="bg-[#fcd860] p-1 text-white text-2xl rounded-md font-bold" />
           }
+          onClick={toggleWhiteBoard}
         />
         <Button
           variant="meeting"
@@ -126,7 +129,7 @@ const LeftSidebarCloseUi = ({
           ))}
       </div>
       {/* waiting list */}
-      {isWaiting && activeTab === "participantList" && (
+      {isWaiting && activeTab === "participantList" && role === 'Moderator' && (
         <div className="pt-2 bg-custom-gray-8 py-4 rounded-xl mb-2 overflow-y-scroll mx-1">
           <div className="flex justify-center items-center py-2">
             <h1 className="font-bold text-[9px] ">

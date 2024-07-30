@@ -1,16 +1,18 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  LuArrowLeftToLine,
-  LuArrowRightToLine,
-} from "react-icons/lu";
+import { LuArrowLeftToLine, LuArrowRightToLine } from "react-icons/lu";
 import userImage from "../../../public/user.jpg";
 import groupChatImage from "../../../public/group-chat.png";
 import LeftSidebarOpenUi from "./LeftSidebarOpenUi";
 import LeftSidebarCloseUi from "./LeftSidebarCloseUi";
 
-
-const LeftSidebar = ({ users, setUsers }) => {
+const LeftSidebar = ({
+  users,
+  setUsers,
+  role,
+  isWhiteBoardOpen,
+  setIsWhiteBoardOpen,
+}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("participantList");
@@ -18,14 +20,14 @@ const LeftSidebar = ({ users, setUsers }) => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [isWaiting, setIsWaiting] = useState([
     {
-      name: 'Brendan Steven',
+      name: "Brendan Steven",
       image: userImage,
     },
     {
-      name: 'Mark Berg',
+      name: "Mark Berg",
       image: userImage,
-    }
-  ])
+    },
+  ]);
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -136,7 +138,10 @@ const LeftSidebar = ({ users, setUsers }) => {
     };
   }, [isModalOpen]);
 
- 
+  const toggleWhiteBoard = () => {
+    setIsWhiteBoardOpen(!isWhiteBoardOpen)
+  };
+
 
   return (
     <div
@@ -161,36 +166,39 @@ const LeftSidebar = ({ users, setUsers }) => {
         {isSidebarOpen ? (
           // If side bar open
           <LeftSidebarOpenUi
-          users={users}
-          setUsers={setUsers}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          currentUser={currentUser}
-          setCurrentUser={setCurrentUser}
-          selectedChat={selectedChat}
-          setSelectedChat={setSelectedChat}
-          isWaiting={isWaiting}
-          setIsWaiting={setIsWaiting}
-          handleTabClick={handleTabClick}
-          chatParticipants={chatParticipants}
+            users={users}
+            setUsers={setUsers}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+            selectedChat={selectedChat}
+            setSelectedChat={setSelectedChat}
+            isWaiting={isWaiting}
+            setIsWaiting={setIsWaiting}
+            handleTabClick={handleTabClick}
+            chatParticipants={chatParticipants}
+            role={role}
+            toggleWhiteBoard={toggleWhiteBoard}
           />
         ) : (
           <LeftSidebarCloseUi
-          users={users}
-          setUsers={setUsers}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          currentUser={currentUser}
-          setCurrentUser={setCurrentUser}
-          selectedChat={selectedChat}
-          setSelectedChat={setSelectedChat}
-          isWaiting={isWaiting}
-          setIsWaiting={setIsWaiting}
-          handleTabClick={handleTabClick}
-          chatParticipants={chatParticipants}
+            users={users}
+            setUsers={setUsers}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+            selectedChat={selectedChat}
+            setSelectedChat={setSelectedChat}
+            isWaiting={isWaiting}
+            setIsWaiting={setIsWaiting}
+            handleTabClick={handleTabClick}
+            chatParticipants={chatParticipants}
+            role={role}
+            toggleWhiteBoard={toggleWhiteBoard}
           />
-        )
-      }
+        )}
       </div>
     </div>
   );

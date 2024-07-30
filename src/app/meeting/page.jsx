@@ -10,30 +10,52 @@ const page = () => {
     {
       id: 1, 
       name: 'Victoria Armstrong',
-      image: userImage
+      image: userImage,
+      isSilent: false,
     }, 
     {
       id: 2, 
       name: 'Rebecca Nitin',
-      image: userImage
+      image: userImage,
+      isSilent: true,
     }, 
     {
       id: 3, 
       name: 'Juliet Frazier',
-      image: userImage
+      image: userImage,
+      isSilent: true,
     }, 
     {
       id: 4, 
       name: 'Hohnny Lewis',
-      image: userImage
+      image: userImage,
+      isSilent: true,
     }, 
     {
       id: 5, 
       name: 'Raina Smith',
-      image: userImage
+      image: userImage,
+      isSilent: true,
     }, 
-    
-  ])
+    {
+      id: 6, 
+      name: 'Alice Johnson',
+      image: userImage,
+      isSilent: true,
+    },
+    {
+      id: 7,
+      name: 'Michael Brown',
+      image: userImage,
+      isSilent: true,
+    },
+    {
+      id: 8,
+      name: 'Emma Wilson',
+      image: userImage,
+      isSilent: true,
+    }
+  ]);
   const [observers, setObservers] = useState([
     {
       id: 10, 
@@ -62,20 +84,39 @@ const page = () => {
     }, 
     
   ])
+  const [isWhiteBoardOpen, setIsWhiteBoardOpen] = useState(true)
 
+  const role = 'Participant'
+  // const role = 'Observer'
+  // const role = 'Moderator'
+  // const role = 'Admin'
   
   
   return (
-    <div className='flex justify-center items-center bg-custom-gray-3'>
-        <div>
-            <LeftSidebar users={users} setUsers={setUsers} />
+    <div className='flex justify-between  min-h-screen max-h-screen meeting_bg'>
+        <div className='h-full '>
+            <LeftSidebar users={users} setUsers={setUsers} 
+            role={role}
+            isWhiteBoardOpen={isWhiteBoardOpen}
+            setIsWhiteBoardOpen={setIsWhiteBoardOpen}
+            />
         </div>
-        <div className='flex-grow w-full'>
-            <MeetingView/>
+        <div className='flex-1 w-full'>
+            <MeetingView
+            role={role}
+            users={users}
+            isWhiteBoardOpen={isWhiteBoardOpen}
+            setIsWhiteBoardOpen={setIsWhiteBoardOpen}
+
+            />
         </div>
-        <div>
-            <RightSidebar observers={observers} setObservers={setObservers}  />
-        </div>
+       {
+        role !== 'Participant' && (
+          <div className='h-full'>
+          <RightSidebar observers={observers} setObservers={setObservers}  />
+      </div>
+        )
+       }
     </div>
   )
 }

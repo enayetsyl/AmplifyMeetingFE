@@ -1,40 +1,43 @@
-'use client'
-import React, { useState } from 'react';
-import Image from 'next/image';
-import userImage from '../../../../public/placeholder-image.png';
-import realUserImage from '../../../../public/user.jpg';
-import { RiPencilFill } from 'react-icons/ri';
-import { MdLockReset } from 'react-icons/md';
-import { IoTrashSharp } from 'react-icons/io5';
-import { FaBell } from 'react-icons/fa';
-import PasswordModal from '@/components/singleComponent/PasswordModal';
-import DeleteModal from '@/components/singleComponent/DeleteModal';
-import NotificationModal from '@/components/singleComponent/NotificationModal';
-import Button from '@/components/shared/button';
-import HeadingParagaraph from '@/components/shared/HeadingParagaraph';
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+import userImage from "../../../../public/placeholder-image.png";
+import realUserImage from "../../../../public/user.jpg";
+import { RiPencilFill } from "react-icons/ri";
+import { MdLockReset } from "react-icons/md";
+import { IoTrashSharp } from "react-icons/io5";
+import { FaBell } from "react-icons/fa";
+import PasswordModal from "@/components/singleComponent/PasswordModal";
+import DeleteModal from "@/components/singleComponent/DeleteModal";
+import NotificationModal from "@/components/singleComponent/NotificationModal";
+import Button from "@/components/shared/button";
+import HeadingParagaraph from "@/components/shared/HeadingParagaraph";
 
 const initialNotifications = [
   {
     id: 1,
     image: realUserImage,
-    message: 'You have been assigned a new project TCT Marathon Campaign by the admin.',
-    time: 'Yesterday at 9:30 AM',
+    message:
+      "You have been assigned a new project TCT Marathon Campaign by the admin.",
+    time: "Yesterday at 9:30 AM",
     read: false,
   },
   {
     id: 3,
     image: realUserImage,
-    message: 'You have been assigned a new project TCT Marathon Campaign by the admin.',
-    time: 'Yesterday at 9:30 AM',
+    message:
+      "You have been assigned a new project TCT Marathon Campaign by the admin.",
+    time: "Yesterday at 9:30 AM",
     read: false,
   },
   {
     id: 2,
     image: realUserImage,
-    message: 'Your Pop Culture Celebration meeting is about to start in the next 15 minutes. Please get your things ready!',
-    time: 'Last Thursday at 10:30 AM',
+    message:
+      "Your Pop Culture Celebration meeting is about to start in the next 15 minutes. Please get your things ready!",
+    time: "Last Thursday at 10:30 AM",
     read: true,
-  }
+  },
 ];
 
 const Page = () => {
@@ -79,7 +82,9 @@ const Page = () => {
     setNotifications([]);
   };
 
-  const unreadCount = notifications.filter((notification) => !notification.read).length;
+  const unreadCount = notifications.filter(
+    (notification) => !notification.read
+  ).length;
 
   return (
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center relative">
@@ -112,13 +117,16 @@ const Page = () => {
               className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#FF66004D]"
             />
             <div className="relative">
-              <div className="rounded-xl bg-[#f3f4f5] text-black p-4 cursor-pointer" onClick={handleNotificationModalOpen}>
+              <div
+                className="rounded-xl bg-[#f3f4f5] text-black p-4 cursor-pointer"
+                onClick={handleNotificationModalOpen}
+              >
                 <FaBell className="h-5 w-5" />
                 {unreadCount > 0 && (
-            <span className="absolute top-0 right-0 w-5 h-5 bg-[#ff2b2b] text-white text-xs font-bold rounded-full text-center pt-0.5">
-              {unreadCount}
-            </span>
-          )}
+                  <span className="absolute top-0 right-0 w-5 h-5 bg-[#ff2b2b] text-white text-xs font-bold rounded-full text-center pt-0.5">
+                    {unreadCount}
+                  </span>
+                )}
               </div>
               {isNotificationModalOpen && (
                 <NotificationModal
@@ -137,18 +145,31 @@ const Page = () => {
       <div className="flex-grow w-full px-10">
         <div className="pt-14">
           <div className="flex justify-start items-center gap-8">
-            <Image src={userImage} alt="user image" height={70} width={70} className="rounded-full" />
+            <Image
+              src={userImage}
+              alt="user image"
+              height={70}
+              width={70}
+              className="rounded-full"
+            />
             <div className="flex-grow">
-              <h1 className="text-3xl font-semibold text-custom-dark-blue-1">Johnny Silver</h1>
+              <h1 className="text-3xl font-semibold text-custom-dark-blue-1">
+                Johnny Silver
+              </h1>
               <p>ADMIN</p>
             </div>
           </div>
           <div>
-            <h1 className="text-2xl font-semibold text-custom-dark-blue-1 pt-14">Personal Details</h1>
+            <h1 className="text-2xl font-semibold text-custom-dark-blue-1 pt-14">
+              Personal Details
+            </h1>
             <div className="space-y-7 pt-7">
               <HeadingParagaraph heading="First Name" paragraph="Johnny" />
               <HeadingParagaraph heading="Last Name" paragraph="Silver" />
-              <HeadingParagaraph heading="Email" paragraph="JohnnSilvie02@gmail.com" />
+              <HeadingParagaraph
+                heading="Email"
+                paragraph="JohnnSilvie02@gmail.com"
+              />
             </div>
           </div>
         </div>
