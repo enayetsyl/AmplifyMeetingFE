@@ -41,10 +41,10 @@ const WhiteBoard = ({ role, users }) => {
 
 
   return (
-    <div className="bg-white flex justify-start items-center rounded-xl">
+    <div className="bg-white flex justify-start items-center rounded-xl h-full">
       {/* video */}
-      <div className="w-1/5 bg-black rounded-l-xl pt-2 h-full">
-        <div className="grid grid-cols-1 gap-3 overflow-y-auto h-full px-3">
+      <div className="w-1/5 bg-black rounded-l-xl pt-2 h-full ">
+        <div className="grid grid-cols-1 gap-3  h-full px-3">
           {users &&
             users?.map((user) => (
               <div className="relative">
