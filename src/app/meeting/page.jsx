@@ -91,8 +91,8 @@ const page = () => {
   // const role = 'Moderator'
   // const role = 'Admin'
 
-  // const meetingStatus = 'Ongoing'
-  const meetingStatus = 'End'
+  const meetingStatus = 'Ongoing'
+  // const meetingStatus = 'End'
   
   
   return (
@@ -104,7 +104,7 @@ const page = () => {
             setIsWhiteBoardOpen={setIsWhiteBoardOpen}
             />
         </div>
-        <div className='flex-1 w-full'>
+        <div className='flex-1 w-full max-h-[100 vh] overflow-hidden'>
             <MeetingView
             role={role}
             users={users}

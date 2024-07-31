@@ -9,9 +9,16 @@ import { RiPencilFill } from "react-icons/ri";
 import HeadingBlue25px from "../shared/HeadingBlue25px";
 import { GrDocumentVideo } from "react-icons/gr";
 
-const EndOFMeeting = () => {
+const EndOFMeeting = ({role}) => {
   return (
-    <div className=" bg-[#f1f1f2] flex-1  rounded-xl flex  justify-start items-start h-full">
+    <>
+    {
+      role === 'Participant' ? (
+      <div className="min-h-full bg-white justify-center items-center rounded-xl">
+        <h1 className="text-3xl font-medium text-[#11112d]">This meeting has been ended by the host</h1>
+      </div>
+      ) : (
+        <div className=" bg-[#f1f1f2] flex-1  rounded-xl flex  justify-start items-start h-full">
       {/* left side -------- */}
       <div className="w-1/5 px-3 py-8  bg-white rounded-l-xl flex flex-col justify-start items-center h-full">
         <Button
@@ -94,6 +101,9 @@ const EndOFMeeting = () => {
      </div>
       </div>
     </div>
+      )
+    }
+    </>
   );
 };
 

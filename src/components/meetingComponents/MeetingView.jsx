@@ -18,6 +18,7 @@ import EndOFMeeting from "./EndOFMeeting";
 const MeetingView = ({ role, users, isWhiteBoardOpen, setIsWhiteBoardOpen,meetingStatus }) => {
   return (
     <div className="px-5 py-5 flex flex-col justify-between items-between h-full">
+<div className="h-1/5">
 
       {/* First ------ nav bar */}
       <div className="flex justify-between items-center pb-2">
@@ -50,11 +51,12 @@ const MeetingView = ({ role, users, isWhiteBoardOpen, setIsWhiteBoardOpen,meetin
           className=" rounded-lg text-custom-black px-3 py-1"
         />
       </div>
+      </div>
 
       {/*Third ---------- meeting stream */}
       {
         meetingStatus === 'Ongoing' ? (isWhiteBoardOpen ? (
-          <div className="flex-1">
+          <div className="h-4/5 max-h-4/5">
   <WhiteBoard
            role={role}
            users={users}
@@ -62,11 +64,17 @@ const MeetingView = ({ role, users, isWhiteBoardOpen, setIsWhiteBoardOpen,meetin
  
           </div>
          ) : (
-           <OngoingMeeting
+          <div className="flex-1">
+             <OngoingMeeting
            users={users}
            />
+          </div>
          ))  : (
-          <EndOFMeeting/>
+         <div className="flex-1 h-full">
+           <EndOFMeeting
+          role={role}
+          />
+         </div>
          )
       }
     </div>
