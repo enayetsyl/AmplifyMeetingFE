@@ -90,6 +90,9 @@ const page = () => {
   // const role = 'Observer'
   // const role = 'Moderator'
   // const role = 'Admin'
+
+  // const meetingStatus = 'Ongoing'
+  const meetingStatus = 'End'
   
   
   return (
@@ -107,7 +110,7 @@ const page = () => {
             users={users}
             isWhiteBoardOpen={isWhiteBoardOpen}
             setIsWhiteBoardOpen={setIsWhiteBoardOpen}
-
+            meetingStatus={meetingStatus}
             />
         </div>
        {
