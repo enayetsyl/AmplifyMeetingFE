@@ -4,6 +4,7 @@ import { RiPencilFill } from 'react-icons/ri'
 import { IoTrashSharp } from "react-icons/io5";
 import { MdLockReset } from "react-icons/md";
 import { FaBell } from "react-icons/fa";
+import Link from 'next/link';
 
 const DashboardNavbar = ({children}) => {
   return (
@@ -14,13 +15,15 @@ const DashboardNavbar = ({children}) => {
     </div>
     {/* right div */}
     <div className='flex justify-center items-center gap-4'>
+      <Link href="/dashboard/edit-profile">
       <Button
       children='Edit Profile'
-      type= 'submit'
+      type= 'button'
       variant='secondary'
       icon={<RiPencilFill/> }
-      className='rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d]'
+      className='rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d] cursor-pointer'
       />
+      </Link>
       <Button
       children='Change Password'
       type= 'submit'

@@ -9,6 +9,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
 import LogoutModal from '../singleComponent/LogoutModal';
+import Link from 'next/link';
 
 const DashboardSidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -49,22 +50,27 @@ const DashboardSidebar = () => {
 
   return (
     <div>
-      <div className="w-[280px] min-h-screen h-full dashboard_sidebar_bg  flex flex-col justify-center items-center">
+      <div className="w-[260px] min-h-screen h-full dashboard_sidebar_bg  flex flex-col justify-center items-center">
        
           <div className="py-10 ">
             <Logo />
           </div>
-          <div className="space-y-5 flex-grow">
+          <div className=" flex-grow">
+            <Link href='/dashboard/project'>
             <div className="flex justify-start items-center gap-3">
               <FaListAlt className="text-base text-[#6A7E88]" />
               <p className="text-base text-[#6A7E88] font-semibold">Projects</p>
             </div>
-            <div className="flex justify-center items-center gap-3">
+            </Link>
+         <Link href='/dashboard/moderators'>
+         <div className="flex justify-center items-center gap-3 pt-5">
               <MdOutlinePets className="text-base text-[#6A7E88]" />
               <p className="text-base text-[#6A7E88] font-semibold">
                 Moderators
               </p>
             </div>
+         </Link>
+
           </div>
           <div className='w-[240px] mx-auto'>
           <div className='flex justify-center items-center gap-2 bg-[#f1f1f1]  h-20 border-white rounded-lg bg-opacity-70 user_info_div_shadow mb-6 relative pl-2'>
@@ -89,11 +95,15 @@ const DashboardSidebar = () => {
         ref={modalRef}
         className={`absolute bottom-12 -right-24 z-20 bg-white rounded-lg h-[90px] w-[125px] profile_dropdown_shadow flex flex-col justify-center items-start px-3 gap-4 ${isModalOpen ? 'block': 'hidden'}`}>
           
-            <div className='flex justify-start items-center gap-2'>
+            <Link
+            href="/dashboard/my-profile"
+            >
+              <div className='flex justify-start items-center gap-2 cursor-pointer'>
               <FaUser className='text-[#697e89] h-3 w-3'/>
               <p className='text-sm text-[#697e89]'>My Profile</p>
             </div>
-            <div className='flex justify-start items-center gap-2'>
+            </Link>
+            <div className='flex justify-start items-center gap-2 cursor-pointer'>
               <IoIosLogOut className='text-[#697e89] h-3 w-3'/>
               <p className='text-sm text-[#697e89]' 
               onClick={handleLogoutModalOpen}

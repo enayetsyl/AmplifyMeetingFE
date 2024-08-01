@@ -37,9 +37,9 @@ const page = () => {
   return (
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center">
       {/* Navbar */}
-      <div className="bg-white h-24 w-full">
+      <div className="bg-white py-5 border-b border-solid border-gray-400 w-full">
         {' '}
-        <div className="px-10 flex justify-between items-center pt-5">
+        <div className="px-10 flex justify-between items-center ">
           {/* left div */}
           <div>
             <p className="text-2xl font-bold text-custom-teal">Moderators</p>
@@ -57,8 +57,8 @@ const page = () => {
         </div>
       </div>
       {/* search bar */}
-      <div className="shadow-[0px_0px_26px_#00000029] h-24 w-full bg-white">
-        <div className="px-10 flex justify-between items-center pt-5">
+      <div className="border-b border-solid border-gray-400 py-4 w-full bg-white">
+        <div className="px-10 flex justify-between items-center ">
           <div className="flex justify-center items-center gap-5">
             <Search placeholder="Search project name" onSearch={handleSearch} />
             <Button

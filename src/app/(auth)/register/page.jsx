@@ -8,6 +8,7 @@ import logo from '../../../../public/logo.jpg';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { BiSolidErrorAlt } from "react-icons/bi";
 import Logo from '@/components/shared/Logo';
+import Link from 'next/link';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -152,7 +153,7 @@ const Register = () => {
           </button>
         </form>
         <p className="mt-4 text-center">
-          Already have an account? <a href="#" className="text-custom-light-blue-1">Login</a>
+          Already have an account? <Link href="/login" className="text-custom-light-blue-1">Login</Link>
         </p></div>
 
         {/* right div */}
@@ -259,7 +260,7 @@ const Register = () => {
           </button>
         </form>
         <p className="mt-4 text-center">
-          Already have an account? <a href="#" className="text-custom-light-blue-1">Login</a>
+          Already have an account? <Link href="/login" className="text-custom-light-blue-1">Login</Link>
         </p></div>
             </div>
   

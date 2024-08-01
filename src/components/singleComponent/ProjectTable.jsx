@@ -127,9 +127,9 @@ const ProjectTable = () => {
   }, [isModalOpen]);
 
   return (
-    <div className="overflow-x-auto px-10 pt-10 w-full">
-      <div className='border-[0.5px] border-custom-dark-blue-1 rounded-lg w-full'>
-        <table className="min-w-full divide-y divide-gray-200 rounded-lg w-full">
+    <div>
+      <div class="overflow-x-auto">
+        <table className="w-full divide-y divide-gray-200 rounded-lg !overflow-x-auto">
           <thead className="bg-custom-gray-2 rounded-lg py-2 w-full">
             <tr className='shadow-[0px_0px_26px_#00000029] w-full'>
               <TableHead>Project Name</TableHead>
@@ -200,6 +200,7 @@ const ProjectTable = () => {
         </div>
       )}
     </div>
+
   );
 };
 
