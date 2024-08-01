@@ -10,12 +10,12 @@ export default function DashboardLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col h-full">
           {/* upper div */}
-          <div className="flex-grow">
-            <div className="flex justify-center items-center ">
+          <div className="flex-grow h-full">
+            <div className="flex justify-center items-center h-full">
               <DashboardSidebar />
-              <div className="flex-grow"> {children}</div>
+              <div className="flex-grow h-full"> {children}</div>
             </div>
           </div>
           {/* footer */}
