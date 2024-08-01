@@ -14,6 +14,7 @@ import DeleteModal from "@/components/singleComponent/DeleteModal";
 import NotificationModal from "@/components/singleComponent/NotificationModal";
 import Button from "@/components/shared/button";
 import HeadingParagaraph from "@/components/shared/HeadingParagaraph";
+import Link from "next/link";
 
 const initialNotifications = [
   {
@@ -137,6 +138,7 @@ console.log(id)
             <p className="text-2xl font-bold text-custom-teal">My Profile</p>
           </div>
           <div className="flex justify-center items-center gap-4">
+            <Link href="/dashboard/edit-profile">
             <Button
               children="Edit Profile"
               type="submit"
@@ -147,12 +149,13 @@ console.log(id)
                 router.push(`/dashboard/edit-profile/${id}`)
               } // Add onClick handler
             />
+            </Link>
             <Button
               children="Change Password"
               type="submit"
               onClick={handlePasswordChangeClick}
               icon={<MdLockReset />}
-              className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d]"
+              className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d] cursor-pointer"
             />
             <Button
               children="Delete My Account"
@@ -160,7 +163,7 @@ console.log(id)
               variant="primary"
               icon={<IoTrashSharp />}
               onClick={handleDeleteModalOpen}
-              className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#FF66004D]"
+              className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#FF66004D] cursor-pointer"
             />
             <div className="relative">
               <div

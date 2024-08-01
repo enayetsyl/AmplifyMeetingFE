@@ -31,3 +31,8 @@ body {
 .my_profile_main_section_shadow{
   box-shadow: 0px 0px 26px #00000029;
 }
+
+.custom-bullets > li::marker {
+  color: #FF6600;
+  font-size: 22px;
+}

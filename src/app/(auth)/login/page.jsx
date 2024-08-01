@@ -50,19 +50,21 @@ const Login = () => {
       <div className="hidden justify-center items-start lg:flex bg-white h-10">
         {/* left image div */}
         <div className="flex-1 flex items-center w-full h-full">
-          <div className='pl-10 pt-8'><Logo/></div>
+          <div className="pl-10 pt-8">
+            <Logo />
+          </div>
         </div>
         <div className="flex-1 bg-custom-gray-2 h-10"></div>
       </div>
       {/* Top div for mobile */}
       <div className="lg:hidden bg-white flex justify-center items-center pt-10">
-        <Logo/>
+        <Logo />
       </div>
 
       {/* Bottom div for large screen */}
       <div className='lg:flex justify-center items-center hidden'>
         {/* left div */}
-        <div className='flex-1'>
+        <div className="flex-1">
           <h2 className="text-2xl font-bold text-center mb-6">LOGIN</h2>
           <form onSubmit={handleSubmit} className='px-32'>
             <InputField
@@ -182,6 +184,7 @@ const Login = () => {
             Don't have an Account? <Link href="/register" className="text-custom-light-blue-1">Register</Link>
           </p>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -70,7 +70,7 @@ const Step2 = ({ formData, setFormData }) => {
         </div>
       </div>
       {/* participant list div */}
-      <div className='pt-5'>
+      <div className='pt-3'>
         <HeadingLg children="Participant List" />
         <div className="border-[0.5px] border-solid border-custom-dark-blue-1 rounded-xl h-[300px] overflow-y-scroll mt-2">
           {/* table heading */}

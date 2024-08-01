@@ -88,8 +88,8 @@ const PoolModal = ({ onClose, formData, setFormData }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 overflow-y-scroll">
-      <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 ">
+      <div className="bg-white rounded-lg p-6 w-full max-w-2xl h-[90%] overflow-y-scroll">
         <HeadingBlue25px children="Add Poll" />
         <div className="pt-5">
           <InputField

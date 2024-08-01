@@ -41,10 +41,9 @@ const WhiteBoard = ({ role, users }) => {
 
 
   return (
-    <div className="bg-white flex justify-start items-center rounded-xl">
+    <div className="bg-white flex justify-start items-center  w-full h-full rounded-xl relative">
       {/* video */}
-      <div className="w-1/5 bg-black rounded-l-xl pt-2 h-full">
-        <div className="grid grid-cols-1 gap-3 overflow-y-auto h-full px-3">
+      <div className="w-1/5 bg-black grid grid-cols-1 p-2  gap-2 items-center overflow-y-auto max-h-full rounded-l-xl ">
           {users &&
             users?.map((user) => (
               <div className="relative">
@@ -65,9 +64,8 @@ const WhiteBoard = ({ role, users }) => {
                 </div>
               </div>
             ))}
-        </div>
         {/* control bar */}
-        <div className="bg-[#1b1b1b] py-2 flex justify-center items-center gap-2  w-full rounded-bl-xl relative">
+        <div className="bg-[#1b1b1b] py-2 flex justify-center items-center gap-2  w-1/5 rounded-bl-xl absolute bottom-0 left-0 ">
           <FaHeadphones className="text-custom-gray-2" />
           <FaVideoSlash className="text-custom-gray-2" />
 
@@ -91,13 +89,13 @@ const WhiteBoard = ({ role, users }) => {
         </div>
       </div>
       {/* White board */}
-      <div className="w-4/5 rounded-r-xl">
+      <div className="w-4/5 rounded-r-xl h-full">
       <Image
       src={whiteboardImage}
       alt="Whiteboard Image"
-      height={200}
+      height={300}
       width={300}
-      className="w-full h-full rounded-r-xl"
+      className="min-w-full min-h-full rounded-r-xl"
       />
       </div>
     </div>

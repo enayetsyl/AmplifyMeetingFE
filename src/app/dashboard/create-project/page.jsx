@@ -10,7 +10,7 @@ import Step5 from '@/components/createProjectFormComponent/Step5';
 import HeadingBlue25px from '@/components/shared/HeadingBlue25px';
 
 const Page = () => {
-  const [currentStep, setCurrentStep] = useState(5);
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
     host: '',
@@ -27,8 +27,8 @@ const Page = () => {
 
     waitingRoom: false,
     interpreter: false,
-    participants: [],
-    observers: [],
+    participants: [{name:'Juliet Frazier', email: 'juliet@gmail.com'}, {name:'Juliet Frazier', email: 'juliet@gmail.com'}],
+    observers: [{name:'Juliet Frazier', email: 'juliet@gmail.com'}, {name:'Juliet Frazier', email: 'juliet@gmail.com'}],
     breakoutRooms: [],
     polls: [],
   });
@@ -59,17 +59,19 @@ const Page = () => {
   };
 
   return (
-    <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen  ">
-      <div className="bg-white h-24 w-full">
-        <div className="px-10 flex justify-between items-center pt-5">
+    <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen">
+      <div className="bg-white py-5 w-full">
+        <div className="px-10 flex justify-between items-center">
           <div>
             <HeadingBlue25px children="New Project" />
           </div>
         </div>
       </div>
-      <div className="flex-grow mx-auto p-5 pt-10 px-10">
+      <div className="flex-grow mx-auto pt-5 px-10">
         {renderStep()}
-        <div className="flex justify-end gap-5 mt-5">
+
+        {/* Next button */}
+        <div className="flex justify-end gap-3 mt-2">
           {currentStep > 1 && <Button onClick={prevStep}
           variant="cancel"
               className="rounded-lg px-7 py-1 "

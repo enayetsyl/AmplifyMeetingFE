@@ -41,13 +41,13 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData }) => {
     onClose();
   };
 
-  const participantsOptions = breakoutRoomParticipant.map(
+  const participantsOptions = formData?.participants?.map(
     (participant) => `${participant.name} (${participant.email})`
   );
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-8 w-full max-w-2xl">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 ">
+      <div className="bg-white rounded-lg p-8 w-full max-w-2xl overflow-y-auto h-[90%]">
         <HeadingBlue25px children="Add Breakout Room" />
         <div className="pt-5">
           <InputField
@@ -63,7 +63,7 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData }) => {
             options={participantsOptions}
             selectedOption="Select Participant"
             onSelect={(option) => {
-              const participant = breakoutRoomParticipant.find(
+              const participant = formData.participants.find(
                 (p) => `${p.name} (${p.email})` === option
               );
               addParticipantToRoom(participant);

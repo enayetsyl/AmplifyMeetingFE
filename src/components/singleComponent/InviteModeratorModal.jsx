@@ -60,7 +60,7 @@ const InviteModeratorModal = ({ onClose }) => {
               className="rounded-xl text-center py-2 px-5 shadow-[0px_3px_6px_#031F3A5c] "
             />
             <Button
-              children="Save"
+              children="Send Invite"
               type="submit"
               variant='save'
               onClick={handleSubmit}
