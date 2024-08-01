@@ -127,9 +127,9 @@ const ProjectTable = () => {
   }, [isModalOpen]);
 
   return (
-    <div>
-      <div class="overflow-x-auto">
-        <table className="w-full divide-y divide-gray-200 rounded-lg !overflow-x-auto">
+    <div className='overflow-hidden'>
+      <div class="min-w-full overflow-x-auto p-8 border">
+        <table className="min-w-full divide-y divide-gray-200 rounded-lg">
           <thead className="bg-custom-gray-2 rounded-lg py-2 w-full">
             <tr className='shadow-[0px_0px_26px_#00000029] w-full'>
               <TableHead>Project Name</TableHead>
@@ -145,7 +145,7 @@ const ProjectTable = () => {
               <TableHead>Actions</TableHead>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200 rounded-lg w-full">
+          <tbody className="bg-white divide-y divide-gray-200 rounded-lg">
             {projects.map((project, index) => (
               <tr key={index} className='shadow-[0px_0px_26px_#00000029] w-full'>
                 <TableData>{project.name}</TableData>

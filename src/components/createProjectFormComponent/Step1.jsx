@@ -33,7 +33,7 @@ const Step1 = ({ formData, setFormData }) => {
     <div>
       <HeadingBlue25px children="General Information" />
       {/* form items container div */}
-      <div className="pt-5 w-full space-y-3">
+      <div className="pt-3 w-full ">
         {/* contianer for name and moderator */}
         <div className="flex justify-start items-start gap-5 w-full">
           <div className="w-full">
@@ -72,7 +72,7 @@ const Step1 = ({ formData, setFormData }) => {
             />
             <div>
               <FormDropdownLabel children="Time Zone"
-              className='mb-2'
+              className='mb-2 z-50'
               />
               <Dropdown
                 options={timeZone}
@@ -106,12 +106,12 @@ const Step1 = ({ formData, setFormData }) => {
         />
         </div>
         {/* lower div container */}
-        <div className="flex justify-center items-center gap-5 pt-5 ">
+        <div className="flex justify-center items-center gap-5  ">
           {/* ⁡⁣⁣⁢security div⁡ */}
-          <div className="space-y-3 w-2/5">
+          <div className="space-y-1 w-2/5">
             <FormDropdownLabel children="Security" />
             {/* passcode and waiting room container */}
-            <div className="flex justify-start items-start gap-5 pt-4">
+            <div className="flex justify-start items-start gap-5 pt-2">
               {/* passcode */}
               <div className="w-1/2">
                 <div className="flex justify-start items-center gap-2 pb-1">
@@ -171,10 +171,10 @@ const Step1 = ({ formData, setFormData }) => {
             </div>
           </div>
           {/* ⁡⁣⁣⁢advance option div⁡ */}
-          <div className="space-y-3 w-3/5 ">
+          <div className="space-y-2 w-3/5 ">
             <FormDropdownLabel children="Advanced Option" />
             {/* interpreter, language and name div container */}
-            <div className='flex justify-start items-start gap-5 pt-4'>
+            <div className='flex justify-start items-start gap-5 pt-2'>
               {/* interpreter */}
               <div className='w-[20%]'>
               <div className="flex justify-start items-center gap-2 ">

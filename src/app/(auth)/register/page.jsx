@@ -9,8 +9,10 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { BiSolidErrorAlt } from "react-icons/bi";
 import Logo from '@/components/shared/Logo';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Register = () => {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
