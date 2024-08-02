@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
 import Image from "next/image";
-import userImage from "../../../../public/placeholder-image.png";
-import realUserImage from "../../../../public/user.jpg";
+import userImage from "../../../../../public/placeholder-image.png";
+import realUserImage from "../../../../../public/user.jpg";
 import { RiPencilFill } from "react-icons/ri";
 import { MdLockReset } from "react-icons/md";
 import { IoTrashSharp } from "react-icons/io5";
@@ -46,7 +48,10 @@ const Page = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [notifications, setNotifications] = useState(initialNotifications);
-
+  const [userData, setUserData] = useState(null);
+  const router = useRouter(); // Add useRouter hook
+  const {id} = useParams()
+console.log(id)
   const handlePasswordChangeClick = () => {
     setShowModal(true);
   };
@@ -83,6 +88,44 @@ const Page = () => {
     setNotifications([]);
   };
 
+  const deleteUser = async () => {
+    try {
+      await axios.delete("http://localhost:8008/api/users/delete-by-id", {
+        params: { "id": id }, // replace with actual user ID
+      });
+      console.log("User deleted successfully");
+      // Redirect to homepage or another page
+      router.push("/register"); // Redirect to homepage or another page
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8008/api/users/find-by-id",
+          {
+            params: { "id": id }, // replace 'user-id' with actual user ID
+          }
+        );
+        if (response.data.result) {
+          setUserData(response.data.result);
+        } else {
+          // Redirect to registration page if no user data
+          // router.push('/register');
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        // Redirect to registration page in case of error
+        // router.push('/register');
+      }
+    };
+
+    fetchUserData();
+  }, [router]); // Add router as dependency
+
   const unreadCount = notifications.filter(
     (notification) => !notification.read
   ).length;
@@ -101,7 +144,10 @@ const Page = () => {
               type="submit"
               variant="secondary"
               icon={<RiPencilFill />}
-              className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d] cursor-pointer"
+              className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d]"
+              onClick={() =>
+                router.push(`/dashboard/edit-profile/${id}`)
+              } // Add onClick handler
             />
             </Link>
             <Button
@@ -157,9 +203,9 @@ const Page = () => {
             />
             <div className="flex-grow">
               <h1 className="text-3xl font-semibold text-custom-dark-blue-1">
-                Johnny Silver
+                {userData ? userData.firstName.toUpperCase() : "Loading..."}
               </h1>
-              <p>ADMIN</p>
+              <p>{userData ? userData.role.toUpperCase() : "Loading..."}</p>
             </div>
           </div>
           <div>
@@ -167,18 +213,26 @@ const Page = () => {
               Personal Details
             </h1>
             <div className="space-y-7 pt-7">
-              <HeadingParagaraph heading="First Name" paragraph="Johnny" />
-              <HeadingParagaraph heading="Last Name" paragraph="Silver" />
+              <HeadingParagaraph
+                heading="First Name"
+                paragraph={userData && userData.firstName.toUpperCase()}
+              />
+              <HeadingParagaraph
+                heading="Last Name"
+                paragraph={userData && userData.lastName.toUpperCase()}
+              />
               <HeadingParagaraph
                 heading="Email"
-                paragraph="JohnnSilvie02@gmail.com"
+                paragraph={userData && userData.email}
               />
             </div>
           </div>
         </div>
       </div>
-      {showModal && <PasswordModal onClose={handleCloseModal} />}
-      {isDeleteModalOpen && <DeleteModal onClose={handleCloseDeleteModal} />}
+      {showModal && <PasswordModal onClose={handleCloseModal} id={id}/>}
+      {isDeleteModalOpen && (
+        <DeleteModal onClose={handleCloseDeleteModal} onDelete={deleteUser} />
+      )}
     </div>
   );
 };
