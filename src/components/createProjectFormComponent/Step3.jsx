@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import HeadingBlue25px from '../shared/HeadingBlue25px';
 import InputField from '../shared/InputField';
 import { GoPlus } from 'react-icons/go';
@@ -6,9 +6,12 @@ import Button from '../shared/button';
 import HeadingLg from '../shared/HeadingLg';
 import { IoTrashSharp } from "react-icons/io5";
 import ParagraphLg from '../shared/ParagraphLg';
+import Pagination from "../shared/Pagination"; // Make sure to import your Pagination component
 
 const Step3 = ({ formData, setFormData }) => {
   const [newObserver, setNewObserver] = useState({ name: '', email: '' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const addObserver = () => {
     setFormData({
@@ -23,11 +26,24 @@ const Step3 = ({ formData, setFormData }) => {
   };
 
   const removeObserver = (index) => {
-    const updatedObservers = formData.Observers.filter(
+    const updatedObservers = formData.observers.filter(
       (_, i) => i !== index
     );
-    setFormData({ ...formData, Observers: updatedObservers });
+    setFormData({ ...formData, observers: updatedObservers });
   };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Calculate the number of pages
+  const totalPages = Math.ceil(formData.observers.length / itemsPerPage);
+
+  // Get the observers for the current page
+  const currentObservers = formData.observers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div>
@@ -70,7 +86,7 @@ const Step3 = ({ formData, setFormData }) => {
         </div>
       </div>
       {/* Observer list div */}
-      <div className=''>
+      <div className='pt-3'>
         <HeadingLg children="Observer List" />
         <div className="border-[0.5px] border-solid border-custom-dark-blue-1 rounded-xl h-[300px] overflow-y-scroll mt-2">
           {/* table heading */}
@@ -83,7 +99,7 @@ const Step3 = ({ formData, setFormData }) => {
             </div>
           </div>
           {/* table item */}
-          {formData.observers.map((observer, index) => (
+          {currentObservers.map((observer, index) => (
             <div className="flex justify-start items-center py-3 px-5 shadow-sm" key={index}>
               <div className="w-[30%]">
                 <ParagraphLg children={observer.name} />
@@ -96,6 +112,16 @@ const Step3 = ({ formData, setFormData }) => {
               </div>
             </div>
           ))}
+        </div>
+        {/* Pagination */}
+        <div className="flex justify-end py-2">
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
         </div>
       </div>
     </div>

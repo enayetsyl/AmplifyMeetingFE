@@ -5,11 +5,14 @@ import Button from '../shared/Button';
 import BreakoutRoomModal from '../singleComponent/BreakoutRoomModal';
 import { IoTrashSharp } from 'react-icons/io5';
 import HeadingLg from '../shared/HeadingLg';
-import { RiPencilFill } from 'react-icons/ri'
+import { RiPencilFill } from 'react-icons/ri';
 import ParagraphLg from '../shared/ParagraphLg';
+import Pagination from '../shared/Pagination'; // Make sure to import your Pagination component
 
 const Step4 = ({ formData, setFormData }) => {
   const [isBreakoutRoomModalOpen, setIsBreakoutRoomModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const handleOpenBreakoutModal = () => {
     setIsBreakoutRoomModalOpen(true);
@@ -26,8 +29,21 @@ const Step4 = ({ formData, setFormData }) => {
   };
 
   const editBreakoutRoom = (index) => { 
-    //write edit logic
-   }
+    // Write edit logic here
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Calculate the number of pages
+  const totalPages = Math.ceil(formData.breakoutRooms.length / itemsPerPage);
+
+  // Get the breakout rooms for the current page
+  const currentBreakoutRooms = formData.breakoutRooms.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div>
@@ -42,7 +58,7 @@ const Step4 = ({ formData, setFormData }) => {
           onClick={handleOpenBreakoutModal}
         />
       </div>
-      <div className="flex justify-stat items-center px-3">
+      <div className="flex justify-start items-center px-3">
         <div className='w-[25%]'> 
           <HeadingLg children="Name" />
         </div>
@@ -53,13 +69,13 @@ const Step4 = ({ formData, setFormData }) => {
           <HeadingLg children="Interpreter" />
         </div>
       </div>
-      {formData.breakoutRooms.map((room, index) => (
+      {currentBreakoutRooms.map((room, index) => (
         <div key={index} className="py-3">
           <div className="flex justify-start items-center bg-white rounded-xl shadow-[0px_0px_6px_#00000029] p-3">
             <ParagraphLg className='w-[25%]'>{room.name}</ParagraphLg>
             <ParagraphLg className='w-[20%]'>{room.participants.length}</ParagraphLg>
             <ParagraphLg className='w-[50%]'>{room.interpreterName}</ParagraphLg>
-            <div className="flex justify-end space-x-2 className='w-[5%]'">
+            <div className="flex justify-end space-x-2 w-[5%]">
               <button onClick={() => editBreakoutRoom(index)}>
                 <RiPencilFill className='bg-custom-teal text-white p-2 text-3xl rounded-xl cursor-pointer' />
               </button>
@@ -70,6 +86,16 @@ const Step4 = ({ formData, setFormData }) => {
           </div>
         </div>
       ))}
+      {/* Pagination */}
+      <div className="flex justify-end py-2">
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
+      </div>
       {isBreakoutRoomModalOpen && (
         <BreakoutRoomModal
           onClose={handleCloseBreakoutModal}
