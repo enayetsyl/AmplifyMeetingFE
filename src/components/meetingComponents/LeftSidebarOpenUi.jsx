@@ -17,6 +17,8 @@ import { IoClose, IoRemoveCircle, IoSend } from "react-icons/io5";
 import { MdInsertEmoticon, MdMoveDown } from "react-icons/md";
 import RemoveUserModal from "../singleComponent/RemoveUserModal";
 import MoveToWaitingRoomModal from "../singleComponent/MoveToWaitingRoomModal";
+import toast from "react-hot-toast";
+import notify from "@/utils/notify";
 
 const LeftSidebarOpenUi = ({
   users,
@@ -65,7 +67,7 @@ const LeftSidebarOpenUi = ({
   };
 
   const openMoveUserModal = (event, user) => {
-    console.log("user in open move user modal", user);
+    
     setUserToMove(user);
     setIsMoveModalOpen(true);
   };
@@ -96,6 +98,11 @@ const LeftSidebarOpenUi = ({
   }, [isModeratorPopupModalOpen]);
 
   const handleRemoveUser = (userId) => {
+    const userName = users.find(user => user.id === userId)
+    notify('success', 'Success', `${userName.name} has been removed`);
+    notify('error', 'Error', `${userName.name} has been removed`);
+    notify('warning', 'Warning', `${userName.name} has been removed`);
+    notify('info', 'Info', `${userName.name} has been removed`);
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
     setIsRemoveModalOpen(false);
   };

@@ -1,0 +1,18 @@
+/* notify.css */
+
+
+.successBorder {
+  border-color: #1a237e;
+}
+
+.errorBorder {
+  border-color: #EC5B56;
+}
+
+.warningBorder {
+  border-color: #FCD860;
+}
+
+.infoBorder {
+  border-color: #4490C1;
+}
