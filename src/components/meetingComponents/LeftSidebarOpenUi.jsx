@@ -100,14 +100,14 @@ const LeftSidebarOpenUi = ({
   const handleRemoveUser = (userId) => {
     const userName = users.find(user => user.id === userId)
     notify('success', 'Success', `${userName.name} has been removed`);
-    notify('error', 'Error', `${userName.name} has been removed`);
-    notify('warning', 'Warning', `${userName.name} has been removed`);
-    notify('info', 'Info', `${userName.name} has been removed`);
+  
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
     setIsRemoveModalOpen(false);
   };
 
   const handleMoveUser = (userId) => {
+    const userName = users.find(user => user.id === userId)
+    notify('success', 'Success', `${userName.name} has been moved to the waiting room`);
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
     setIsMoveModalOpen(false);
   };
@@ -215,7 +215,7 @@ const LeftSidebarOpenUi = ({
             {isModeratorPopupModalOpen && currentUser && (
               <div
                 ref={modalRef}
-                className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg w-44"
+                className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg w-44 z-20"
                 style={{
                   top: modalPosition.top + 20,
                   left: modalPosition.left - 30,

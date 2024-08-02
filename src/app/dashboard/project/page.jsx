@@ -80,6 +80,7 @@ const page = () => {
       </div>
       {/* Body */}
       <div className="flex-grow mx-auto">
+        {/* Fixme-  need to make the NoSearchResult and ProjectTable conditional based on data */}
         {/* <NoSearchResult/> */}
         <ProjectTable/>
       </div>
