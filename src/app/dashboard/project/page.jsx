@@ -8,6 +8,7 @@ import { FiRefreshCw } from "react-icons/fi";
 import { statusOptions } from '@/constant/Index';
 import NoSearchResult from '@/components/singleComponent/NoSearchResult';
 import ProjectTable from '@/components/singleComponent/ProjectTable';
+import Link from 'next/link';
 
 const page = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,13 +43,15 @@ const page = () => {
           </div>
           {/* right div */}
           <div className="flex justify-center items-center gap-4">
-            <Button
-              children="Add New Projcect"
-              type="submit"
+           <Link href='/dashboard/create-project'>
+           <Button
+              children="Add New Project"
+              type="button"
               variant="default"
               icon={<MdAdd />}
-              className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d]"
+              className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d] cursor-pointer"
             />
+           </Link>
           </div>
         </div>
       </div>

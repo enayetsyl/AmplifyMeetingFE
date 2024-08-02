@@ -185,7 +185,7 @@ const ProjectTable = () => {
         <div
           ref={modalRef}
           className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg"
-          style={{ top: modalPosition.top + 20, left: modalPosition.left - 30 }}
+          style={{ top: modalPosition.top + 20, left: modalPosition.left - 100 }}
         >
           <ul className="text-[12px]">
             <li
