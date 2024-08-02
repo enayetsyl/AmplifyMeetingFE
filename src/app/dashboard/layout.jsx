@@ -8,8 +8,6 @@ export const metadata = {
 
 export default function DashboardLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
       <div className="min-h-screen flex flex-col h-full">
           {/* upper div */}
           <div className="flex-grow h-full flex relative">
@@ -23,7 +21,5 @@ export default function DashboardLayout({ children }) {
           {/* footer */}
           <Footer />
         </div>
-      </body>
-    </html>
   );
 }

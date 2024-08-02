@@ -24,7 +24,6 @@ const Page = () => {
     interpreterSelect: false,
     interpreterName: '',
     interpreterEmail: '',
-
     waitingRoom: false,
     interpreter: false,
     participants: [{name:'Juliet Frazier', email: 'juliet@gmail.com'}, {name:'Juliet Frazier', email: 'juliet@gmail.com'}],
