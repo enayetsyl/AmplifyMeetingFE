@@ -14,7 +14,7 @@ const EndOFMeeting = ({role}) => {
     <>
     {
       role === 'Participant' ? (
-      <div className="min-h-full bg-white justify-center items-center rounded-xl">
+      <div className="h-full bg-white flex justify-center items-center rounded-xl">
         <h1 className="text-3xl font-medium text-[#11112d]">This meeting has been ended by the host</h1>
       </div>
       ) : (

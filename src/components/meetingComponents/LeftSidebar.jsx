@@ -12,6 +12,8 @@ const LeftSidebar = ({
   role,
   isWhiteBoardOpen,
   setIsWhiteBoardOpen,
+  isRecordingOpen,
+  setIsRecordingOpen,
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -139,9 +141,12 @@ const LeftSidebar = ({
   }, [isModalOpen]);
 
   const toggleWhiteBoard = () => {
-    setIsWhiteBoardOpen(!isWhiteBoardOpen)
+    setIsWhiteBoardOpen(!isWhiteBoardOpen);
   };
 
+  const toggleRecordingButton = () => {
+    setIsRecordingOpen(!isRecordingOpen)
+  }
 
   return (
     <div
@@ -180,6 +185,7 @@ const LeftSidebar = ({
             chatParticipants={chatParticipants}
             role={role}
             toggleWhiteBoard={toggleWhiteBoard}
+            toggleRecordingButton={toggleRecordingButton}
           />
         ) : (
           <LeftSidebarCloseUi
@@ -197,6 +203,7 @@ const LeftSidebar = ({
             chatParticipants={chatParticipants}
             role={role}
             toggleWhiteBoard={toggleWhiteBoard}
+            toggleRecordingButton={toggleRecordingButton}
           />
         )}
       </div>

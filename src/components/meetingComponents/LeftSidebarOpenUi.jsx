@@ -34,7 +34,8 @@ const LeftSidebarOpenUi = ({
   handleTabClick,
   chatParticipants,
   role,
-  toggleWhiteBoard
+  toggleWhiteBoard,
+  toggleRecordingButton
 }) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -135,7 +136,7 @@ const LeftSidebarOpenUi = ({
           icon={
             <FaVideo className="bg-custom-orange-1 p-1 text-white text-2xl rounded-md font-bold" />
           }
-          
+          onClick={toggleRecordingButton}
         />
       </div>
 
