@@ -68,7 +68,7 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData }) => {
               );
               addParticipantToRoom(participant);
             }}
-            className="w-full mt-2"
+            className="w-full mt-2 z-20"
           />
         </div>
 

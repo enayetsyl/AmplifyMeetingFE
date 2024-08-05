@@ -103,7 +103,7 @@ const Page = () => {
 
 
   return (
-    <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen">
+    <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen pb-10">
       <div className="bg-white py-5 w-full">
         <div className="px-10 flex justify-between items-center">
           <div>
