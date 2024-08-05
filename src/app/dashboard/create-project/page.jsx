@@ -18,7 +18,8 @@ const Page = () => {
   const [formData, setFormData] = useState({
     name: "",
     host: "",
-    startTime: "",
+    startDate: "2022-10-12",
+    startTime: "17:00",
     duration: "",
     description: "",
     passcodeSelect: false,
