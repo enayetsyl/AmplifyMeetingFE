@@ -1,4 +1,4 @@
-import  { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const configuration = {
   iceServers: [
@@ -194,7 +194,7 @@ function App() {
       const remoteStream = remoteStreams[participantName] || new MediaStream();
 
       remoteStream.addTrack(event.track);
-      
+
       setRemoteStreams((prev) => ({ ...prev, [participantName]: remoteStream }));
 
       if (!remoteVideoRefs.current[participantName]) {
@@ -321,7 +321,10 @@ function App() {
 
   const updateParticipants = (participants) => {
     console.log('Updating participants:', participants);
-    setParticipants(participants);
+    setParticipants(participants.map(participant => ({
+      name: participant.name,
+      id: participant.id
+    })));
   };
 
   const updateBreakoutRooms = (breakoutRooms) => {
@@ -391,8 +394,8 @@ function App() {
             Return to Main Room
           </button>
           <ul id="participants" className="list-disc">
-            {participants.map((participant) => (
-              <li key={participant}>{participant}</li>
+            {participants.map(participant => (
+              <li key={participant.id}>{participant.name}</li>
             ))}
           </ul>
         </div>
