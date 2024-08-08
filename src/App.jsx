@@ -95,7 +95,6 @@ function App() {
       }
     }
   };
-  
 
   const createBreakoutRoom = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -110,6 +109,7 @@ function App() {
       Object.values(peerConnections).forEach(pc => pc.close());
       setPeerConnections({});
       setRemoteStreams({});
+      document.getElementById('remoteVideos').innerHTML = ''; // Clear remote videos
       socket.send(JSON.stringify({ type: 'join-breakout-room', roomId, breakoutRoomId, name }));
     }
   };
@@ -125,7 +125,6 @@ function App() {
       socket.send(JSON.stringify({ type: 'return-to-main-room', roomId, name }));
     }
   };
-  
 
   const endBreakoutRoom = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -250,7 +249,6 @@ function App() {
     return pc;
   };
   
-
   const handleOffer = (offer, sender) => {
     console.log(`Handling offer from ${sender}`);
     const pc = peerConnections[sender] || createPeerConnection(sender);
