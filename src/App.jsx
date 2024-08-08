@@ -95,6 +95,7 @@ function App() {
       }
     }
   };
+  
 
   const createBreakoutRoom = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -120,9 +121,11 @@ function App() {
       Object.values(peerConnections).forEach(pc => pc.close());
       setPeerConnections({});
       setRemoteStreams({});
+      document.getElementById('remoteVideos').innerHTML = ''; // Clear remote videos
       socket.send(JSON.stringify({ type: 'return-to-main-room', roomId, name }));
     }
   };
+  
 
   const endBreakoutRoom = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -165,15 +168,19 @@ function App() {
       console.log(`Peer connection to ${participantName} already exists`);
       return peerConnections[participantName];
     }
+    if (!localStream) {
+      console.error('Local stream is not available');
+      return;
+    }
     console.log(`Creating peer connection to ${participantName}`);
-
+  
     const pc = new RTCPeerConnection(configuration);
     setPeerConnections((prev) => ({ ...prev, [participantName]: pc }));
-
+  
     localStream.getTracks().forEach((track) => {
       pc.addTrack(track, localStream);
     });
-
+  
     pc.onicecandidate = (event) => {
       if (event.candidate) {
         console.log('Sending ICE candidate:', event.candidate);
@@ -187,42 +194,42 @@ function App() {
         );
       }
     };
-
+  
     pc.ontrack = (event) => {
       console.log(`Received track from ${participantName}:`, event.track.kind);
-
+  
       const remoteStream = remoteStreams[participantName] || new MediaStream();
-
+  
       remoteStream.addTrack(event.track);
-
+  
       setRemoteStreams((prev) => ({ ...prev, [participantName]: remoteStream }));
-
+  
       if (!remoteVideoRefs.current[participantName]) {
         remoteVideoRefs.current[participantName] = document.createElement('video');
         remoteVideoRefs.current[participantName].srcObject = remoteStream;
         remoteVideoRefs.current[participantName].autoplay = true;
         remoteVideoRefs.current[participantName].playsInline = true;
         remoteVideoRefs.current[participantName].id = `video-${participantName}`;
-
+  
         const container = document.createElement('div');
         container.id = `container-${participantName}`;
         container.appendChild(remoteVideoRefs.current[participantName]);
-
+  
         const nameTag = document.createElement('div');
         nameTag.innerText = participantName;
         container.appendChild(nameTag);
-
+  
         document.getElementById('remoteVideos').appendChild(container);
       }
     };
-
+  
     pc.onconnectionstatechange = () => {
       console.log('Connection state change:', pc.connectionState);
       if (pc.connectionState === 'failed') {
         console.error('Connection failed for peer:', participantName);
       }
     };
-
+  
     pc.onnegotiationneeded = () => {
       pc.createOffer()
         .then((offer) => pc.setLocalDescription(offer))
@@ -239,9 +246,10 @@ function App() {
         })
         .catch((e) => console.error('Error during negotiation:', e));
     };
-
+  
     return pc;
   };
+  
 
   const handleOffer = (offer, sender) => {
     console.log(`Handling offer from ${sender}`);
