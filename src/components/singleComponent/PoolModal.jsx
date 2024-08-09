@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import HeadingBlue25px from '../shared/HeadingBlue25px';
 import InputField from '../shared/InputField';
 import Button from '../shared/Button';
@@ -7,7 +7,7 @@ import { GoPlus } from 'react-icons/go';
 import FormDropdownLabel from '../shared/FormDropdownLabel';
 import { FiMinus } from 'react-icons/fi';
 
-const PoolModal = ({ onClose, formData, setFormData }) => {
+const PoolModal = ({ onClose, formData, setFormData, poolToEdit }) => {
   const [newPool, setNewPool] = useState({
     name: '',
     active: false,
@@ -19,6 +19,12 @@ const PoolModal = ({ onClose, formData, setFormData }) => {
       },
     ],
   });
+
+  useEffect(() => {
+    if (poolToEdit) {
+      setNewPool(poolToEdit);
+    }
+  }, [poolToEdit]);
 
   const addQuestion = () => {
     setNewPool({
@@ -77,20 +83,27 @@ const PoolModal = ({ onClose, formData, setFormData }) => {
   };
 
   const handleSave = () => {
-    const updatedPools = formData.pools
-      ? [...formData.pools, newPool]
-      : [newPool];
+    let updatedPolls = [...formData.polls];
+    
+    if (poolToEdit) {
+      // Update existing poll
+      updatedPolls[poolToEdit.index] = newPool;
+    } else {
+      // Add new poll
+      updatedPolls.push(newPool);
+    }
+
     setFormData({
       ...formData,
-      pools: updatedPools,
+      polls: updatedPolls,
     });
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 ">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-2xl h-[90%] overflow-y-scroll">
-        <HeadingBlue25px children="Add Poll" />
+        <HeadingBlue25px children={poolToEdit ? "Edit Poll" : "Add Poll"} />
         <div className="pt-5">
           <InputField
             label="Name"
@@ -116,7 +129,6 @@ const PoolModal = ({ onClose, formData, setFormData }) => {
                 <FormDropdownLabel
                   children={`${qIndex + 1}. Type your question`}
                 />
-
                 <IoTrashSharp
                   className="bg-custom-orange-1 text-white p-2 text-3xl rounded-xl cursor-pointer"
                   onClick={() => removeQuestion(qIndex)}
@@ -137,7 +149,6 @@ const PoolModal = ({ onClose, formData, setFormData }) => {
                   onChange={() => updateQuestion(qIndex, 'type', 'single')}
                 />
                 <FormDropdownLabel children="Single Choice" className="ml-2" />
-
                 <input
                   type="radio"
                   name={`type-${qIndex}`}
@@ -169,12 +180,6 @@ const PoolModal = ({ onClose, formData, setFormData }) => {
                     className="bg-custom-red text-white p-0.5 font-bold rounded-xl cursor-pointer ml-3"
                     onClick={() => removeAnswer(qIndex, aIndex)}
                   />
-                  {/* {aIndex > 1 && (
-                    <IoTrashSharp
-                      className="text-red-500 cursor-pointer ml-2"
-                      onClick={() => removeAnswer(qIndex, aIndex)}
-                    />
-                  )} */}
                 </div>
               ))}
               <div className="flex justify-start mt-2">
