@@ -1,31 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import HeadingBlue25px from '../shared/HeadingBlue25px';
-import InputField from '../shared/InputField';
-import Button from '../shared/Button';
-import { IoTrashSharp } from 'react-icons/io5';
-import { GoPlus } from 'react-icons/go';
-import FormDropdownLabel from '../shared/FormDropdownLabel';
-import { FiMinus } from 'react-icons/fi';
-import axios from 'axios'; // Import axios for API calls
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import HeadingBlue25px from "../shared/HeadingBlue25px";
+import InputField from "../shared/InputField";
+import Button from "../shared/Button";
+import { IoTrashSharp } from "react-icons/io5";
+import { GoPlus } from "react-icons/go";
+import FormDropdownLabel from "../shared/FormDropdownLabel";
+import { FiMinus } from "react-icons/fi";
 
-const PoolModal = ({ onClose, formData, setFormData, poolToEdit }) => {
+const EditPoolModal = ({ onClose, formData, setFormData, pools }) => {
+  const [pool, setPool] = useState(null); // State to store fetched pool data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPollById = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8008/api/get/poll-id/${pools}`);
+        setPool(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchPollById();
+  }, [pools]);
+
   const [newPool, setNewPool] = useState({
-    name: '',
+    name: "",
     active: false,
     questions: [
       {
-        question: '',
-        type: 'single',
-        answers: [{ answer: '' }, { answer: '' }],
+        question: "",
+        type: "single",
+        answers: [{ answer: "" }, { answer: "" }],
       },
     ],
   });
 
   useEffect(() => {
-    if (poolToEdit) {
-      setNewPool(poolToEdit);
+    if (pool) {
+      setNewPool({
+        name: pool.pollName,
+        active: pool.isActive,
+        questions: pool.questions,
+      });
     }
-  }, [poolToEdit]);
+  }, [pool]);
 
   const addQuestion = () => {
     setNewPool({
@@ -33,9 +56,9 @@ const PoolModal = ({ onClose, formData, setFormData, poolToEdit }) => {
       questions: [
         ...newPool.questions,
         {
-          question: '',
-          type: 'single',
-          answers: [{ answer: '' }, { answer: '' }],
+          question: "",
+          type: "single",
+          answers: [{ answer: "" }, { answer: "" }],
         },
       ],
     });
@@ -64,7 +87,7 @@ const PoolModal = ({ onClose, formData, setFormData, poolToEdit }) => {
 
   const addAnswer = (index) => {
     const updatedQuestions = newPool.questions.map((q, i) =>
-      i === index ? { ...q, answers: [...q.answers, { answer: '' }] } : q
+      i === index ? { ...q, answers: [...q.answers, { answer: "" }] } : q
     );
     setNewPool({ ...newPool, questions: updatedQuestions });
   };
@@ -83,29 +106,41 @@ const PoolModal = ({ onClose, formData, setFormData, poolToEdit }) => {
     setNewPool({ ...newPool, questions: updatedQuestions });
   };
 
-  const handleSave = () => {
-    let updatedPolls = [...formData.polls];
-    
-    if (poolToEdit) {
-      // Update existing poll
-      updatedPolls[poolToEdit.index] = newPool;
-    } else {
-      // Add new poll
-      updatedPolls.push(newPool);
-    }
+  const handleSave = async () => {
+    try {
+        console.log(pools)
+      const response = await axios.put(
+        `http://localhost:8008/api/update-poll/${pools}`,
+        {
+          pollName: newPool.name,
+          isActive: newPool.active,
+          questions: newPool.questions,
+          choice: null, // or any default value if needed
+        }
+      );
+console.log(response)
+    //   const updatedPools = formData.pools
+    //     ? formData.pools.map((p) => (p._id === pools ? response.data : p))
+    //     : [response.data];
 
-    setFormData({
-      ...formData,
-      polls: updatedPolls,
-    });
-    onClose();
+    //   setFormData({
+    //     ...formData,
+    //     pools: updatedPools,
+    //   });
+
+      onClose(); // Close the modal after successful save
+    } catch (error) {
+      console.error("Error updating poll:", error);
+    }
   };
-  
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-2xl h-[90%] overflow-y-scroll">
-        <HeadingBlue25px children={poolToEdit ? "Edit Poll" : "Add Poll"} />
+        <HeadingBlue25px children="Edit Poll" />
         <div className="pt-5">
           <InputField
             label="Name"
@@ -118,19 +153,15 @@ const PoolModal = ({ onClose, formData, setFormData, poolToEdit }) => {
           <input
             type="checkbox"
             checked={newPool.active}
-            onChange={(e) =>
-              setNewPool({ ...newPool, active: e.target.checked })
-            }
+            onChange={(e) => setNewPool({ ...newPool, active: e.target.checked })}
           />
-          <FormDropdownLabel children="Active" className="ml-2 " />
+          <FormDropdownLabel children="Active" className="ml-2" />
         </div>
         <div className="bg-[#f3f3f3] -mx-6 p-6 mt-3">
           {newPool.questions.map((question, qIndex) => (
-            <div key={qIndex} className="mt-4 ">
+            <div key={qIndex} className="mt-4">
               <div className="flex justify-between items-center">
-                <FormDropdownLabel
-                  children={`${qIndex + 1}. Type your question`}
-                />
+                <FormDropdownLabel children={`${qIndex + 1}. Type your question`} />
                 <IoTrashSharp
                   className="bg-custom-orange-1 text-white p-2 text-3xl rounded-xl cursor-pointer"
                   onClick={() => removeQuestion(qIndex)}
@@ -139,43 +170,33 @@ const PoolModal = ({ onClose, formData, setFormData, poolToEdit }) => {
               <textarea
                 className="w-full mt-2 p-2 border-[0.5px] border-custom-dark-blue-1 bg-white rounded-xl"
                 value={question.question}
-                onChange={(e) =>
-                  updateQuestion(qIndex, 'question', e.target.value)
-                }
+                onChange={(e) => updateQuestion(qIndex, "question", e.target.value)}
               />
               <div className="flex items-center mt-2 pl-5">
                 <input
                   type="radio"
                   name={`type-${qIndex}`}
-                  checked={question.type === 'single'}
-                  onChange={() => updateQuestion(qIndex, 'type', 'single')}
+                  checked={question.type === "single"}
+                  onChange={() => updateQuestion(qIndex, "type", "single")}
                 />
                 <FormDropdownLabel children="Single Choice" className="ml-2" />
                 <input
                   type="radio"
                   name={`type-${qIndex}`}
                   className="ml-4"
-                  checked={question.type === 'multiple'}
-                  onChange={() => updateQuestion(qIndex, 'type', 'multiple')}
+                  checked={question.type === "multiple"}
+                  onChange={() => updateQuestion(qIndex, "type", "multiple")}
                 />
-                <FormDropdownLabel
-                  children="Multiple Choice"
-                  className="ml-2"
-                />
+                <FormDropdownLabel children="Multiple Choice" className="ml-2" />
               </div>
               {question.answers.map((answer, aIndex) => (
-                <div
-                  key={aIndex}
-                  className="flex justify-between items-center mt-2 w-full"
-                >
+                <div key={aIndex} className="flex justify-between items-center mt-2 w-full">
                   <div className="flex-grow">
                     <InputField
                       label={`Answer ${aIndex + 1}`}
                       type="text"
                       value={answer.answer}
-                      onChange={(e) =>
-                        updateAnswer(qIndex, aIndex, e.target.value)
-                      }
+                      onChange={(e) => updateAnswer(qIndex, aIndex, e.target.value)}
                     />
                   </div>
                   <FiMinus
@@ -196,9 +217,7 @@ const PoolModal = ({ onClose, formData, setFormData, poolToEdit }) => {
               </div>
             </div>
           ))}
-        </div>
-        <div className="flex justify-between mt-5 items-center">
-          <div>
+          <div className="flex justify-start mt-2">
             <Button
               type="button"
               variant="save"
@@ -208,26 +227,26 @@ const PoolModal = ({ onClose, formData, setFormData, poolToEdit }) => {
               onClick={addQuestion}
             />
           </div>
-          <div className="flex justify-end gap-5 ">
-            <Button
-              type="button"
-              variant="cancel"
-              children="Cancel"
-              className="px-5 py-1 rounded-xl"
-              onClick={onClose}
-            />
-            <Button
-              type="button"
-              variant="save"
-              children="Save Poll"
-              className="px-5 py-1 rounded-xl"
-              onClick={handleSave}
-            />
-          </div>
+        </div>
+        <div className="flex justify-end mt-6">
+          <Button
+            type="button"
+            variant="cancel"
+            children="Cancel"
+            className="mr-2 py-1.5 px-5"
+            onClick={onClose}
+          />
+          <Button
+            type="button"
+            variant="save"
+            children="Update Poll"
+            className="py-1.5 px-5"
+            onClick={handleSave}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-export default PoolModal;
+export default EditPoolModal;

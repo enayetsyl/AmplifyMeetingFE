@@ -34,7 +34,7 @@ const [errors, setErrors] = useState({});
   };
   return (
     <div className="py-20">
-       <div className="max-w-[800px] mx-auto shadow_primary px-10 lg:px-20 bg-white rounded-xl">
+       <div className="max-w-[800px] mx-auto shadow_primary px-10 lg:px-20 bg-white rounded-xl ">
          {/* icon div */}
          <div className="flex justify-center items-center py-5">
            ⁡⁢⁣⁢ {/* 𝗧𝗼𝗱𝗼- 𝗻𝗲𝗲𝗱 𝘁𝗼 𝗰𝗵𝗮𝗻𝗴𝗲 it */}⁡

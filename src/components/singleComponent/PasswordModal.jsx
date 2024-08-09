@@ -7,7 +7,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import ErrorModal from './ErrorModal';
 
 const PasswordModal = ({ onClose, id }) => {
-  console.log("+",id)
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,7 +15,7 @@ const PasswordModal = ({ onClose, id }) => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  console.log(localStorage.getItem("Token"))
   // for showing error message modal
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -55,7 +55,7 @@ const PasswordModal = ({ onClose, id }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 px-5">
       <div className="bg-white p-8 rounded-lg w-[420px]">
         <h2 className="text-2xl font-semibold mb-1 text-custom-dark-blue-2">Change Password</h2>
         <p className='text-custom-gray-6 text-[11px] mb-3'>Make sure you remember the password to login. Your new password must be different from previously used passwords.</p>
