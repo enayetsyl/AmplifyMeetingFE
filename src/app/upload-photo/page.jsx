@@ -52,13 +52,13 @@ const Page = () => {
 
   return (
     <div>
-      <div className="bg-white flex justify-center items-center pl-20 min-h-screen">
+      <div className="bg-white lg:flex lg:justify-center lg:items-center lg:pl-20 min-h-screen pb-5">
         {/* left div */}
-        <div className="w-[40%] flex flex-col justify-center items-center">
-          <div className="">
+        <div className="w-full lg:w-[40%] flex flex-col justify-center items-center">
+          <div className="pt-5 lg-pt-0">
             <Logo />
           </div>
-          <h1 className="text-3xl text-custom-dark-blue-2 font-bold uppercase pt-14 pb-10">
+          <h1 className="text-3xl text-custom-dark-blue-2 font-bold uppercase lg:pt-14 lg:pb-10 py-10">
             UPLOAD YOUR PHOTO
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col items-center">
@@ -87,7 +87,7 @@ const Page = () => {
                 children={isUploading ? 'Uploading...' : 'Skip & Enter Meeting'}
                 type="submit"
                 variant="primary"
-                className="w-full py-2 rounded-xl"
+                className="w-full py-2 rounded-xl px-5"
                 disabled={isUploading}
               />
             </div>
@@ -95,7 +95,7 @@ const Page = () => {
           <h2 className="text-xl font-bold text-custom-dark-blue-2 text-center pt-5 cursor-pointer" onClick={() => router.back()}>Back</h2>
         </div>
         {/* right div */}
-        <div className="w-[60%] flex justify-center items-center">
+        <div className="lg:w-[60%] hidden lg:flex lg:justify-center lg:items-center">
           <Image
             src={joinMeetingImage}
             alt="join meeting image"
