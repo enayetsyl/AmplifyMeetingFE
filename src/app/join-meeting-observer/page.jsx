@@ -33,17 +33,17 @@ const page = () => {
 
   return (
     <div className="2xl:min-h-screen">
-      <div className="bg-white flex justify-center items-center pl-20 min-h-screen">
-        {/* style={{ height: 'calc(100vh - 80px)' }} */}
+      <div className="bg-white lg:flex lg:justify-center lg:items-center lg:pl-20 min-h-screen">
+    
         {/* left div */}
-        <div className="w-[40%] flex flex-col justify-center items-center">
-          <div className="">
+        <div className="w-full lg:w-[40%] flex flex-col justify-center items-center px-10">
+          <div className="pt-5">
             <Logo />
           </div>
-          <h1 className="text-3xl text-custom-dark-blue-2 font-bold uppercase lg:py-8 xl:py-10 2xl:py-14">
+          <h1 className="text-3xl text-custom-dark-blue-2 font-bold uppercase lg:py-8 py-10 2xl:py-14 ">
             Join Meeting
           </h1>
-          <div className="flex justify-between items-center gap-5 w-full 2xl:px-28">
+          <div className="lg:flex lg:justify-between lg:items-center gap-5 w-full 2xl:px-28">
             <InputField label="First Name" name="firstName" type="text" />
             <InputField label="Last Name" name="lastName" type="text" />
           </div>
@@ -68,7 +68,7 @@ const page = () => {
               }
             />
           </div>
-          <div className="w-full 2xl:px-28 pt-2">
+          <div className="w-full 2xl:px-28 pt-2 pb-10 lg:pb-0">
             <Button
               children="Join Meeting"
               type="submit"
@@ -78,13 +78,13 @@ const page = () => {
           </div>
         </div>
         {/* right div */}
-        <div className="w-[60%] flex justify-center items-center ">
+        <div className="lg:w-[60%] hidden lg:flex lg:justify-center lg:items-center ">
           <Image
             src={joinMeetingImage}
             alt="join meeting image"
             height={500}
             width={700}
-            className='lg:pt-40'
+            className=''
           />
         </div>
       </div>
