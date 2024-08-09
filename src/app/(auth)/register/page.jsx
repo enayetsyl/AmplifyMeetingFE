@@ -8,6 +8,7 @@ import Logo from '@/components/shared/Logo';
 import registerImage from '../../../../public/register.jpg';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Button from '@/components/shared/button';
 
 const Register = () => {
   const router = useRouter();
@@ -166,15 +167,18 @@ const Register = () => {
                 Your personal data will be used to support your experience throughout this website to manage access to your account, and for other purposes described in our <span className='text-custom-light-blue-1 underline'>Privacy Policy</span>.
               </p>
             </div>
-            <button
+            <Button
               type="submit"
               className="w-full bg-custom-orange-1 text-white font-semibold py-2 rounded-lg hover:bg-orange-600"
             >
               Create Account
-            </button>
+            </Button>
           </form>
           <p className="mt-4 text-center">
-            Already have an account? <a href="#" className="text-custom-light-blue-1">Login</a>
+            Already have an account? 
+            <Link href='/login'>
+            <span href="#" className="text-custom-light-blue-1">Login</span>
+            </Link>
           </p>
         </div>
 

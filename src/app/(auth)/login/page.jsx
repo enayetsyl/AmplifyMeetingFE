@@ -105,12 +105,12 @@ const Login = () => {
               </label>
               <p className='text-custom-light-blue-1 text-base'>Forgot Password</p>
             </div>
-            <button
+            <Button
               type="submit"
               className="w-full bg-custom-orange-1 text-white font-semibold py-2 rounded-lg hover:bg-orange-600"
             >
               Login
-            </button>
+            </Button>
           </form>
           <p className="mt-4 text-center">
             Don't have an Account? <Link href="/register" className="text-custom-light-blue-1">Register</Link>
@@ -173,12 +173,12 @@ const Login = () => {
               </label>
               <p className='text-custom-light-blue-1 text-base'>Forgot Password</p>
             </div>
-            <button
+            <Button
               type="submit"
               className="w-full bg-custom-orange-1 text-white font-semibold py-2 rounded-lg hover:bg-orange-600"
             >
               Login
-            </button>
+            </Button>
           </form>
           <p className="mt-4 text-center">
             Don't have an Account? <Link href="/register" className="text-custom-light-blue-1">Register</Link>

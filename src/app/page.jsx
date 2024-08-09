@@ -1,4 +1,4 @@
-import Button from "@/components/shared/button";
+import Button from "@/components/shared/Button";
 import accountActivation from "@/components/authComponent/AccountActivation";
 import { FaUserEdit, FaKey, FaTrashAlt, FaBell } from 'react-icons/fa';
 import AccountActivation from "@/components/authComponent/AccountActivation";
