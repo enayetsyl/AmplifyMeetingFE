@@ -10,6 +10,7 @@ import userImage from '../../../../../public/placeholder-image.png';
 
 const Page = () => {
   const { id } = useParams();
+  console.log("id",id)
   const router = useRouter();
   const [user, setUser] = useState({
     firstName: '',
@@ -55,16 +56,16 @@ const Page = () => {
   };
 
   return (
-    <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center">
+    <div className="my_profile_main_section_shadow pb-16 bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center">
       {/* navbar */}
       <div className="bg-white h-20 w-full">
         <div className="px-10 flex justify-between items-center pt-3">
           {/* left div */}
-          <div>
-            <p className="text-2xl font-bold text-custom-teal">Edit Profile</p>
+          <div className='flex justify-center items-center w-full'>
+            <p className="text-2xl font-bold text-custom-teal text-center">Edit Profile</p>
           </div>
           {/* right div */}
-          <div className="flex justify-center items-center gap-4">
+          <div className=" justify-center items-center gap-4 hidden md:flex">
             <Button
               children="Save"
               type="submit"
@@ -74,13 +75,23 @@ const Page = () => {
               onClick={handleSave}
             />
           </div>
+          <div className="flex justify-center items-center gap-4 md:hidden fixed right-5">
+            <Button
+              children=""
+              type="submit"
+              variant="secondary"
+              icon={<FaSave />}
+              className="rounded-xl  text-center py-3 shadow-[0px_3px_6px_#2976a54d] pl-4 pr-2"
+              onClick={handleSave}
+            />
+          </div>
         </div>
       </div>
       {/* body */}
-      <div className="flex-grow">
-        <div className="pt-8">
+      <div className="w-full md:flex-grow px-5 md:px-0">
+        <div className="pt-8 w-full">
           {/* name, role and image */}
-          <div className="flex justify-start items-center gap-8">
+          <div className="flex justify-start items-center gap-8 flex-col md:flex-row">
             <Image
               src={userImage}
               alt="user image"
@@ -89,10 +100,10 @@ const Page = () => {
               className="rounded-full"
             />
             <div className="flex-grow">
-              <h1 className="text-3xl font-semibold text-custom-dark-blue-1">
+              <h1 className="text-3xl font-semibold text-custom-teal text-center">
                 {user.firstName} {user.lastName}
               </h1>
-              <p>ADMIN</p>
+              <p className='text-center text-gray-400'>ADMIN</p>
             </div>
           </div>
           {/* personal details */}

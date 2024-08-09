@@ -117,7 +117,7 @@ const page = () => {
               }`}
               onClick={() => handleTabChange('Participants')}
             >
-              Participants
+              Participantss
             </button>
             <button
               className={`py-2 border-custom-dark-blue-1 ${

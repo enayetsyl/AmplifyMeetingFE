@@ -1,33 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import HeadingBlue25px from '../shared/HeadingBlue25px';
 import { GoPlus } from 'react-icons/go';
 import Button from '../shared/Button';
 import BreakoutRoomModal from '../singleComponent/BreakoutRoomModal';
+import EditBreakoutRoomModal from '../singleComponent/EditBreakRoomModal'; // Import the new EditBreakoutRoomModal
 import { IoTrashSharp } from 'react-icons/io5';
 import HeadingLg from '../shared/HeadingLg';
-import { RiPencilFill } from 'react-icons/ri'
+import { RiPencilFill } from 'react-icons/ri';
 import ParagraphLg from '../shared/ParagraphLg';
 
 const Step4 = ({ formData, setFormData }) => {
   const [isBreakoutRoomModalOpen, setIsBreakoutRoomModalOpen] = useState(false);
+  const [isEditBreakoutRoomModalOpen, setIsEditBreakoutRoomModalOpen] = useState(false); // State for the edit modal
+  const [selectedBreakoutRoomId, setSelectedBreakoutRoomId] = useState(null); // State for selected breakout room ID
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch breakout rooms from the API
+  useEffect(() => {
+    const fetchBreakoutRooms = async () => {
+      try {
+        const response = await axios.get('http://localhost:8008/get-all-breakout-rooms', {
+          params: { page: 1, limit: 10 },
+        });
+        setFormData((prevData) => ({
+          ...prevData,
+          breakoutRooms: response.data.breakoutRooms,
+        }));
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchBreakoutRooms();
+  }, [setFormData]);
 
   const handleOpenBreakoutModal = () => {
     setIsBreakoutRoomModalOpen(true);
   };
+
   const handleCloseBreakoutModal = () => {
     setIsBreakoutRoomModalOpen(false);
   };
 
-  const removeBreakoutRoom = (index) => {
-    const updatedBreakoutRooms = formData.breakoutRooms.filter(
-      (_, i) => i !== index
-    );
-    setFormData({ ...formData, breakoutRooms: updatedBreakoutRooms });
+  const handleOpenEditBreakoutRoomModal = (id) => {
+    setSelectedBreakoutRoomId(id);
+    setIsEditBreakoutRoomModalOpen(true);
   };
 
-  const editBreakoutRoom = (index) => { 
-    //write edit logic
-   }
+  const handleCloseEditBreakoutRoomModal = () => {
+    setSelectedBreakoutRoomId(null);
+    setIsEditBreakoutRoomModalOpen(false);
+  };
+
+  const removeBreakoutRoom = async (index) => {
+    const roomToDelete = formData.breakoutRooms[index];
+    try {
+      await axios.delete(`http://localhost:8008/delete-breakout-room/${roomToDelete._id}`);
+      const updatedBreakoutRooms = formData.breakoutRooms.filter(
+        (_, i) => i !== index
+      );
+      setFormData({ ...formData, breakoutRooms: updatedBreakoutRooms });
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const editBreakoutRoom = (id) => {
+    handleOpenEditBreakoutRoomModal(id);
+  };
 
   return (
     <div>
@@ -42,7 +86,7 @@ const Step4 = ({ formData, setFormData }) => {
           onClick={handleOpenBreakoutModal}
         />
       </div>
-      <div className="flex justify-stat items-center px-3">
+      <div className="flex justify-start items-center px-3">
         <div className='w-[25%]'> 
           <HeadingLg children="Name" />
         </div>
@@ -53,18 +97,20 @@ const Step4 = ({ formData, setFormData }) => {
           <HeadingLg children="Interpreter" />
         </div>
       </div>
-      {formData.breakoutRooms.map((room, index) => (
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      {!loading && !error && formData.breakoutRooms.map((room, index) => (
         <div key={index} className="py-3">
           <div className="flex justify-start items-center bg-white rounded-xl shadow-[0px_0px_6px_#00000029] p-3">
             <ParagraphLg className='w-[25%]'>{room.name}</ParagraphLg>
             <ParagraphLg className='w-[20%]'>{room.participants.length}</ParagraphLg>
-            <ParagraphLg className='w-[50%]'>{room.interpreterName}</ParagraphLg>
-            <div className="flex justify-end space-x-2 className='w-[5%]'">
-              <button onClick={() => editBreakoutRoom(index)}>
+            <ParagraphLg className='w-[50%]'>{room.interpretor.name}</ParagraphLg>
+            <div className="flex justify-end space-x-2 w-[5%]">
+              <button onClick={() => editBreakoutRoom(room._id)}>
                 <RiPencilFill className='bg-custom-teal text-white p-2 text-3xl rounded-xl cursor-pointer' />
               </button>
               <button onClick={() => removeBreakoutRoom(index)}>
-                <IoTrashSharp className=' bg-custom-orange-1 text-white p-2 text-3xl rounded-xl cursor-pointer' />
+                <IoTrashSharp className='bg-custom-orange-1 text-white p-2 text-3xl rounded-xl cursor-pointer' />
               </button>
             </div>
           </div>
@@ -75,6 +121,12 @@ const Step4 = ({ formData, setFormData }) => {
           onClose={handleCloseBreakoutModal}
           formData={formData}
           setFormData={setFormData}
+        />
+      )}
+      {isEditBreakoutRoomModalOpen && (
+        <EditBreakoutRoomModal
+          onClose={handleCloseEditBreakoutRoomModal}
+          breakoutRoomId={selectedBreakoutRoomId}
         />
       )}
     </div>
