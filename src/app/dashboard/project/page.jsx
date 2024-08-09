@@ -78,6 +78,7 @@ const Page = () => {
                 }
               className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d]"
             />
+           </Link>
           </div>
         </div>
       </div>

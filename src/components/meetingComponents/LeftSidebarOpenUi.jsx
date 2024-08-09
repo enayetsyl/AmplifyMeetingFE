@@ -17,6 +17,8 @@ import { IoClose, IoRemoveCircle, IoSend } from "react-icons/io5";
 import { MdInsertEmoticon, MdMoveDown } from "react-icons/md";
 import RemoveUserModal from "../singleComponent/RemoveUserModal";
 import MoveToWaitingRoomModal from "../singleComponent/MoveToWaitingRoomModal";
+import toast from "react-hot-toast";
+import notify from "@/utils/notify";
 
 const LeftSidebarOpenUi = ({
   users,
@@ -32,7 +34,8 @@ const LeftSidebarOpenUi = ({
   handleTabClick,
   chatParticipants,
   role,
-  toggleWhiteBoard
+  toggleWhiteBoard,
+  toggleRecordingButton
 }) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -65,7 +68,7 @@ const LeftSidebarOpenUi = ({
   };
 
   const openMoveUserModal = (event, user) => {
-    console.log("user in open move user modal", user);
+    
     setUserToMove(user);
     setIsMoveModalOpen(true);
   };
@@ -96,11 +99,16 @@ const LeftSidebarOpenUi = ({
   }, [isModeratorPopupModalOpen]);
 
   const handleRemoveUser = (userId) => {
+    const userName = users.find(user => user.id === userId)
+    notify('success', 'Success', `${userName.name} has been removed`);
+  
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
     setIsRemoveModalOpen(false);
   };
 
   const handleMoveUser = (userId) => {
+    const userName = users.find(user => user.id === userId)
+    notify('success', 'Success', `${userName.name} has been moved to the waiting room`);
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
     setIsMoveModalOpen(false);
   };
@@ -128,7 +136,7 @@ const LeftSidebarOpenUi = ({
           icon={
             <FaVideo className="bg-custom-orange-1 p-1 text-white text-2xl rounded-md font-bold" />
           }
-          
+          onClick={toggleRecordingButton}
         />
       </div>
 
@@ -208,7 +216,7 @@ const LeftSidebarOpenUi = ({
             {isModeratorPopupModalOpen && currentUser && (
               <div
                 ref={modalRef}
-                className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg w-44"
+                className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg w-44 z-20"
                 style={{
                   top: modalPosition.top + 20,
                   left: modalPosition.left - 30,

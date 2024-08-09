@@ -2,7 +2,9 @@
 import Button from '@/components/shared/button';
 import HeadingBlue25px from '@/components/shared/HeadingBlue25px';
 import HeadingLg from '@/components/shared/HeadingLg';
+import Pagination from '@/components/shared/Pagination';
 import ParagraphLg from '@/components/shared/ParagraphLg';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { RiPencilFill } from 'react-icons/ri';
 
@@ -12,6 +14,11 @@ const page = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+
+const handlePageChange = () => {
+  //Add logic here
+}
+
   return (
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center ">
       {/* navbar */}
@@ -24,13 +31,15 @@ const page = () => {
       <div className="flex-grow px-10 w-full">
         {/* button */}
         <div className="flex justify-end py-5">
-          <Button
+         <Link href='/dashboard/edit-project'>
+         <Button
             children="Edit"
             type="submit"
             variant="save"
             icon={<RiPencilFill />}
             className="rounded-xl  px-5 py-1 shadow-[0px_3px_6px_#2976a54d]"
           />
+         </Link>
         </div>
         {/*  general information  div*/}
         <div className="bg-white shadow-[0px_0px_12px_#00000029] rounded-xl p-5">
@@ -306,6 +315,14 @@ const page = () => {
               {/* ))} */}
             </div>
           )}
+
+          <div className='flex justify-end py-3'>
+          <Pagination 
+          currentPage={2} 
+          totalPages={5} 
+          onPageChange={handlePageChange}
+          />
+          </div>
         </div>
       </div>
     </div>

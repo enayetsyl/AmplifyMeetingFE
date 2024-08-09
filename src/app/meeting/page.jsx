@@ -84,15 +84,16 @@ const page = () => {
     }, 
     
   ])
-  const [isWhiteBoardOpen, setIsWhiteBoardOpen] = useState(true)
+  const [isWhiteBoardOpen, setIsWhiteBoardOpen] = useState(false)
+  const [isRecordingOpen, setIsRecordingOpen] = useState(false)
 
-  const role = 'Participant'
+  // const role = 'Participant'
   // const role = 'Observer'
-  // const role = 'Moderator'
+  const role = 'Moderator'
   // const role = 'Admin'
 
-  const meetingStatus = 'Ongoing'
-  // const meetingStatus = 'End'
+  // const meetingStatus = 'Ongoing'
+  const meetingStatus = 'End'
   
   
   return (
@@ -102,6 +103,8 @@ const page = () => {
             role={role}
             isWhiteBoardOpen={isWhiteBoardOpen}
             setIsWhiteBoardOpen={setIsWhiteBoardOpen}
+            isRecordingOpen={isRecordingOpen}
+            setIsRecordingOpen={setIsRecordingOpen}
             />
         </div>
         <div className='flex-1 w-full max-h-[100 vh] overflow-hidden'>
@@ -111,6 +114,8 @@ const page = () => {
             isWhiteBoardOpen={isWhiteBoardOpen}
             setIsWhiteBoardOpen={setIsWhiteBoardOpen}
             meetingStatus={meetingStatus}
+            isRecordingOpen={isRecordingOpen}
+            setIsRecordingOpen={setIsRecordingOpen}
             />
         </div>
        {

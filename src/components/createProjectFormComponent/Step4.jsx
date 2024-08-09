@@ -9,6 +9,7 @@ import { IoTrashSharp } from 'react-icons/io5';
 import HeadingLg from '../shared/HeadingLg';
 import { RiPencilFill } from 'react-icons/ri';
 import ParagraphLg from '../shared/ParagraphLg';
+import Pagination from '../shared/Pagination'; // Make sure to import your Pagination component
 
 const Step4 = ({ formData, setFormData }) => {
   const [isBreakoutRoomModalOpen, setIsBreakoutRoomModalOpen] = useState(false);
@@ -39,6 +40,7 @@ const Step4 = ({ formData, setFormData }) => {
   }, [setFormData]);
 
   const handleOpenBreakoutModal = () => {
+    setRoomToEdit(null); // Reset roomToEdit to null when adding a new room
     setIsBreakoutRoomModalOpen(true);
   };
 
@@ -116,6 +118,16 @@ const Step4 = ({ formData, setFormData }) => {
           </div>
         </div>
       ))}
+      {/* Pagination */}
+      <div className="flex justify-end py-2">
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
+      </div>
       {isBreakoutRoomModalOpen && (
         <BreakoutRoomModal
           onClose={handleCloseBreakoutModal}

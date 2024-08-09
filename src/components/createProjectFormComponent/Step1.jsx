@@ -1,20 +1,18 @@
-'use client';
-import React, { useState } from 'react';
-import HeadingBlue25px from '../shared/HeadingBlue25px';
-import InputField from '../shared/InputField';
-import Dropdown from '../shared/Dropdown';
-import { language, moderatorList, timeZone } from '@/constant/Index';
-import FormDropdownLabel from '../shared/FormDropdownLabel';
-import Button from '../shared/button';
+"use client";
+import React, { useState } from "react";
+import HeadingBlue25px from "../shared/HeadingBlue25px";
+import InputField from "../shared/InputField";
+import Dropdown from "../shared/Dropdown";
+import { language, moderatorList, timeZone } from "@/constant/Index";
+import FormDropdownLabel from "../shared/FormDropdownLabel";
+import Button from "../shared/button";
 
 const Step1 = ({ formData, setFormData }) => {
-  const [selectedModerator, setSelectedModerator] = useState('Moderator1');
+  const [selectedModerator, setSelectedModerator] = useState("Moderator1");
   const [selectedTimeZone, setSelectedTimeZone] = useState(
-    'UTC-12:00 International Date Line West'
+    "UTC-12:00 International Date Line West"
   );
-  const [selectedLanguage, setSelectedLanguage] = useState(
-    'English'
-  );
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
 
   const handleModeratorSelect = (status) => {
     setSelectedModerator(status);
@@ -56,29 +54,40 @@ const Step1 = ({ formData, setFormData }) => {
               onChange={(e) =>
                 setFormData({ ...formData, host: e.target.value })
               }
+              className="z-30"
             />
           </div>
         </div>
         {/* container for start time, time zone and duration */}
         <div className="flex justify-start items-start gap-5 w-full">
-          {/* ⁡⁢⁣⁣Todo calander need to implement ⁡ */}
+          {/* ⁡⁢⁣⁣Todo calender need to implement ⁡ */}
           <div className="flex justify-center items-start gap-5">
-            <input
-              type="datetime-local"
-              value={formData.startTime}
-              onChange={(e) =>
-                setFormData({ ...formData, startTime: e.target.value })
-              }
-            />
             <div>
-              <FormDropdownLabel children="Time Zone"
-              className='mb-2 z-50'
+              <p className="block text-sm font-semibold mb-2" htmlFor={name}>
+                Start Time
+              </p>
+              <div className="flex items-center">
+              <input
+                type="date"
+                value={formData.startDate}
+                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                className="w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none border-black"
               />
+              <input
+                type="time"
+                value={formData.startTime}
+                onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                className="w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none ml-2 border-black"
+              />
+              </div>
+            </div>
+            <div>
+              <FormDropdownLabel children="Time Zone" className="mb-2 z-50" />
               <Dropdown
                 options={timeZone}
                 selectedOption={selectedTimeZone}
                 onSelect={handleTimeZoneSelect}
-                className=" w-full "
+                className=" w-full z-20"
                 value={formData.timeZone}
                 onChange={(e) =>
                   setFormData({ ...formData, duration: e.target.value })
@@ -95,15 +104,15 @@ const Step1 = ({ formData, setFormData }) => {
             /> */}
           </div>
         </div>
-        <div className='w-1/3'>
-        <InputField
-          label="Description"
-          type="text"
-          value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
-        />
+        <div className="w-[45%]">
+          <InputField
+            label="Description"
+            type="text"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+          />
         </div>
         {/* lower div container */}
         <div className="flex justify-center items-center gap-5  ">
@@ -174,10 +183,10 @@ const Step1 = ({ formData, setFormData }) => {
           <div className="space-y-2 w-3/5 ">
             <FormDropdownLabel children="Advanced Option" />
             {/* interpreter, language and name div container */}
-            <div className='flex justify-start items-start gap-5 pt-2'>
+            <div className="flex justify-start items-start gap-5 pt-2">
               {/* interpreter */}
-              <div className='w-[20%]'>
-              <div className="flex justify-start items-center gap-2 ">
+              <div className="w-[20%]">
+                <div className="flex justify-start items-center gap-2 ">
                   <input
                     type="checkbox"
                     checked={formData.interpreterSelect}
@@ -192,44 +201,47 @@ const Step1 = ({ formData, setFormData }) => {
                 </div>
               </div>
               {/* language */}
-              <div className='w-[30%]'>
-                <FormDropdownLabel children='Language'
-                className='mb-2'/>
+              <div className="w-[30%]">
+                <FormDropdownLabel children="Language" className="mb-2" />
                 <Dropdown
-                options={language}
-                selectedOption={selectedLanguage}
-                onSelect={handleLanguageSelect}
-                value={formData.language}
-          onChange={(e) =>
-            setFormData({ ...formData, language: e.target.value })
-          }
+                  options={language}
+                  selectedOption={selectedLanguage}
+                  onSelect={handleLanguageSelect}
+                  value={formData.language}
+                  onChange={(e) =>
+                    setFormData({ ...formData, language: e.target.value })
+                  }
                 />
               </div>
               {/* name and email */}
-              <div className='w-[50%]'>
-              <InputField
-          label="Name"
-          type="text"
-          value={formData.interpreterName}
-          onChange={(e) =>
-            setFormData({ ...formData, interpreterName: e.target.value })
-          }
-        />
-        <InputField
-          label="Email"
-          type="text"
-          value={formData.interpreterEmail}
-          onChange={(e) =>
-            setFormData({ ...formData, interpreterEmail: e.target.value })
-          }
-        />   
+              <div className="w-[50%]">
+                <InputField
+                  label="Name"
+                  type="text"
+                  value={formData.interpreterName}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      interpreterName: e.target.value,
+                    })
+                  }
+                />
+                <InputField
+                  label="Email"
+                  type="text"
+                  value={formData.interpreterEmail}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      interpreterEmail: e.target.value,
+                    })
+                  }
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      
     </div>
   );
 };

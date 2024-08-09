@@ -13,7 +13,7 @@ const Dropdown = ({ options, selectedOption, onSelect, className = '' }) => {
   const defaultWidthClass = className.includes('w-') ? '' : 'w-48';
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} `}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`px-4 py-1 sm:py-2 border border-[#000000] rounded-lg flex items-center justify-between ${defaultWidthClass} text-custom-dark-blue-1 font-semibold`}

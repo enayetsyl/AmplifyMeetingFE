@@ -19,15 +19,17 @@ const ProjectTable = ({ projects, setProjects }) => {
 
   const renderStatus = (status) => {
     const statusStyles = {
-      Open: 'bg-custom-teal text-white',
-      Closed: 'bg-gray-400 text-white',
-      Started: 'bg-custom-light-blue-1 text-white',
-      Ended: 'bg-custom-red text-white',
+      Open: "bg-custom-teal text-white",
+      Closed: "bg-gray-400 text-white",
+      Started: "bg-custom-light-blue-1 text-white",
+      Ended: "bg-custom-red text-white",
     };
 
     return (
       <div className="flex justify-center">
-        <span className={`w-16 text-[12px] text-center py-1 rounded-full ${statusStyles[status]}`}>
+        <span
+          className={`w-16 text-[12px] text-center py-1 rounded-full ${statusStyles[status]}`}
+        >
           {status}
         </span>
       </div>
@@ -36,13 +38,13 @@ const ProjectTable = ({ projects, setProjects }) => {
 
   const getButtonVariant = (action) => {
     const actionVariants = {
-      Start: 'save',
-      Delete: 'closed',
-      Join: 'primary',
-      Close: 'default',
+      Start: "save",
+      Delete: "closed",
+      Join: "primary",
+      Close: "default",
     };
 
-    return actionVariants[action] || 'default';
+    return actionVariants[action] || "default";
   };
 
   const toggleModal = (event, project) => {
@@ -65,13 +67,13 @@ const ProjectTable = ({ projects, setProjects }) => {
 
   useEffect(() => {
     if (isModalOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isModalOpen]);
 
@@ -95,7 +97,7 @@ const ProjectTable = ({ projects, setProjects }) => {
       <div className="min-w-full overflow-x-auto p-8 border">
         <table className="min-w-full divide-y divide-gray-200 rounded-lg">
           <thead className="bg-custom-gray-2 rounded-lg py-2 w-full">
-            <tr className='shadow-[0px_0px_26px_#00000029] w-full'>
+            <tr className="shadow-[0px_0px_26px_#00000029] w-full">
               <TableHead>Project Name</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Creator</TableHead>
@@ -135,16 +137,27 @@ const ProjectTable = ({ projects, setProjects }) => {
             ))}
           </tbody>
         </table>
+       
       </div>
+        <div className='flex justify-end py-3'>
+          <Pagination 
+          currentPage={2} 
+          totalPages={5} 
+          onPageChange={handlePageChange}
+          />
+          </div>
 
       {isModalOpen && (
         <div
           ref={modalRef}
           className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg"
-          style={{ top: modalPosition.top + 20, left: modalPosition.left - 30 }}
+          style={{ top: modalPosition.top + 20, left: modalPosition.left - 100 }}
         >
-          <ul className='text-[12px]'>
-            <li className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2" onClick={closeModal}>
+          <ul className="text-[12px]">
+            <li
+              className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
+              onClick={closeModal}
+            >
               <FaUser />
               <span>View</span>
             </li>

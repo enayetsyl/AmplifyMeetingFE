@@ -20,7 +20,8 @@ const LeftSidebarCloseUi = ({
   handleTabClick,
   chatParticipants,
   role,
-  toggleWhiteBoard
+  toggleWhiteBoard,
+  toggleRecordingButton
 }) => {
   return (
     <>
@@ -42,6 +43,7 @@ const LeftSidebarCloseUi = ({
           icon={
             <FaVideo className="bg-custom-orange-1 p-1 text-white text-2xl rounded-md font-bold" />
           }
+          onClick={toggleRecordingButton}
         />
       </div>
       {/* Backroom chat and icon */}

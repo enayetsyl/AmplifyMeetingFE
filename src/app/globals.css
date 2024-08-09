@@ -19,6 +19,10 @@ body {
   background:  linear-gradient(90deg, #D3D6D8 , #E5DCD6 ) 
     no-repeat padding-box;
 }
+.create_project_progress_bar_bg {
+  background:  linear-gradient(-90deg, #D3D6D8 , #E5DCD6 ) 
+    no-repeat padding-box;
+}
 
 .profile_dropdown_shadow{
   box-shadow: 0px 3px 6px #0000004A;
