@@ -13,20 +13,23 @@ const Error500 = () => {
 
   return (
     <>
-    <div className='flex flex-col justify-center items-center pb-10 '>
+    <div className='flex flex-col justify-center items-center py-10 '>
       <Image
-      src={Error401Image}
-      alt='401'
-      height={200}
+      src={Error500Image}
+      alt='500'
+      height={300}
       width={200}
-      className='bg-white w-1/3'
+      className='bg-white w-[80%] lg:w-1/3 h-1/2'
       />
 
-      <h1 className='text-8xl font-bold text-custom-dark-blue-1 pb-5'>401</h1>
-      <HeadingBlue25px children='ACCESS DENIED' />
-      <div className='my-5 px-10'>
+      <h1 className='text-7xl lg:text-8xl font-bold text-custom-dark-blue-1 pb-5'>500</h1>
+      <HeadingBlue25px children='UNEXPECTED ERROR' />
+      <div className='my-5 px-10 space-y-2'>
       <ParagraphBlue2
-      children="Sorry, you don't have permission to access this page."
+      children="Sorry, something went wrong."
+      />
+      <ParagraphBlue2
+      children="Try reloading the page. We're working hard to fix it as soon as possible."
       />
       </div>
       <Button
