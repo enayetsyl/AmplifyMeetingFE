@@ -54,6 +54,7 @@ const Step1 = ({ formData, setFormData }) => {
               onChange={(e) =>
                 setFormData({ ...formData, host: e.target.value })
               }
+              className="z-30"
             />
           </div>
         </div>
@@ -86,7 +87,7 @@ const Step1 = ({ formData, setFormData }) => {
                 options={timeZone}
                 selectedOption={selectedTimeZone}
                 onSelect={handleTimeZoneSelect}
-                className=" w-full "
+                className=" w-full z-20"
                 value={formData.timeZone}
                 onChange={(e) =>
                   setFormData({ ...formData, duration: e.target.value })

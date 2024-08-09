@@ -7,6 +7,7 @@ import { BsFillEnvelopeAtFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import { RiPencilFill } from "react-icons/ri";
 import { IoTrashSharp } from "react-icons/io5";
+import Pagination from "../shared/Pagination";
 
 const ProjectTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -128,8 +129,14 @@ const ProjectTable = () => {
     };
   }, [isModalOpen]);
 
+
+  const handlePageChange = () => {
+    //Add logic here
+  }
+
+
   return (
-    <div className="overflow-hidden">
+    <div className="!overflow-hidden max-w-[calc(100vw-280px)]">
       <div className="min-w-full overflow-x-auto p-8 border">
         <table className="min-w-full divide-y divide-gray-200 rounded-lg">
           <thead className="bg-custom-gray-2 rounded-lg py-2 w-full">
@@ -163,7 +170,7 @@ const ProjectTable = () => {
                 <TableData>{project.breakoutRooms}</TableData>
                 <TableData>{project.polls}</TableData>
                 <TableData>{project.interpreters}</TableData>
-                <td className="flex justify-between items-center gap-2 relative">
+                <td className="flex justify-between items-center gap-2 relative py-2">
                   <Button
                     variant={getButtonVariant(project.action)}
                     className="w-16 text-center text-[12px] rounded-xl py-1"
@@ -179,7 +186,15 @@ const ProjectTable = () => {
             ))}
           </tbody>
         </table>
+       
       </div>
+        <div className='flex justify-end py-3'>
+          <Pagination 
+          currentPage={2} 
+          totalPages={5} 
+          onPageChange={handlePageChange}
+          />
+          </div>
 
       {isModalOpen && (
         <div

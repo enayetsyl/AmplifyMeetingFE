@@ -29,13 +29,11 @@ const page = () => {
   };
 
   
-
   return (
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center">
       {/* <DashboardNavbar/> */}
       {/* Navbar */}
-      <div className="bg-white h-20 w-full border-b">
-       
+      <div className="bg-white h-20 w-full border-b">   
         <div className="px-10 flex justify-between items-center pt-5">
           {/* left div */}
           <div>
@@ -57,7 +55,7 @@ const page = () => {
       </div>
       {/* search bar */}
       <div className=" w-full bg-white">
-        <div className="p-5 flex justify-between items-center ">
+        <div className="p-5 flex justify-between items-center">
           <Search placeholder="Search project name" onSearch={handleSearch} />
           <div className='flex justify-center items-center gap-5'>
           <div className="flex justify-center items-center gap-3">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import HeadingBlue25px from '../shared/HeadingBlue25px';
 import InputField from '../shared/InputField';
 import Dropdown from '../shared/Dropdown';
@@ -9,7 +9,7 @@ import FormDropdownLabel from '../shared/FormDropdownLabel';
 import HeadingLg from '../shared/HeadingLg';
 import ParagraphLg from '../shared/ParagraphLg';
 
-const BreakoutRoomModal = ({ onClose, formData, setFormData }) => {
+const BreakoutRoomModal = ({ onClose, formData, setFormData, roomToEdit }) => {
   const [newRoom, setNewRoom] = useState({
     name: '',
     participants: [],
@@ -33,13 +33,33 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData }) => {
     setNewRoom({ ...newRoom, participants: updatedParticipants });
   };
 
+  useEffect(() => {
+    if (roomToEdit) {
+      setNewRoom(roomToEdit);
+    }
+  }, [roomToEdit]);
+  
+
   const handleSave = () => {
-    setFormData({
-      ...formData,
-      breakoutRooms: [...formData.breakoutRooms, newRoom],
-    });
+    if (roomToEdit) {
+      // Update existing room
+      const updatedBreakoutRooms = formData.breakoutRooms.map((room, index) =>
+        index === roomToEdit.index ? newRoom : room
+      );
+      setFormData({
+        ...formData,
+        breakoutRooms: updatedBreakoutRooms,
+      });
+    } else {
+      // Add new room
+      setFormData({
+        ...formData,
+        breakoutRooms: [...formData.breakoutRooms, newRoom],
+      });
+    }
     onClose();
   };
+  
 
   const participantsOptions = formData?.participants?.map(
     (participant) => `${participant.name} (${participant.email})`
@@ -48,7 +68,8 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData }) => {
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 ">
       <div className="bg-white rounded-lg p-8 w-full max-w-2xl overflow-y-auto h-[90%]">
-        <HeadingBlue25px children="Add Breakout Room" />
+      <HeadingBlue25px children={roomToEdit ? "Edit Breakout Room" : "Add Breakout Room"} />
+
         <div className="pt-5">
           <InputField
             label="Breakout Room Name"

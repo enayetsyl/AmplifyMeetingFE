@@ -12,11 +12,15 @@ import Pagination from '../shared/Pagination'; // Make sure to import your Pagin
 const Step4 = ({ formData, setFormData }) => {
   const [isBreakoutRoomModalOpen, setIsBreakoutRoomModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [roomToEdit, setRoomToEdit] = useState(null);
+
   const itemsPerPage = 10;
 
   const handleOpenBreakoutModal = () => {
+    setRoomToEdit(null); // Reset roomToEdit to null when adding a new room
     setIsBreakoutRoomModalOpen(true);
   };
+  
   const handleCloseBreakoutModal = () => {
     setIsBreakoutRoomModalOpen(false);
   };
@@ -28,9 +32,11 @@ const Step4 = ({ formData, setFormData }) => {
     setFormData({ ...formData, breakoutRooms: updatedBreakoutRooms });
   };
 
-  const editBreakoutRoom = (index) => { 
-    // Write edit logic here
+  const editBreakoutRoom = (index) => {
+    setRoomToEdit({ ...formData.breakoutRooms[index], index });
+    setIsBreakoutRoomModalOpen(true);
   };
+  
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -97,12 +103,14 @@ const Step4 = ({ formData, setFormData }) => {
       )}
       </div>
       {isBreakoutRoomModalOpen && (
-        <BreakoutRoomModal
-          onClose={handleCloseBreakoutModal}
-          formData={formData}
-          setFormData={setFormData}
-        />
-      )}
+  <BreakoutRoomModal
+    onClose={handleCloseBreakoutModal}
+    formData={formData}
+    setFormData={setFormData}
+    roomToEdit={roomToEdit} // Pass the room to be edited to the modal
+  />
+)}
+
     </div>
   );
 };

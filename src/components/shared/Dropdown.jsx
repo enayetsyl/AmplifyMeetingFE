@@ -13,7 +13,7 @@ const Dropdown = ({ options, selectedOption, onSelect, className = '' }) => {
   const defaultWidthClass = className.includes('w-') ? '' : 'w-48';
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} `}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`px-4 py-2 border border-[#000000] rounded-lg flex items-center justify-between ${defaultWidthClass} ${className} text-custom-dark-blue-1 font-semibold`}
@@ -24,7 +24,7 @@ const Dropdown = ({ options, selectedOption, onSelect, className = '' }) => {
         />
       </button>
       {isOpen && (
-        <ul className={`absolute left-0 bg-white rounded-lg shadow-[0px_3px_6px_#00000029] text-custom-dark-blue-1 font-semibold ${defaultWidthClass} ${className}`}>
+        <ul className={`absolute left-0 bg-white rounded-lg shadow-[0px_3px_6px_#00000029] text-custom-dark-blue-1 font-semibold ${defaultWidthClass} ${className} max-h-40 overflow-y-auto`}>
           {options.map((option, index) => (
             <li
               key={index}
