@@ -9,6 +9,10 @@ import Button from '../shared/button';
 import { FaClock } from "react-icons/fa6";
 
 const ViewModeratorModal = ({ user, onClose }) => {
+  console.log(user)
+  // Format the date to yy-mm-dd
+  const formattedDate = new Date(user.joinedOn).toISOString().split('T')[0];
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-96 max-w-2xl ">
@@ -56,7 +60,7 @@ const ViewModeratorModal = ({ user, onClose }) => {
             </div>
             <div>
             <HeadingLg children='Joined On'/>
-            <ParagraphLg children={user.joinedOn}/>
+            <ParagraphLg children={formattedDate}/>
             </div>
           </div>
         </div>
@@ -74,5 +78,6 @@ const ViewModeratorModal = ({ user, onClose }) => {
     </div>
   );
 };
+
 
 export default ViewModeratorModal;

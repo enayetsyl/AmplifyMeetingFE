@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState } from 'react';
+import axios from 'axios';
 
 import Button from "@/components/shared/button";
 import Step1 from "@/components/createProjectFormComponent/Step1";
@@ -16,57 +18,35 @@ import { HiOutlineMinus } from "react-icons/hi2";
 const Page = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: "",
-    host: "",
-    startDate: "2022-10-12",
-    startTime: "17:00",
-    duration: "",
-    description: "",
-    passcodeSelect: false,
-    passcode: "",
-    waitingRoomSelect: false,
-    language: "English",
-    interpreterSelect: false,
-    interpreterName: "",
-    interpreterEmail: "",
-    waitingRoom: false,
-    interpreter: false,
+    name: 'Sample Project', // Default name
+    description: 'This is a sample project description.', // Default description
+    startDate: '2024-08-01', // Default start date
+    status: 'Open',
+    creator: '66ac809894acb82568c588a0', // Default creator ID
+    moderator: '66ac809894acb82568c588a0', // Default moderator ID
+    startTime: '2024-08-01T10:00', // Default start time
+    timeZone: 'UTC-12:00 International Date Line West', // Default time zone
     participants: [
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
+      { name: 'Juliet Frazier', email: 'juliet@gmail.com' },
+      { name: 'Harsh Pandey', email: 'harsh123@gmail.com' }
     ],
     observers: [
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Juliet Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
-      { name: "Second Frazier", email: "juliet@gmail.com" },
+      { name: 'Juliet Frazier', email: 'juliet@gmail.com' }
     ],
-    breakoutRooms: [],
+    breakoutRooms: [
+      {
+        name: 'Breakout Room 1',
+        participants: [],
+        interpreter: false,
+        interpreterName: '',
+        interpreterEmail: '',
+        interpreterLanguage: 'English'
+      }
+    ],
     polls: [],
+    interpreters: [],
+    passcode: 'defaultpasscode', // Default passcode
+    endDate: '2024-08-02' // Default end date
   });
 
   const nextStep = () => {
@@ -75,6 +55,18 @@ const Page = () => {
 
   const prevStep = () => {
     setCurrentStep((prevStep) => prevStep - 1);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      console.log(formData)
+      const response = await axios.post('http://localhost:8008/api/create/project', formData);
+      console.log(response)
+      alert('Project created successfully!');
+    } catch (error) {
+      console.error('Error creating project:', error);
+      alert('Failed to create project. Please try again.');
+    }
   };
 
   const renderStep = () => {
@@ -136,13 +128,13 @@ const Page = () => {
       <div className="flex-grow mx-auto pt-5 px-10">
         {renderStep()}
 
-        {/* Next button */}
-        <div className="flex justify-end gap-3 py-4">
+        {/* Navigation buttons */}
+        <div className="flex justify-end gap-3 mt-2">
           {currentStep > 1 && (
             <Button
               onClick={prevStep}
               variant="cancel"
-              className="rounded-lg px-7 py-1 "
+              className="rounded-lg px-7 py-1"
             >
               Back
             </Button>
@@ -151,7 +143,7 @@ const Page = () => {
             <Button
               onClick={nextStep}
               variant="save"
-              className="rounded-lg px-7 py-1 "
+              className="rounded-lg px-7 py-1"
             >
               Next
             </Button>
@@ -159,9 +151,9 @@ const Page = () => {
           {currentStep === 5 && (
             <Button
               variant="save"
-              type="submit"
+              type="button"
               className="rounded-lg px-7 py-1"
-              onClick={() => alert("Submit Form")}
+              onClick={handleSubmit}
             >
               Save Project
             </Button>

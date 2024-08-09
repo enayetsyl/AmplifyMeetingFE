@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HeadingBlue25px from '../shared/HeadingBlue25px';
 import InputField from '../shared/InputField';
 import Dropdown from '../shared/Dropdown';
@@ -10,7 +10,7 @@ import HeadingLg from '../shared/HeadingLg';
 import ParagraphLg from '../shared/ParagraphLg';
 import axios from 'axios';
 
-const BreakoutRoomModal = ({ onClose, formData, setFormData, roomToEdit }) => {
+const EditBreakoutRoomModal = ({ onClose, breakoutRoomId, formData, setFormData }) => {
   const [newRoom, setNewRoom] = useState({
     name: '',
     participants: [],
@@ -19,6 +19,30 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData, roomToEdit }) => {
     interpreterEmail: '',
     interpreterLanguage: 'English',
   });
+
+  useEffect(() => {
+    const fetchBreakoutRoom = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8008/get-breakout-room/${breakoutRoomId}`);
+        const data = response.data;
+
+        setNewRoom({
+          name: data.name,
+          participants: data.participants,
+          interpreter: !!data.interpretor,
+          interpreterName: data.interpretor?.name || '',
+          interpreterEmail: data.interpretor?.email || '',
+          interpreterLanguage: data.interpretor?.language || 'English',
+        });
+      } catch (error) {
+        console.error('Error fetching breakout room:', error);
+      }
+    };
+
+    if (breakoutRoomId) {
+      fetchBreakoutRoom();
+    }
+  }, [breakoutRoomId]);
 
   const addParticipantToRoom = (participant) => {
     setNewRoom({
@@ -34,17 +58,9 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData, roomToEdit }) => {
     setNewRoom({ ...newRoom, participants: updatedParticipants });
   };
 
-  useEffect(() => {
-    if (roomToEdit) {
-      setNewRoom(roomToEdit);
-    }
-  }, [roomToEdit]);
-  
-
   const handleSave = async () => {
     try {
-      const response = await axios.post('http://localhost:8008/create-breakout-room', {
-        project: "66b09e0fa55a6fb9481f7f77", // assuming you have projectId in formData
+      const response = await axios.put(`http://localhost:8008/update-breakout-room/${breakoutRoomId}`, {
         name: newRoom.name,
         participants: newRoom.participants.map(p => p._id),
         duration: 60, // Set the duration as needed
@@ -57,28 +73,27 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData, roomToEdit }) => {
           : null,
       });
 
-      if (response.status === 201) {
-        setFormData({
-          ...formData,
-          breakoutRooms: [...formData.breakoutRooms, response.data],
-        });
+      if (response.status === 200) {
+        // Update the breakout rooms in the form data
+        const updatedBreakoutRooms = formData.breakoutRooms.map(room => 
+          room._id === breakoutRoomId ? response.data : room
+        );
+        setFormData({ ...formData, breakoutRooms: updatedBreakoutRooms });
         onClose();
       }
     } catch (error) {
-      console.error('Error creating breakout room:', error);
+      console.error('Error updating breakout room:', error);
     }
   };
-  
 
   const participantsOptions = formData?.participants?.map(
     (participant) => `${participant.name} (${participant.email})`
   );
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 ">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-8 w-full max-w-2xl overflow-y-auto h-[90%]">
-      <HeadingBlue25px children={roomToEdit ? "Edit Breakout Room" : "Add Breakout Room"} />
-
+        <HeadingBlue25px children="Edit Breakout Room" />
         <div className="pt-5">
           <InputField
             label="Breakout Room Name"
@@ -98,7 +113,7 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData, roomToEdit }) => {
               );
               addParticipantToRoom(participant);
             }}
-            className="w-full mt-2 z-20"
+            className="w-full mt-2"
           />
         </div>
 
@@ -142,7 +157,7 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData, roomToEdit }) => {
         <div className="flex justify-start items-start gap-5 pt-4">
           {/* interpreter */}
           <div className="w-[20%]">
-            <div className="flex justify-start items-center gap-2 ">
+            <div className="flex justify-start items-center gap-2">
               <input
                 type="checkbox"
                 checked={newRoom.interpreter}
@@ -211,4 +226,4 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData, roomToEdit }) => {
   );
 };
 
-export default BreakoutRoomModal;
+export default EditBreakoutRoomModal;

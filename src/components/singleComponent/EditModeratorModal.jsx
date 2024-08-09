@@ -9,12 +9,13 @@ import ParagraphLg from '../shared/ParagraphLg';
 import Button from '../shared/button';
 import InputField from '../shared/InputField';
 
-const EditModeratorModal = ({ user, onClose, onSave }) => {
+const EditModeratorModal = ({ user, onClose ,onsave}) => {
   const [formData, setFormData] = useState({
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    status: user.status,
+    // status: user.status,
+    project: '66b0a6bf824132f349bbbc84',
   });
 
   const handleInputChange = (e) => {
@@ -25,10 +26,32 @@ const EditModeratorModal = ({ user, onClose, onSave }) => {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const updatedUser = { ...user, ...formData };
-    onSave(updatedUser);
+  
+    try {
+      const response = await fetch(`http://localhost:8008/api/update/moderator/${user._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedUser),
+      });
+  
+      if (response.ok) {
+        onsave(updatedUser); // Update the parent component with new details
+        onClose(); // Close the modal
+        alert('Moderator updated successfully.');
+      } else {
+        const error = await response.text();
+        alert(`Failed to update moderator: ${error}`);
+      }
+    } catch (error) {
+      console.error('Error updating moderator:', error);
+      alert('Error updating moderator.');
+    }
   };
+  
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">

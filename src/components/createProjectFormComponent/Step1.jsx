@@ -94,14 +94,14 @@ const Step1 = ({ formData, setFormData }) => {
                 }
               />
             </div>
-            <InputField
+            {/* <InputField
               label="Duration"
               type="text"
               value={formData.duration}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-            />
+            /> */}
           </div>
         </div>
         <div className="w-[45%]">

@@ -35,7 +35,7 @@ const Login = () => {
         password: formData.password,
       });
       console.log('User signed in:', response.data);
-      localStorage.setItem("Token",response.data.accessToken)
+      localStorage.setItem("token",response.data.accessToken)
       router.push(`/dashboard/my-profile/${response.data._id}`)
       // Handle successful sign-in (e.g., redirect to dashboard, store token, etc.)
     } catch (error) {

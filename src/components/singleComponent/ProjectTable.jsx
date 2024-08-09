@@ -1,75 +1,21 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import Button from "../shared/button";
-import TableHead from "../shared/TableHead";
-import TableData from "../shared/TableData";
-import { BsFillEnvelopeAtFill, BsThreeDotsVertical } from "react-icons/bs";
-import { FaUser } from "react-icons/fa";
-import { RiPencilFill } from "react-icons/ri";
-import { IoTrashSharp } from "react-icons/io5";
-import Pagination from "../shared/Pagination";
+'use client';
 
-const ProjectTable = () => {
+import React, { useState, useEffect, useRef } from 'react';
+import Button from '../shared/button';
+import TableHead from '../shared/TableHead';
+import TableData from '../shared/TableData';
+import { BsFillEnvelopeAtFill, BsThreeDotsVertical } from "react-icons/bs";
+import { FaUser } from 'react-icons/fa';
+import { RiPencilFill } from 'react-icons/ri';
+import { IoTrashSharp } from 'react-icons/io5';
+import axios from 'axios';
+
+const ProjectTable = ({ projects, setProjects }) => {
+  console.log("prop", projects);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+  const [selectedProject, setSelectedProject] = useState(null);
   const modalRef = useRef();
-
-  const projects = [
-    // Array of project objects, extracted from the image
-    {
-      name: "Cross Hatching: 101",
-      status: "Closed",
-      creator: "Juliet Frazier",
-      moderator: "Juliet Frazier",
-      startTime: "04/22/2022 09:00 PM",
-      participants: 3,
-      observers: 23,
-      breakoutRooms: 4,
-      polls: 4,
-      interpreters: 2,
-      action: "Start",
-    },
-    {
-      name: "Cross Hatching: 102",
-      status: "Open",
-      creator: "Juliet Frazier",
-      moderator: "Juliet Frazier",
-      startTime: "04/22/2022 09:00 PM",
-      participants: 3,
-      observers: 23,
-      breakoutRooms: 4,
-      polls: 4,
-      interpreters: 2,
-      action: "Delete",
-    },
-    {
-      name: "Cross Hatching: 103",
-      status: "Started",
-      creator: "Juliet Frazier",
-      moderator: "Juliet Frazier",
-      startTime: "04/22/2022 09:00 PM",
-      participants: 3,
-      observers: 23,
-      breakoutRooms: 4,
-      polls: 4,
-      interpreters: 2,
-      action: "Join",
-    },
-    {
-      name: "Cross Hatching: 104",
-      status: "Ended",
-      creator: "Juliet Frazier",
-      moderator: "Juliet Frazier",
-      startTime: "04/22/2022 09:00 PM",
-      participants: 3,
-      observers: 23,
-      breakoutRooms: 4,
-      polls: 4,
-      interpreters: 2,
-      action: "Close",
-    },
-    // Add other project objects here...
-  ];
 
   const renderStatus = (status) => {
     const statusStyles = {
@@ -101,14 +47,16 @@ const ProjectTable = () => {
     return actionVariants[action] || "default";
   };
 
-  const toggleModal = (event) => {
+  const toggleModal = (event, project) => {
     const { top, left } = event.currentTarget.getBoundingClientRect();
     setModalPosition({ top, left });
+    setSelectedProject(project);
     setIsModalOpen(!isModalOpen);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setSelectedProject(null);
   };
 
   const handleClickOutside = (event) => {
@@ -129,14 +77,23 @@ const ProjectTable = () => {
     };
   }, [isModalOpen]);
 
-
-  const handlePageChange = () => {
-    //Add logic here
-  }
-
+  const handleDeleteProject = async () => {
+    try {
+      console.log("he")
+      // Ensure the endpoint URL matches your backend setu
+      await axios.delete(`http://localhost:8008/api/delete/project/${selectedProject._id}`);
+      setProjects((prevProjects) => prevProjects.filter(project => project._id !== selectedProject._id));
+      alert('Project deleted successfully');
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      alert('Failed to delete project');
+    } finally {
+      closeModal();
+    }
+  };
 
   return (
-    <div className="!overflow-hidden max-w-[calc(100vw-280px)]">
+    <div className='overflow-hidden'>
       <div className="min-w-full overflow-x-auto p-8 border">
         <table className="min-w-full divide-y divide-gray-200 rounded-lg">
           <thead className="bg-custom-gray-2 rounded-lg py-2 w-full">
@@ -155,32 +112,26 @@ const ProjectTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200 rounded-lg">
-            {projects.map((project, index) => (
-              <tr
-                key={index}
-                className="shadow-[0px_0px_26px_#00000029] w-full"
-              >
+            {projects.map((project) => (
+              <tr key={project._id} className='shadow-[0px_0px_26px_#00000029] w-full'>
                 <TableData>{project.name}</TableData>
                 <TableData>{renderStatus(project.status)}</TableData>
-                <TableData>{project.creator}</TableData>
-                <TableData>{project.moderator}</TableData>
-                <TableData>{project.startTime}</TableData>
-                <TableData>{project.participants}</TableData>
-                <TableData>{project.observers}</TableData>
-                <TableData>{project.breakoutRooms}</TableData>
-                <TableData>{project.polls}</TableData>
-                <TableData>{project.interpreters}</TableData>
-                <td className="flex justify-between items-center gap-2 relative py-2">
+                <TableData>{project.creator?.name || 'N/A'}</TableData>
+                <TableData>{project.moderator?.name || 'N/A'}</TableData>
+                <TableData>{new Date(project.startTime).toLocaleString()}</TableData>
+                <TableData>{project.participants.length}</TableData>
+                <TableData>{project.observers.length}</TableData>
+                <TableData>{project.breakoutRooms.length}</TableData>
+                <TableData>{project.polls.length}</TableData>
+                <TableData>{project.interpreters.length}</TableData>
+                <td className='flex justify-between items-center gap-2 relative'>
                   <Button
-                    variant={getButtonVariant(project.action)}
-                    className="w-16 text-center text-[12px] rounded-xl py-1"
+                    variant={getButtonVariant('Action')} // Replace 'Action' with the actual project action
+                    className='w-16 text-center text-[12px] rounded-xl py-1'
                   >
-                    {project.action}
+                    Action
                   </Button>
-                  <BsThreeDotsVertical
-                    onClick={toggleModal}
-                    className="cursor-pointer"
-                  />
+                  <BsThreeDotsVertical onClick={(e) => toggleModal(e, project)} className='cursor-pointer' />
                 </td>
               </tr>
             ))}
@@ -210,24 +161,15 @@ const ProjectTable = () => {
               <FaUser />
               <span>View</span>
             </li>
-            <li
-              className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-              onClick={closeModal}
-            >
+            <li className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2" onClick={closeModal}>
               <RiPencilFill />
               <span>Edit</span>
             </li>
-            <li
-              className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-              onClick={closeModal}
-            >
+            <li className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2" onClick={handleDeleteProject}>
               <IoTrashSharp />
               <span>Delete</span>
             </li>
-            <li
-              className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-              onClick={closeModal}
-            >
+            <li className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2" onClick={closeModal}>
               <BsFillEnvelopeAtFill />
               <span>Resend Email</span>
             </li>

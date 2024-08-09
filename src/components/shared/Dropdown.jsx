@@ -16,7 +16,7 @@ const Dropdown = ({ options, selectedOption, onSelect, className = '' }) => {
     <div className={`relative ${className} `}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`px-4 py-2 border border-[#000000] rounded-lg flex items-center justify-between ${defaultWidthClass} ${className} text-custom-dark-blue-1 font-semibold`}
+        className={`px-4 py-1 sm:py-2 border border-[#000000] rounded-lg flex items-center justify-between ${defaultWidthClass} text-custom-dark-blue-1 font-semibold`}
       >
         {selectedOption}
         <FaAngleDown
@@ -24,7 +24,7 @@ const Dropdown = ({ options, selectedOption, onSelect, className = '' }) => {
         />
       </button>
       {isOpen && (
-        <ul className={`absolute left-0 bg-white rounded-lg shadow-[0px_3px_6px_#00000029] text-custom-dark-blue-1 font-semibold ${defaultWidthClass} ${className} max-h-40 overflow-y-auto`}>
+        <ul className={`absolute left-0 text-xs bg-white rounded-lg shadow-[0px_3px_6px_#00000029] text-custom-dark-blue-1 font-semibold ${defaultWidthClass}`}>
           {options.map((option, index) => (
             <li
               key={index}
