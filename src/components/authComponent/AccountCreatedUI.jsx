@@ -14,7 +14,7 @@ const AccountCreatedUI = () => {
            <FaEnvelopeOpenText className="h-20 w-20 " />
          </div>
          {/* text div */}
-         <div className="px-3">
+         <div className="px-3  space-y-5">
            <HeadingH1 children="YOUR ACCOUNT HAS BEEN SUCCESSFULLY CREATED" />
            <ParagraphBlue2 children="Welcome to Amplify Research! Let's start your first video conference." />
            
