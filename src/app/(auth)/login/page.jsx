@@ -46,7 +46,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className='min-h-[86vh] lg:min-h-0'>
       {/* Top div for lg */}
       <div className="hidden justify-center items-start lg:flex bg-white h-10">
         {/* left image div */}
@@ -63,11 +63,11 @@ const Login = () => {
       </div>
 
       {/* Bottom div for large screen */}
-      <div className='lg:flex justify-center items-center hidden'>
+      <div className='lg:flex justify-center items-center'>
         {/* left div */}
         <div className="flex-1">
-          <h2 className="text-2xl font-bold text-center mb-6">LOGIN</h2>
-          <form onSubmit={handleSubmit} className='px-32'>
+          <h2 className="text-2xl font-bold text-center mb-6 pt-5 lg:pt-0">LOGIN</h2>
+          <form onSubmit={handleSubmit} className='lg:px-32 px-16'>
             <InputField
               label="Email"
               type="email"
@@ -119,7 +119,7 @@ const Login = () => {
         </div>
 
         {/* right div */}
-        <div className='flex-1 bg-custom-gray-2 min-h-screen'>
+        <div className='flex-1 bg-custom-gray-2 min-h-screen hidden lg:block'>
           <div className="flex-1 flex justify-center items-start">
             <Image
               src={registerImage}
@@ -131,61 +131,7 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Bottom div for small screen */}
-      <div className='flex lg:hidden'>
-        <div className='flex-1'>
-          <h2 className="text-2xl font-bold text-center my-6">LOGIN</h2>
-          <form onSubmit={handleSubmit} className='px-10 md:px-28 pt-5'>
-            <InputField
-              label="Email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-            />
-            <InputField
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              icon={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="focus:outline-none"
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              }
-            />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <div className="mb-4 flex justify-between items-center">
-              <label className="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  className="form-checkbox peer checked:bg-custom-dark-blue-1 border-black rounded-lg"
-                  name="terms"
-                  // Handle checkbox change
-                />
-                <span className="ml-2">Remember me</span>
-              </label>
-              <p className='text-custom-light-blue-1 text-base'>Forgot Password</p>
-            </div>
-            <Button
-              type="submit"
-              className="w-full bg-custom-orange-1 text-white font-semibold py-2 rounded-lg hover:bg-orange-600"
-            >
-              Login
-            </Button>
-          </form>
-          <p className="mt-4 text-center">
-            Don't have an Account? <Link href="/register" className="text-custom-light-blue-1">Register</Link>
-          </p>
-        </div>
-      </div>
+      
       </div>
     
   );
