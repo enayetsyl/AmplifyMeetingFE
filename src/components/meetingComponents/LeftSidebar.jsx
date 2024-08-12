@@ -14,6 +14,11 @@ const LeftSidebar = ({
   setIsWhiteBoardOpen,
   isRecordingOpen,
   setIsRecordingOpen,
+  isBreakoutRoom,
+  setIsBreakoutRoom,
+  breakoutRooms,
+  setBreakoutRooms,
+  handleBreakoutRoomChange,selectedRoom, setSelectedRoom
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -186,6 +191,13 @@ const LeftSidebar = ({
             role={role}
             toggleWhiteBoard={toggleWhiteBoard}
             toggleRecordingButton={toggleRecordingButton}
+            isBreakoutRoom={isBreakoutRoom}
+            setIsBreakoutRoom={setIsBreakoutRoom}
+            breakoutRooms={breakoutRooms}
+            setBreakoutRooms={setBreakoutRooms}
+            handleBreakoutRoomChange={handleBreakoutRoomChange}
+            selectedRoom={selectedRoom}
+            setSelectedRoom={setSelectedRoom}
           />
         ) : (
           <LeftSidebarCloseUi
@@ -204,6 +216,13 @@ const LeftSidebar = ({
             role={role}
             toggleWhiteBoard={toggleWhiteBoard}
             toggleRecordingButton={toggleRecordingButton}
+            isBreakoutRoom={isBreakoutRoom}
+            setIsBreakoutRoom={setIsBreakoutRoom}
+            breakoutRooms={breakoutRooms}
+            setBreakoutRooms={setBreakoutRooms}
+            handleBreakoutRoomChange={handleBreakoutRoomChange}
+            selectedRoom={selectedRoom}
+            setSelectedRoom={setSelectedRoom}
           />
         )}
       </div>

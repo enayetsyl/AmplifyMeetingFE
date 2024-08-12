@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import HeadingBlue25px from '../shared/HeadingBlue25px';
 import InputField from '../shared/InputField';
 import { GoPlus } from 'react-icons/go';
-import Button from '../shared/button';
+import Button from '../shared/Button';
 import HeadingLg from '../shared/HeadingLg';
 import { IoTrashSharp } from "react-icons/io5";
 import ParagraphLg from '../shared/ParagraphLg';

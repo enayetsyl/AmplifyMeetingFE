@@ -1,7 +1,7 @@
 import React from 'react'
 import HeadingH1 from '../shared/headingH1'
 import ParagraphBlue2 from '../shared/ParagraphBlue2'
-import Button from '../shared/button'
+import Button from '../shared/Button'
 import { FaEnvelopeOpenText } from 'react-icons/fa'
 
 const AccountCreatedUI = () => {
@@ -14,7 +14,7 @@ const AccountCreatedUI = () => {
            <FaEnvelopeOpenText className="h-20 w-20 " />
          </div>
          {/* text div */}
-         <div className="px-3">
+         <div className="px-3  space-y-5">
            <HeadingH1 children="YOUR ACCOUNT HAS BEEN SUCCESSFULLY CREATED" />
            <ParagraphBlue2 children="Welcome to Amplify Research! Let's start your first video conference." />
            

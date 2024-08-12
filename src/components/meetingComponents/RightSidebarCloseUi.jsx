@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../shared/button";
+import Button from "../shared/Button";
 import { LuClipboardSignature } from "react-icons/lu";
 import { FaEye, FaFolder, FaTrash, FaVideo } from "react-icons/fa";
 import { BsChatSquareFill } from "react-icons/bs";
@@ -70,7 +70,7 @@ const RightSidebarCloseUi = ({
         {/* observers list */}
         {activeTab === "observersList" && (
           <div className="flex-grow pt-2 overflow-y-auto">
-            {/* observers continer */}
+            {/* observers container */}
             {observers?.map((observer) => (
               <div
                 className="flex justify-center items-center gap-2 py-1"

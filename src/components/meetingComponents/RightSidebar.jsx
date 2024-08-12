@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import userImage from "../../../public/user.jpg";
 import groupChatImage from "../../../public/group-chat.png";
-import { LuArrowLeftToLine, LuArrowRightToLine } from 'react-icons/lu';
-import RightSidebarCloseUi from './RightSidebarCloseUi';
-import RightSidebarOpenUi from './RightSidebarOpenUi';
+import { LuArrowLeftToLine, LuArrowRightToLine } from "react-icons/lu";
+import RightSidebarCloseUi from "./RightSidebarCloseUi";
+import RightSidebarOpenUi from "./RightSidebarOpenUi";
 
-const RightSidebar = ({observers, setObservers}) => {
+const RightSidebar = ({
+  observers,
+  setObservers,
+  isBreakoutRoom,
+  setIsBreakoutRoom,
+  breakoutRooms,
+  setBreakoutRooms,
+}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("observersList");
@@ -13,14 +20,14 @@ const RightSidebar = ({observers, setObservers}) => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [isWaiting, setIsWaiting] = useState([
     {
-      name: 'Brendan Steven',
+      name: "Brendan Steven",
       image: userImage,
     },
     {
-      name: 'Mark Berg',
+      name: "Mark Berg",
       image: userImage,
-    }
-  ])
+    },
+  ]);
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -159,42 +166,41 @@ const RightSidebar = ({observers, setObservers}) => {
         {isSidebarOpen ? (
           // If side bar open
           <RightSidebarOpenUi
-          observers={observers}
-          setObservers={setObservers}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          currentObserver={currentObserver}
-          setCurrentObserver={setCurrentObserver}
-          selectedChat={selectedChat}
-          setSelectedChat={setSelectedChat}
-          isWaiting={isWaiting}
-          setIsWaiting={setIsWaiting}
-          handleTabClick={handleTabClick}
-          chatParticipants={chatParticipants}
-          files={files}
-          handleSearch={handleSearch}
+            observers={observers}
+            setObservers={setObservers}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            currentObserver={currentObserver}
+            setCurrentObserver={setCurrentObserver}
+            selectedChat={selectedChat}
+            setSelectedChat={setSelectedChat}
+            isWaiting={isWaiting}
+            setIsWaiting={setIsWaiting}
+            handleTabClick={handleTabClick}
+            chatParticipants={chatParticipants}
+            files={files}
+            handleSearch={handleSearch}
           />
         ) : (
           <RightSidebarCloseUi
-          observers={observers}
-          setObservers={setObservers}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          currentObserver={currentObserver}
-          setCurrentObserver={setCurrentObserver}
-          selectedChat={selectedChat}
-          setSelectedChat={setSelectedChat}
-          isWaiting={isWaiting}
-          setIsWaiting={setIsWaiting}
-          handleTabClick={handleTabClick}
-          chatParticipants={chatParticipants}
-          files={files}
+            observers={observers}
+            setObservers={setObservers}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            currentObserver={currentObserver}
+            setCurrentObserver={setCurrentObserver}
+            selectedChat={selectedChat}
+            setSelectedChat={setSelectedChat}
+            isWaiting={isWaiting}
+            setIsWaiting={setIsWaiting}
+            handleTabClick={handleTabClick}
+            chatParticipants={chatParticipants}
+            files={files}
           />
-        )
-      }
+        )}
       </div>
     </div>
   );
-}
+};
 
-export default RightSidebar
+export default RightSidebar;

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-import Button from "@/components/shared/button";
+import Button from "@/components/shared/Button";
 import Step1 from "@/components/createProjectFormComponent/Step1";
 import Step2 from "@/components/createProjectFormComponent/Step2";
 import Step3 from "@/components/createProjectFormComponent/Step3";
@@ -14,7 +14,7 @@ import { BiSolidBarChartAlt2 } from "react-icons/bi";
 import { HiOutlineMinus } from "react-icons/hi2";
 
 const Page = () => {
-  const [currentStep, setCurrentStep] = useState(4);
+  const [currentStep, setCurrentStep] = useState(5);
   const [formData, setFormData] = useState({
     name: "Project Name",
     host: "Host Name",
@@ -34,84 +34,68 @@ const Page = () => {
     participants: [
       { name: "Juliet Frazier", email: "juliet@gmail.com" },
       { name: "John Doe", email: "john.doe@example.com" },
-      { name: "Alice Johnson", email: "alice.johnson@example.com" },
-      { name: "Bob Smith", email: "bob.smith@example.com" },
-      { name: "Eve Davis", email: "eve.davis@example.com" },
-      { name: "Charlie Brown", email: "charlie.brown@example.com" },
-      { name: "Dana White", email: "dana.white@example.com" },
-      { name: "Frank Green", email: "frank.green@example.com" },
-      { name: "Grace Lee", email: "grace.lee@example.com" },
-      { name: "Hank Thomas", email: "hank.thomas@example.com" },
-      { name: "Ivy Moore", email: "ivy.moore@example.com" },
-      { name: "Jack Black", email: "jack.black@example.com" },
     ],
     observers: [
       { name: "Oliver Twist", email: "oliver.twist@example.com" },
-      { name: "Harry Potter", email: "harry.potter@example.com" },
-      { name: "Hermione Granger", email: "hermione.granger@example.com" },
-      { name: "Ron Weasley", email: "ron.weasley@example.com" },
-      { name: "Luna Lovegood", email: "luna.lovegood@example.com" },
-      { name: "Neville Longbottom", email: "neville.longbottom@example.com" },
-      { name: "Draco Malfoy", email: "draco.malfoy@example.com" },
-      { name: "Ginny Weasley", email: "ginny.weasley@example.com" },
-      { name: "Fred Weasley", email: "fred.weasley@example.com" },
-      { name: "George Weasley", email: "george.weasley@example.com" },
-      { name: "Sirius Black", email: "sirius.black@example.com" },
-      { name: "Remus Lupin", email: "remus.lupin@example.com" },
     ],
-    breakoutRooms: [
+    breakoutRooms: [],
+    polls: [
       {
-        name: "Room A",
-        participants: [
-          { name: "Juliet Frazier", email: "juliet@gmail.com" },
-          { name: "John Doe", email: "john.doe@example.com" },
+        name: "Poll 1",
+        active: true,
+        questions: [
+          {
+            question: "What is your favorite color?",
+            type: "single",
+            answers: [
+              { answer: "Red" },
+              { answer: "Blue" },
+              { answer: "Green" },
+              { answer: "Yellow" },
+            ],
+          },
+          {
+            question: "Select your preferred languages (multiple)",
+            type: "multiple",
+            answers: [
+              { answer: "English" },
+              { answer: "French" },
+              { answer: "Spanish" },
+            ],
+          },
         ],
-        interpreter: true,
-        interpreterName: "Interpreter One",
-        interpreterEmail: "interpreter.one@example.com",
-        interpreterLanguage: "French",
+        creator: "Juliet Frazier",
       },
       {
-        name: "Room B",
-        participants: [
-          { name: "Alice Johnson", email: "alice.johnson@example.com" },
-          { name: "Bob Smith", email: "bob.smith@example.com" },
+        name: "Poll 2",
+        active: false,
+        questions: [
+          {
+            question: "What is your preferred mode of transportation?",
+            type: "single",
+            answers: [
+              { answer: "Car" },
+              { answer: "Bike" },
+              { answer: "Public Transport" },
+              { answer: "Walking" },
+            ],
+          },
+          {
+            question: "Which continents have you visited? (multiple)",
+            type: "multiple",
+            answers: [
+              { answer: "North America" },
+              { answer: "Europe" },
+              { answer: "Asia" },
+              { answer: "Africa" },
+            ],
+          },
         ],
-        interpreter: false,
-      },
-      {
-        name: "Room C",
-        participants: [
-          { name: "Eve Davis", email: "eve.davis@example.com" },
-          { name: "Charlie Brown", email: "charlie.brown@example.com" },
-        ],
-        interpreter: true,
-        interpreterName: "Interpreter Two",
-        interpreterEmail: "interpreter.two@example.com",
-        interpreterLanguage: "Spanish",
-      },
-      {
-        name: "Room D",
-        participants: [
-          { name: "Dana White", email: "dana.white@example.com" },
-          { name: "Frank Green", email: "frank.green@example.com" },
-        ],
-        interpreter: false,
-      },
-      {
-        name: "Room E",
-        participants: [
-          { name: "Grace Lee", email: "grace.lee@example.com" },
-          { name: "Hank Thomas", email: "hank.thomas@example.com" },
-        ],
-        interpreter: true,
-        interpreterName: "Interpreter Three",
-        interpreterEmail: "interpreter.three@example.com",
-        interpreterLanguage: "German",
+        creator: "John Doe",
       },
     ],
-    polls: [],
   });
+  
   
 
   const nextStep = () => {
@@ -210,16 +194,7 @@ const Page = () => {
               Next
             </Button>
           )}
-          {currentStep === 5 && (
-            <Button
-              variant="save"
-              type="submit"
-              className="rounded-lg px-7 py-1"
-              onClick={() => alert("Submit Form")}
-            >
-              Save Project
-            </Button>
-          )}
+       
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import InputField from "../shared/InputField";
 import Dropdown from "../shared/Dropdown";
 import { language, moderatorList, timeZone } from "@/constant/Index";
 import FormDropdownLabel from "../shared/FormDropdownLabel";
-import Button from "../shared/button";
+import Button from "../shared/Button";
 
 const Step1 = ({ formData, setFormData }) => {
   const [selectedModerator, setSelectedModerator] = useState("Moderator1");

@@ -1,7 +1,7 @@
 'use client'
 import HeadingH1 from '../shared/headingH1'
 import ParagraphBlue2 from '../shared/ParagraphBlue2'
-import Button from '../shared/button'
+import Button from '../shared/Button'
 import BackToLogin from '../shared/BackToLogin'
 import { FaEnvelopeOpenText } from 'react-icons/fa'
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -84,13 +84,13 @@ const [errors, setErrors] = useState({});
             }
           />
          
-          <button
+          <Button
             type="submit"
             className="w-full bg-custom-orange-1 text-white font-semibold py-2 rounded-lg hover:bg-orange-600"
             onClick={handleSubmit}
           >
             Reset Password
-          </button>
+          </Button>
         </form>
          </div>
          

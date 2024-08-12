@@ -7,16 +7,22 @@ import React from "react";
 const page = () => {
   return (
     <>
-    <div className="dashboard_sidebar_bg px-40 pb-20">
-      <div className="bg-white pb-20 pt-10 px-28 shadow-[0px_3px_16px_#00000029]">
+    <div className="dashboard_sidebar_bg lg:px-40 pb-20">
+      <div className="bg-white pb-20 pt-10 lg:px-28 px-5 shadow-[0px_3px_16px_#00000029]">
+        <div className="flex justify-center lg:justify-start">
         <Logo />
-        <p
-          className="text-custom-dark-blue-2 text-4xl font-bold uppercase  pb-2 pt-10 " >
+        </div>
+        <p className="text-custom-dark-blue-2 text-2xl lg:text-4xl font-bold uppercase  pb-2 pt-10  text-center lg:text-left" >
           AMPLIFY RESEARCH PRIVACY POLICY
         </p>
         
-        <p className="pb-10">Last updated: December 12, 2022</p>
+        <p className="pb-10 text-center lg:text-left">Last updated: December 12, 2022</p>
+
+        <p className="py-4 text-custom-dark-blue-2 text-center lg:text-left ">This Privacy Statement describes the personal data we collect and/or process (which may include collecting, organizing, structuring, storing, using, or disclosing) to provide products and services offered directly by Zoom Video Communications, Inc. (“Zoom”), including Zoom’s websites, its meetings, webinars, and messaging platform, related collaborative features, and Zoom App Marketplace (“Zoom products and services” or “products and services”). Zoom products and services covered in this Privacy Statement do not include products or services developed by Zoom that are covered under a separate privacy policy (including those listed here).</p>
+
+        <div className="py-5 text-center lg:text-left">
         <HeadingBlue25px children="WHAT PERSONAL DATA DO WE RECEIVE?" />
+        </div>
         <p className="py-4 text-custom-dark-blue-2">
           Personal data is any information from or about an identified or
           identifiable person, including information that Zoom can associate
@@ -24,7 +30,7 @@ const page = () => {
           customers, the following categories of personal data when you use or
           interact with Zoom products and services:
         </p>
-        <ul className="pl-16 space-y-5 list-disc list-inside custom-bullets pb-16 text-custom-dark-blue-2">
+        <ul className="pl-5 lg:pl-16 space-y-5 list-disc list-inside custom-bullets pb-16 text-custom-dark-blue-2">
           <li>
             <span className="font-medium">Account Information:</span> Information associated with an account that
             licenses Zoom products and services, which may include administrator
@@ -155,7 +161,9 @@ const page = () => {
             showed you.
           </li>
         </ul>
-        <HeadingBlue25px children="HOW DO WE USE PERSONAL DATA?" />
+       <div className="text-center lg:text-left">
+       <HeadingBlue25px children="HOW DO WE USE PERSONAL DATA?" />
+       </div>
         <div className="space-y-5 text-custom-dark-blue-2 pt-10">
           <p>
             Zoom employees do not access meeting, webinar, messaging or email

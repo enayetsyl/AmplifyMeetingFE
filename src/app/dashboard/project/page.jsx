@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Button from '@/components/shared/button';
+import Button from '@/components/shared/Button';
 import Dropdown from '@/components/shared/Dropdown';
 import Search from '@/components/singleComponent/Search';
 import { MdAdd } from 'react-icons/md';
@@ -115,21 +115,21 @@ const Page = () => {
         )}
         {/* Pagination Controls */}
         <div className="flex justify-center mt-4">
-          <button
+          <Button
             onClick={() => handlePageChange(page - 1)}
             disabled={page <= 1}
             className="px-4 py-2 bg-gray-300 rounded-md"
           >
             Previous
-          </button>
+          </Button>
           <span className="mx-4">Page {page} of {totalPages}</span>
-          <button
+          <Button
             onClick={() => handlePageChange(page + 1)}
             disabled={page >= totalPages}
             className="px-4 py-2 bg-gray-300 rounded-md"
           >
             Next
-          </button>
+          </Button>
         </div>
       </div>
       
