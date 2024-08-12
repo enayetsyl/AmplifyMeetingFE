@@ -87,7 +87,7 @@ const page = () => {
   const [isWhiteBoardOpen, setIsWhiteBoardOpen] = useState(false)
   const [isRecordingOpen, setIsRecordingOpen] = useState(false)
 
-  const [isBreakoutRoom, setIsBreakoutRoom] = useState(true);
+  const [isBreakoutRoom, setIsBreakoutRoom] = useState(false);
   const [breakoutRooms, setBreakoutRooms] = useState([
     {
       roomName: 'Room A: Group 1',
