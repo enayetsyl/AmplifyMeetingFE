@@ -70,7 +70,7 @@ const RightSidebarCloseUi = ({
         {/* observers list */}
         {activeTab === "observersList" && (
           <div className="flex-grow pt-2 overflow-y-auto">
-            {/* observers continer */}
+            {/* observers container */}
             {observers?.map((observer) => (
               <div
                 className="flex justify-center items-center gap-2 py-1"

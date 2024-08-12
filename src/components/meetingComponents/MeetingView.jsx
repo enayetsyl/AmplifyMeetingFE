@@ -28,6 +28,11 @@ const MeetingView = ({
   meetingStatus,
   isRecordingOpen,
   setIsRecordingOpen,
+  isBreakoutRoom,
+  setIsBreakoutRoom,
+  breakoutRooms,
+  setBreakoutRooms,
+  projectStatus
 }) => {
   return (
     <div className="px-5 py-5 flex flex-col justify-between items-between h-full">
@@ -42,6 +47,12 @@ const MeetingView = ({
                 ? "On going Meeting"
                 : "End of Meeting"}
             </p>
+            <Button
+              children={`${projectStatus}`}
+              type="button"
+              variant={`${projectStatus !== "Open" ? "secondary" : "primary"}`}
+              className={`text-white py-1 px-3 rounded-xl text-sm`}
+            />
             <Button
               children={`${role} View`}
               type="button"
