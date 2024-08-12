@@ -12,8 +12,7 @@ const page = () => {
         <div className="flex justify-center lg:justify-start">
         <Logo />
         </div>
-        <p
-          className="text-custom-dark-blue-2 text-2xl lg:text-4xl font-bold uppercase  pb-2 pt-10 px-10 text-center lg:text-left" >
+        <p className="text-custom-dark-blue-2 text-2xl lg:text-4xl font-bold uppercase  pb-2 pt-10  text-center lg:text-left" >
           AMPLIFY RESEARCH PRIVACY POLICY
         </p>
         
