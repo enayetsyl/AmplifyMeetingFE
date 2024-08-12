@@ -28,12 +28,12 @@ const Step1 = ({ formData, setFormData }) => {
   };
 
   return (
-    <div>
+    <div className="px-5">
       <HeadingBlue25px children="General Information" />
       {/* form items container div */}
       <div className="pt-3 w-full ">
         {/* contianer for name and moderator */}
-        <div className="flex justify-start items-start gap-5 w-full">
+        <div className="flex justify-start items-start gap-5 w-full flex-col md:flex-row">
           <div className="w-full">
             <InputField
               label="Name"
@@ -59,26 +59,30 @@ const Step1 = ({ formData, setFormData }) => {
           </div>
         </div>
         {/* container for start time, time zone and duration */}
-        <div className="flex justify-start items-start gap-5 w-full">
+        <div className="flex justify-start items-start gap-5 w-full mt-5">
           {/* ⁡⁢⁣⁣Todo calender need to implement ⁡ */}
-          <div className="flex justify-center items-start gap-5">
+          <div className="flex justify-center items-start gap-5 flex-col md:flex-row">
             <div>
               <p className="block text-sm font-semibold mb-2" htmlFor={name}>
                 Start Time
               </p>
               <div className="flex items-center">
-              <input
-                type="date"
-                value={formData.startDate}
-                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                className="w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none border-black"
-              />
-              <input
-                type="time"
-                value={formData.startTime}
-                onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                className="w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none ml-2 border-black"
-              />
+                <input
+                  type="date"
+                  value={formData.startDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, startDate: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none border-black"
+                />
+                <input
+                  type="time"
+                  value={formData.startTime}
+                  onChange={(e) =>
+                    setFormData({ ...formData, startTime: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none ml-2 border-black"
+                />
               </div>
             </div>
             <div>
@@ -104,7 +108,7 @@ const Step1 = ({ formData, setFormData }) => {
             /> */}
           </div>
         </div>
-        <div className="w-[45%]">
+        <div className="md:w-[45%] w-full">
           <InputField
             label="Description"
             type="text"
@@ -115,14 +119,14 @@ const Step1 = ({ formData, setFormData }) => {
           />
         </div>
         {/* lower div container */}
-        <div className="flex justify-center items-center gap-5  ">
+        <div className="flex justify-center items-center gap-5  flex-col md:flex-row">
           {/* ⁡⁣⁣⁢security div⁡ */}
-          <div className="space-y-1 w-2/5">
+          <div className="space-y-1 md:w-2/5 w-full">
             <FormDropdownLabel children="Security" />
             {/* passcode and waiting room container */}
-            <div className="flex justify-start items-start gap-5 pt-2">
+            <div className="flex justify-start items-start gap-5 pt-2 flex-col md:flex-row">
               {/* passcode */}
-              <div className="w-1/2">
+              <div className="md:w-1/2 w-full">
                 <div className="flex justify-start items-center gap-2 pb-1">
                   <input
                     type="checkbox"
@@ -149,7 +153,7 @@ const Step1 = ({ formData, setFormData }) => {
                     type="submit"
                     variant="save"
                     children="New Passcode"
-                    className="py-1 px-5 shadow-[0px_3px_6px_#09828F69] rounded-xl"
+                    className="py-1 px-5 shadow-[0px_3px_6px_#09828F69] rounded-xl mt-2 md:mt-0"
                   />
                   <p className="text-sm text-custom-dark-blue-2 pt-3">
                     Only users who have the invite link or passcode can join the
@@ -158,7 +162,7 @@ const Step1 = ({ formData, setFormData }) => {
                 </div>
               </div>
               {/* ⁡⁣⁣⁢Waiting room⁡ */}
-              <div className="w-1/2">
+              <div className="sm:w-1/2 w-full">
                 <div className="flex justify-start items-center gap-2 pb-1">
                   <input
                     type="checkbox"
@@ -180,10 +184,10 @@ const Step1 = ({ formData, setFormData }) => {
             </div>
           </div>
           {/* ⁡⁣⁣⁢advance option div⁡ */}
-          <div className="space-y-2 w-3/5 ">
+          <div className="space-y-2 md:w-3/5 w-full">
             <FormDropdownLabel children="Advanced Option" />
             {/* interpreter, language and name div container */}
-            <div className="flex justify-start items-start gap-5 pt-2">
+            <div className="flex justify-start items-start gap-5 pt-2 flex-col md:flex-row">
               {/* interpreter */}
               <div className="w-[20%]">
                 <div className="flex justify-start items-center gap-2 ">
@@ -201,7 +205,7 @@ const Step1 = ({ formData, setFormData }) => {
                 </div>
               </div>
               {/* language */}
-              <div className="w-[30%]">
+              <div className="md:w-[30%] w-full">
                 <FormDropdownLabel children="Language" className="mb-2" />
                 <Dropdown
                   options={language}
@@ -214,7 +218,7 @@ const Step1 = ({ formData, setFormData }) => {
                 />
               </div>
               {/* name and email */}
-              <div className="w-[50%]">
+              <div className="md:w-[50%] w-full">
                 <InputField
                   label="Name"
                   type="text"

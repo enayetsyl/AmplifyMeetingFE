@@ -140,7 +140,7 @@ const DashboardSidebar = () => {
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full bg-white z-20 transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          isSidebarOpen ? "translate-x-0 " : "-translate-x-full "
         } transition-transform duration-300 md:relative md:translate-x-0 w-[260px] dashboard_sidebar_bg flex flex-col justify-center items-center`}
       >
         <div className="py-10">

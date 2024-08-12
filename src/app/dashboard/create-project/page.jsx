@@ -98,13 +98,13 @@ const Page = () => {
   return (
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen pb-10">
       <div className="bg-white py-5 w-full">
-        <div className="px-10 flex justify-between items-center">
+        <div className="md:px-10 flex justify-around md:justify-between items-center w-full">
           <div>
-            <HeadingBlue25px children="New Project" />
+            <p className='text-custom-teal text-2xl font-bold text-center' >New Project</p>
           </div>
         </div>
       </div>
-  <div className="create_project_progress_bar_bg py-1 w-full flex justify-center items-center">
+  <div className="create_project_progress_bar_bg py-1 w-full flex justify-center items-center ">
         <div className={`text-white ${getIconClass(1)} p-2 rounded-full`}>
           <PiNotebookFill />
         </div>
@@ -125,7 +125,7 @@ const Page = () => {
           <BiSolidBarChartAlt2 />
         </div>
       </div>
-      <div className="flex-grow mx-auto pt-5 px-10">
+      <div className="flex-grow mx-auto pt-5 md:px-10 ">
         {renderStep()}
 
         {/* Navigation buttons */}

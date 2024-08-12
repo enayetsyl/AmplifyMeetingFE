@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }) {
       <div className="min-h-screen flex flex-col h-full">
           {/* upper div */}
           <div className="flex-grow h-full flex relative">
-            <div className="sticky top-0 w-[260px] h-screen">
+            <div className="sticky top-0 md:w-[260px] h-screen">
               <DashboardSidebar />
             </div>
             <div className="flex-grow h-full">

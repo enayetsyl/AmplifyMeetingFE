@@ -40,7 +40,7 @@ const Step4 = ({ formData, setFormData }) => {
   }, [setFormData]);
 
   const handleOpenBreakoutModal = () => {
-    setRoomToEdit(null); // Reset roomToEdit to null when adding a new room
+    // setRoomToEdit(null); // Reset roomToEdit to null when adding a new room
     setIsBreakoutRoomModalOpen(true);
   };
 
@@ -120,13 +120,13 @@ const Step4 = ({ formData, setFormData }) => {
       ))}
       {/* Pagination */}
       <div className="flex justify-end py-2">
-      {totalPages > 1 && (
+      {/* {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
-      )}
+      )} */}
       </div>
       {isBreakoutRoomModalOpen && (
         <BreakoutRoomModal
@@ -136,7 +136,7 @@ const Step4 = ({ formData, setFormData }) => {
         />
       )}
       {isEditBreakoutRoomModalOpen && (
-        <EditBreakoutRoomModal
+         <EditBreakoutRoomModal
           onClose={handleCloseEditBreakoutRoomModal}
           breakoutRoomId={selectedBreakoutRoomId}
         />

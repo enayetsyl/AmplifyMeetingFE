@@ -140,11 +140,11 @@ const ProjectTable = ({ projects, setProjects }) => {
        
       </div>
         <div className='flex justify-end py-3'>
-          <Pagination 
+          {/* <Pagination 
           currentPage={2} 
           totalPages={5} 
           onPageChange={handlePageChange}
-          />
+          /> */}
           </div>
 
       {isModalOpen && (

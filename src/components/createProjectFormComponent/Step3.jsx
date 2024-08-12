@@ -46,12 +46,12 @@ const Step3 = ({ formData, setFormData }) => {
   );
 
   return (
-    <div>
+    <div className="px-5 md:px-0">
       <HeadingBlue25px children="Observers" />
       {/* Form container div */}
       <div className="pt-5 w-full space-y-3">
         <div className="w-full">
-          <div className="flex justify-start items-center gap-5 w-full">
+          <div className="flex justify-start items-center gap-5 w-full flex-col md:flex-row">
             <div className="w-full">
               <InputField
                 label="Name"
@@ -73,7 +73,7 @@ const Step3 = ({ formData, setFormData }) => {
               />
             </div>
           </div>
-          <div className="flex justify-end">
+          <div className="flex md:justify-end justify-center">
             <Button
               type="submit"
               variant="save"
@@ -91,23 +91,23 @@ const Step3 = ({ formData, setFormData }) => {
         <div className="border-[0.5px] border-solid border-custom-dark-blue-1 rounded-xl h-[300px] overflow-y-scroll mt-2">
           {/* table heading */}
           <div className="flex justify-start items-center py-3 px-5 shadow-sm">
-            <div className="w-[30%]">
+            <div className="md:w-[30%] w-1/2">
               <HeadingLg children="Name" />
             </div>
-            <div className="w-[70%]">
+            <div className="md:w-[70%] w-1/2">
               <HeadingLg children="Email" />
             </div>
           </div>
           {/* table item */}
           {currentObservers.map((observer, index) => (
             <div className="flex justify-start items-center py-3 px-5 shadow-sm" key={index}>
-              <div className="w-[30%]">
+              <div className="md:w-[30%] w-1/2">
                 <ParagraphLg children={observer.name} />
               </div>
-              <div className="w-[65%]">
+              <div className="md:w-[70%] w-1/2">
                 <ParagraphLg children={observer.email} />
               </div>
-              <div className="w-[5%] flex justify-end">
+              <div className="md:w-[5%] w-[15%] flex justify-end">
                 <IoTrashSharp className='bg-custom-orange-1 text-white p-2 text-3xl rounded-xl cursor-pointer' onClick={() => removeObserver(index)} />
               </div>
             </div>

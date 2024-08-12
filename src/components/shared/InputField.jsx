@@ -4,8 +4,8 @@ import { BiSolidErrorAlt } from "react-icons/bi";
 
 const InputField = ({ label, type = 'text', name, value, onChange, placeholder, error, icon, emailSuccess }) => {
   return (
-    <div className="mb-4">
-      <label className="block text-sm font-semibold mb-2" htmlFor={name}>
+    <div className="mb-1">
+      <label className="block sm:text-sm font-semibold mb-2 text-sm text-black" htmlFor={name}>
         {label}
       </label>
       <div className="relative">

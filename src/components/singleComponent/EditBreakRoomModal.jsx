@@ -1,41 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import HeadingBlue25px from '../shared/HeadingBlue25px';
-import InputField from '../shared/InputField';
-import Dropdown from '../shared/Dropdown';
-import Button from '../shared/Button';
-import { IoTrashSharp } from 'react-icons/io5';
-import { breakoutRoomParticipant, language } from '@/constant/Index';
-import FormDropdownLabel from '../shared/FormDropdownLabel';
-import HeadingLg from '../shared/HeadingLg';
-import ParagraphLg from '../shared/ParagraphLg';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import HeadingBlue25px from "../shared/HeadingBlue25px";
+import InputField from "../shared/InputField";
+import Dropdown from "../shared/Dropdown";
+import Button from "../shared/Button";
+import { IoTrashSharp } from "react-icons/io5";
+import { breakoutRoomParticipant, language } from "@/constant/Index";
+import FormDropdownLabel from "../shared/FormDropdownLabel";
+import HeadingLg from "../shared/HeadingLg";
+import ParagraphLg from "../shared/ParagraphLg";
+import axios from "axios";
 
-const EditBreakoutRoomModal = ({ onClose, breakoutRoomId, formData, setFormData }) => {
+const EditBreakoutRoomModal = ({
+  onClose,
+  breakoutRoomId,
+  formData,
+  setFormData,
+}) => {
   const [newRoom, setNewRoom] = useState({
-    name: '',
+    name: "",
     participants: [],
     interpreter: false,
-    interpreterName: '',
-    interpreterEmail: '',
-    interpreterLanguage: 'English',
+    interpreterName: "",
+    interpreterEmail: "",
+    interpreterLanguage: "English",
   });
 
   useEffect(() => {
     const fetchBreakoutRoom = async () => {
       try {
-        const response = await axios.get(`http://localhost:8008/get-breakout-room/${breakoutRoomId}`);
+        const response = await axios.get(
+          `http://localhost:8008/get-breakout-room/${breakoutRoomId}`
+        );
         const data = response.data;
 
         setNewRoom({
           name: data.name,
           participants: data.participants,
           interpreter: !!data.interpretor,
-          interpreterName: data.interpretor?.name || '',
-          interpreterEmail: data.interpretor?.email || '',
-          interpreterLanguage: data.interpretor?.language || 'English',
+          interpreterName: data.interpretor?.name || "",
+          interpreterEmail: data.interpretor?.email || "",
+          interpreterLanguage: data.interpretor?.language || "English",
         });
       } catch (error) {
-        console.error('Error fetching breakout room:', error);
+        console.error("Error fetching breakout room:", error);
       }
     };
 
@@ -60,29 +67,32 @@ const EditBreakoutRoomModal = ({ onClose, breakoutRoomId, formData, setFormData 
 
   const handleSave = async () => {
     try {
-      const response = await axios.put(`http://localhost:8008/update-breakout-room/${breakoutRoomId}`, {
-        name: newRoom.name,
-        participants: newRoom.participants.map(p => p._id),
-        duration: 60, // Set the duration as needed
-        interpretor: newRoom.interpreter
-          ? {
-              name: newRoom.interpreterName,
-              email: newRoom.interpreterEmail,
-              language: newRoom.interpreterLanguage,
-            }
-          : null,
-      });
+      const response = await axios.put(
+        `http://localhost:8008/update-breakout-room/${breakoutRoomId}`,
+        {
+          name: newRoom.name,
+          participants: newRoom.participants.map((p) => p._id),
+          duration: 60, // Set the duration as needed
+          interpretor: newRoom.interpreter
+            ? {
+                name: newRoom.interpreterName,
+                email: newRoom.interpreterEmail,
+                language: newRoom.interpreterLanguage,
+              }
+            : null,
+        }
+      );
 
       if (response.status === 200) {
         // Update the breakout rooms in the form data
-        const updatedBreakoutRooms = formData.breakoutRooms.map(room => 
+        const updatedBreakoutRooms = formData.breakoutRooms.map((room) =>
           room._id === breakoutRoomId ? response.data : room
         );
         setFormData({ ...formData, breakoutRooms: updatedBreakoutRooms });
         onClose();
       }
     } catch (error) {
-      console.error('Error updating breakout room:', error);
+      console.error("Error updating breakout room:", error);
     }
   };
 
@@ -154,10 +164,10 @@ const EditBreakoutRoomModal = ({ onClose, breakoutRoomId, formData, setFormData 
         </div>
 
         {/* interpreter, language and name div container */}
-        <div className="flex justify-start items-start gap-5 pt-4">
+        <div className="flex justify-start items-start gap-5 pt-4 flex-col md:flex-row">
           {/* interpreter */}
-          <div className="w-[20%]">
-            <div className="flex justify-start items-center gap-2">
+          <div className="md:w-[20%] w-full">
+            <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
               <input
                 type="checkbox"
                 checked={newRoom.interpreter}
@@ -171,7 +181,7 @@ const EditBreakoutRoomModal = ({ onClose, breakoutRoomId, formData, setFormData 
           {newRoom.interpreter && (
             <>
               {/* language */}
-              <div className="w-[30%]">
+              <div className="md:w-[30%] w-full">
                 <FormDropdownLabel children="Language" className="mb-2" />
                 <Dropdown
                   options={language}
@@ -205,19 +215,19 @@ const EditBreakoutRoomModal = ({ onClose, breakoutRoomId, formData, setFormData 
           )}
         </div>
 
-        <div className="flex justify-end mt-4 gap-5">
+        <div className="flex justify-end mt-4 gap-5 flex-col md:flex-row">
           <Button
             type="button"
             variant="cancel"
             children="Cancel"
-            className="px-5 py-1 rounded-xl"
+            className="px-5 py-1 rounded-xl w-full"
             onClick={onClose}
           />
           <Button
             type="button"
             variant="save"
             children="Save"
-            className="px-5 py-1 rounded-xl"
+            className="px-5 py-1 rounded-xl w-full"
             onClick={handleSave}
           />
         </div>
