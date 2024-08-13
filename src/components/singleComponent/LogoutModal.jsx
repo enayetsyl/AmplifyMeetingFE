@@ -2,14 +2,16 @@
 import React from 'react';
 import Button from '../shared/Button';
 import { useRouter } from 'next/navigation';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 const LogoutModal = ({ onClose }) => {
-
+  const {  setUser } = useGlobalContext();
   
   const router = useRouter()
   const handleLogout = () => {
     // Remove the token from local storage
     localStorage.removeItem('token');
+    setUser(null)
     // Perform any additional logout actions, such as redirecting to a login page
     // For example: window.location.href = '/login';
     // Close the modal
