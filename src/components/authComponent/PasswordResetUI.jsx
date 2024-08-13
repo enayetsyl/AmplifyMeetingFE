@@ -21,7 +21,7 @@ const PasswordResetUI = () => {
           <ParagraphBlue2 children="Your password has been successfully reset. " />
           <ParagraphBlue2 children="Please login to your account." />
         </div>
-        <div className="pt-10 pb-32">
+        <div className="pt-10 pb-32"> 
           <Link href="/login">
             <Button
               children="Back to Login"
