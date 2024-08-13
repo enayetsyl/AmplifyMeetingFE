@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+// RightSidebarOpenUi.js
+import React, { useEffect, useState } from "react";
 import Button from "../shared/Button";
 import Image from "next/image";
 import { LuClipboardSignature } from "react-icons/lu";
@@ -18,6 +19,7 @@ import { IoClose, IoRemoveCircle, IoSend } from "react-icons/io5";
 import { MdInsertEmoticon, MdMoveDown } from "react-icons/md";
 import RemoveUserModal from "../singleComponent/RemoveUserModal";
 import MoveToWaitingRoomModal from "../singleComponent/MoveToWaitingRoomModal";
+import axios from 'axios';
 
 const RightSidebarOpenUi = ({
   observers,
@@ -35,14 +37,62 @@ const RightSidebarOpenUi = ({
   files,
   handleSearch
 }) => {
+  const [fileList, setFileList] = useState(files);
 
+  useEffect(() => {
+    // Fetch initial files
+    const fetchFiles = async () => {
+      try {
+        const response = await axios.get('http://localhost:8008/api/files');
+        setFileList(response.data);
+      } catch (error) {
+        console.error("Error fetching files:", error);
+      }
+    };
+
+    fetchFiles();
+  }, []);
+
+  const handleFileUpload = async (event) => {
+    console.log("File upload triggered"); // Debug log
+    const file = event.target.files[0];
+    if (file) {
+      console.log(file); // Debug log
+      const formData = new FormData();
+      formData.append('file', file);
+  
+      try {
+        await axios.post('http://localhost:8008/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        const response = await axios.get('http://localhost:8008/api/files');
+        setFileList(response.data);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
+    }
+  };
+  
+  
+
+  const handleDeleteFile = async (fileId) => {
+    try {
+      await axios.delete(`http://localhost:8008/api/files/${fileId}`);
+      const response = await axios.get('http://localhost:8008/api/files');
+      setFileList(response.data);
+    } catch (error) {
+      console.error("Error deleting file:", error);
+    }
+  };
 
   return (
     <>
       {/* Backroom chat and icon */}
-      <div className="flex justify-center items-center gap-2 pt-10  lg:pb-4 mx-4">
+      <div className="flex justify-center items-center gap-2 pt-10 lg:pb-4 mx-4">
         <BsChatSquareFill className="text-custom-dark-blue-1" />
-        <h2 className=" uppercase  font-bold">backroom chat</h2>
+        <h2 className="uppercase font-bold">backroom chat</h2>
         <div className="bg-custom-black flex justify-center items-center gap-1 px-2 py-1 rounded-xl">
           <FaEye className="text-custom-orange-1" />
           <p className="text-xs text-white">Viewers</p>
@@ -58,11 +108,11 @@ const RightSidebarOpenUi = ({
             children="Observers List"
             variant="default"
             type="submit"
-            className={`w-full py-2 rounded-xl pl-2  text-[10px] text-center px-1  ${
+            className={`w-full py-2 rounded-xl pl-2 text-[10px] text-center px-1 ${
               activeTab === "observersList"
                 ? "shadow-[0px_4px_6px_#1E656D4D]"
-                : "bg-custom-gray-8 border-2  border-custom-teal !text-custom-teal "
-            }  `}
+                : "bg-custom-gray-8 border-2 border-custom-teal !text-custom-teal "
+            } `}
             onClick={() => handleTabClick("observersList")}
           />
           <div className="w-full relative">
@@ -70,11 +120,11 @@ const RightSidebarOpenUi = ({
               children="Observers Chat"
               variant="default"
               type="submit"
-              className={`w-full py-2 rounded-xl pl-2  text-[10px] text-center px-1  ${
+              className={`w-full py-2 rounded-xl pl-2 text-[10px] text-center px-1 ${
                 activeTab === "observersChat"
                   ? "shadow-[0px_4px_6px_#1E656D4D]"
-                  : "bg-custom-gray-8 border-2  border-custom-teal !text-custom-teal "
-              }  `}
+                  : "bg-custom-gray-8 border-2 border-custom-teal !text-custom-teal "
+              } `}
               onClick={() => handleTabClick("observersChat")}
             />
             <div className="absolute -top-1 -right-1 w-3 h-3 rounded-lg bg-[#ff2b2b] shadow-[0px_1px_3px_#00000036]"></div>
@@ -92,7 +142,7 @@ const RightSidebarOpenUi = ({
               inputClassName="!bg-[#F3F4F5] !rounded-xl "
               iconClassName="!bg-[#EBEBEB]"
             />
-            {/* participant continer */}
+            {/* participant container */}
             {observers?.map((observer) => (
               <div
                 className="flex justify-center items-center gap-2 py-1"
@@ -149,7 +199,7 @@ const RightSidebarOpenUi = ({
           ))}
 
         {activeTab === "observersChat" && selectedChat && (
-          <div className="flex-grow pt-2  rounded-xl flex flex-col justify-center items-center">
+          <div className="flex-grow pt-2 rounded-xl flex flex-col justify-center items-center">
             {/* chat name and image */}
             <div className="flex w-full items-center justify-center gap-2 mb-4 bg-custom-gray-4 p-2">
               <Image
@@ -174,47 +224,49 @@ const RightSidebarOpenUi = ({
                   key={index}
                   className="flex items-center justify-between gap-2"
                 >
-                  <p className="text-[#1a1a1a] text-[12px] f">
+                  <p className="text-[#1a1a1a] text-[12px]">
                     <span className="font-bold">{message.sender}:</span>{" "}
                     {message.content}
                   </p>
-                  <p className="text-[#1a1a1a] text-[10px] text-end">
+                  <p className="text-[#1a1a1a] text-[10px] text-gray-500">
                     {message.time}
                   </p>
                 </div>
               ))}
             </div>
-            {/* send message */}
-            <div className="flex justify-between items-center gap-2 relative">
+            {/* message input */}
+            <div className="flex items-center gap-2 mt-2 bg-custom-gray-2 p-2 rounded-xl">
+              <MdInsertEmoticon className="text-custom-gray-4" />
               <input
                 type="text"
-                placeholder="Type Message"
-                className="rounded-lg py-1 px-2 placeholder:text-[10px]"
+                placeholder="Type your message..."
+                className="flex-grow bg-transparent border-none outline-none"
               />
-              <div className="absolute right-11 cursor-pointer">
-                <MdInsertEmoticon />
-              </div>
-              <div className="py-1.5 px-1.5 bg-custom-orange-2 rounded-[50%] text-white cursor-pointer text-sm">
+              <button className="bg-custom-teal text-white p-2 rounded-full">
                 <IoSend />
-              </div>
+              </button>
             </div>
           </div>
         )}
       </div>
 
+      {/* document hub */}
       <div className="mb-4">
         {/* heading */}
         <div className="flex justify-center items-center gap-2 px-4 pb-2 ">
-          <IoIosDocument className="text-custom-dark-blue-1text-lg" />
+          <IoIosDocument className="text-custom-dark-blue-1 text-lg" />
           <h1 className="uppercase font-bold flex-1 text-custom-dark-blue-2">
             document hub
           </h1>
-          <Button
-            children="Upload File"
-            variant="primary"
-            type="submit"
-            className="bg-custom-orange-1 text-white rounded-xl py-1 px-3 text-xs"
-          />
+          <label className="bg-custom-orange-1 text-white rounded-xl py-1 px-3 text-xs cursor-pointer">
+  Upload File
+  <input
+    type="file"
+    className="hidden"
+    onChange={handleFileUpload}
+  />
+</label>
+
         </div>
         {/* Upload file div */}
         <div className="bg-custom-gray-8 rounded-xl mx-4 p-2 overflow-y-auto">
@@ -224,22 +276,30 @@ const RightSidebarOpenUi = ({
             <p className="text-xs text-custom-gray-3 mr-11">Size</p>
           </div>
           {/* files */}
-          <div className="flex items-center justify-between bg-gray-200 py-3 rounded">
-            <div className="flex items-center space-x-2">
-              <FaFolder className="h-3 w-3 text-custom-gray-3" />
-              <span className="text-xs  text-custom-gray-3">
-                {files[0].name}
-              </span>
+          {fileList.map((file) => (
+            <div
+              key={file.id}
+              className="flex items-center justify-between bg-gray-200 py-3 rounded"
+            >
+              <div className="flex items-center space-x-2">
+                <FaFolder className="h-3 w-3 text-custom-gray-3" />
+                <span className="text-xs text-custom-gray-3">
+                  {file.name}
+                </span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <span className="text-xs text-custom-gray-3">
+                  {file.size}
+                </span>
+                <button
+                  className="text-red-600 hover:text-red-800"
+                  onClick={() => handleDeleteFile(file._id)}
+                >
+                  <FaTrash className="h-3 w-3" />
+                </button>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-xs text-custom-gray-3">
-                {files[0].size}
-              </span>
-              <button className="text-red-600 hover:text-red-800">
-                <FaTrash className="h-3 w-3" />
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </>
