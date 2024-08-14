@@ -83,7 +83,7 @@ const page = () => {
       </div>
 
       {/* Body */}
-      <div className="flex-grow w-full">
+      <div className="flex-grow w-full z-10">
         <ContactTable/>
       </div>
       {showAddContactModal && (
