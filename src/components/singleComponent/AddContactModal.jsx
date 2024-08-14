@@ -1,22 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputField from "../shared/InputField";
 import Button from "../shared/Button";
 import { useGlobalContext } from "@/context/GlobalContext";
 
-const AddContactModal = ({ onClose }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [companyName, setCompanyName] = useState("");
+const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
+  const [firstName, setFirstName] = useState(contactToEdit?.firstName || "");
+  const [lastName, setLastName] = useState(contactToEdit?.lastName || "");
+  const [email, setEmail] = useState(contactToEdit?.email || "");
+  const [companyName, setCompanyName] = useState(contactToEdit?.companyName || "");
   const [roles, setRoles] = useState({
-    Admin: false,
-    Moderator: false,
-    Observer: false,
+    Admin: contactToEdit?.roles?.includes('Admin') || false,
+    Moderator: contactToEdit?.roles?.includes('Moderator') || false,
+    Observer: contactToEdit?.roles?.includes('Observer') || false,
   });
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const {user } = useGlobalContext()
-console.log(user)
+  const { user } = useGlobalContext();
+  console.log(user);
+
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setRoles((prevRoles) => ({
@@ -24,19 +25,21 @@ console.log(user)
       [name]: checked,
     }));
   };
-  
+  console.log('conatct to edit', contactToEdit)
+  console.log('isEditing', isEditing)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const selectedRoles = Object.keys(roles).filter((role) => roles[role]);
-    console.log(firstName, lastName, email, companyName, selectedRoles)
+    console.log(firstName, lastName, email, companyName, selectedRoles);
 
     try {
       const response = await fetch(
-        "http://localhost:8008/api/create/contact",
+        isEditing
+          ? `http://localhost:8008/api/update-contact/${contactToEdit._id}`
+          : "http://localhost:8008/api/create/contact",
         {
-          method: "POST",
+          method: isEditing ? "PUT" : "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -46,22 +49,15 @@ console.log(user)
             email,
             companyName,
             roles: selectedRoles,
-            createdBy: user._id
           }),
         }
       );
 
-
-    // Optionally, log the response status and statusText
-    console.log('Status Text:', response.statusText);
-
-    // If the response has a body, you can log that as well
-    const responseData = await response.json();
-    console.log('Response Data:', responseData);
-
+      const responseData = await response.json();
+      console.log('Response Data:', responseData);
 
       if (response.ok) {
-        setSuccessMessage("Contact created successfully.");
+        setSuccessMessage(isEditing ? "Contact updated successfully." : "Contact created successfully.");
         setError(null);
       } else {
         const errorMessage = await response.text();
@@ -69,12 +65,12 @@ console.log(user)
         setSuccessMessage(null);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setError(error.message);
       setSuccessMessage(null);
     } finally {
-      console.log(error)
-      onClose()
+      console.log(error);
+      onClose();
     }
   };
 
@@ -86,7 +82,7 @@ console.log(user)
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
       <div className="bg-white p-8 rounded-lg w-[420px]">
         <h2 className="text-2xl font-semibold mb-1 text-custom-dark-blue-2">
-          Add New Contact
+          {isEditing ? "Edit Contact" : "Add New Contact"}
         </h2>
 
         {error && (
@@ -137,7 +133,7 @@ console.log(user)
                 <input
                   type="checkbox"
                   name="Admin"
-                  checked={roles.admin}
+                  checked={roles.Admin}
                   onChange={handleCheckboxChange}
                   className="form-checkbox cursor-pointer"
                 />
@@ -147,7 +143,7 @@ console.log(user)
                 <input
                   type="checkbox"
                   name="Moderator"
-                  checked={roles.moderator}
+                  checked={roles.Moderator}
                   onChange={handleCheckboxChange}
                   className="form-checkbox cursor-pointer"
                 />
@@ -157,7 +153,7 @@ console.log(user)
                 <input
                   type="checkbox"
                   name="Observer"
-                  checked={roles.observer}
+                  checked={roles.Observer}
                   onChange={handleCheckboxChange}
                   className="form-checkbox cursor-pointer"
                 />
@@ -173,7 +169,7 @@ console.log(user)
               variant="save"
               className="rounded-xl text-center py-2 px-5 shadow-[0px_3px_6px_#09828F69]"
             >
-              Save
+              {isEditing ? "Update" : "Save"}
             </Button>
           </div>
         </form>

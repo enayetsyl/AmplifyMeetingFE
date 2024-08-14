@@ -29,7 +29,9 @@ export default function DashboardLayout({ children }) {
       {/* upper div */}
       <div className="flex-grow h-full flex relative">
         <div className="sticky top-0 w-[260px] h-screen z-10">
-          <DashboardSidebar handleLogoutModalOpen={handleLogoutModalOpen} />
+          <DashboardSidebar handleLogoutModalOpen={handleLogoutModalOpen} 
+          isLogoutModalOpen={isLogoutModalOpen}
+          />
         </div>
         <div className="flex-grow h-full ">{children}</div>
       </div>

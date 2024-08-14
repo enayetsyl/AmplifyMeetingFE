@@ -13,7 +13,7 @@ import { IoIosLogOut } from "react-icons/io";
 import LogoutModal from "../singleComponent/LogoutModal";
 import Link from "next/link";
 
-const DashboardSidebar = ({handleLogoutModalOpen}) => {
+const DashboardSidebar = ({handleLogoutModalOpen, isLogoutModalOpen}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);

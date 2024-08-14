@@ -9,9 +9,10 @@ import { RiPencilFill } from 'react-icons/ri';
 import ViewModeratorModal from './ViewModeratorModal';
 import EditModeratorModal from './EditModeratorModal';
 import ViewContactModal from './ViewContactModal';
+import AddContactModal from './AddContactModal';
 
-const ContactTable = () => {
-  const [contacts, setContacts] = useState([]);
+const ContactTable = ({contacts, currentContact, setCurrentContact, isEditing, setIsEditing}) => {
+  
   // const [filteredModerators, setFilteredModerators] = useState([]);
   // const [searchQuery, setSearchQuery] = useState('');
 
@@ -20,33 +21,18 @@ const ContactTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [isViewContactModalOpen, setIsViewContactModalOpen] = useState(false);
-  const [isEditModeratorModalOpen, setIsEditModeratorModalOpen] = useState(false);
-  const [currentContact, setCurrentContact] = useState(null);
+  const [isEditContactModalOpen, setIsEditContactModalOpen] = useState(false);
+
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   // const [inviteDetails, setInviteDetails] = useState({ firstName: '', lastName: '', email: '' });
 
   const modalRef = useRef();
 
-  useEffect(() => {
-    fetchContacts();
-  }, []);
 
-  // useEffect(() => {
-  //   filterModerators();
-  // }, [searchQuery, selectedStatus, contacts]);
-
-  const fetchContacts = async () => {
-    try {
-      const response = await fetch('http://localhost:8008/api/get-all/contact?page=1&limit=10');
-      const data = await response.json();
-      console.log(data)
-      setContacts(data.contacts);
-   
-      // setFilteredModerators(data.moderators);
-    } catch (error) {
-      console.error('Error fetching moderators:', error);
-    }
-  };
+  
+    // useEffect(() => {
+    //   filterModerators();
+    // }, [searchQuery, selectedStatus, contacts]);
 
   // const filterModerators = () => {
   //   let results = moderators;
@@ -79,15 +65,16 @@ const ContactTable = () => {
   //   fetchModerators();
   // };
 
-  // const handleEditModeratorOpenModal = (moderator) => {
-  //   closeModal();
-  //   setCurrentModerator(moderator);
-  //   setIsEditModeratorModalOpen(true);
-  // };
+  const handleEditContactOpenModal = (contact) => {
+    closeModal();
+    setIsEditing(true)
+    setCurrentContact(contact);
+    setIsEditContactModalOpen(true);
+  };
 
-  // const handleEditModeratorCloseModal = () => {
-  //   setIsEditModeratorModalOpen(false);
-  // };
+  const handleEditContactCloseModal = () => {
+    setIsEditContactModalOpen(false);
+  };
 
   const handleViewContactOpenModal = (contact) => {
     closeModal();
@@ -145,7 +132,7 @@ const ContactTable = () => {
   //       moderator.id === updatedModerator.id ? updatedModerator : moderator
   //     )
   //   );
-  //   setIsEditModeratorModalOpen(false);
+  //   setIsEditContactModalOpen(false);
   // };
 
 
@@ -216,7 +203,7 @@ const ContactTable = () => {
                       </button>
                       <button
                         className="flex items-center justify-start px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleEditModeratorOpenModal(contact)}
+                        onClick={() => handleEditContactOpenModal(contact)}
                       >
                         <RiPencilFill className="mr-2" /> Edit
                       </button>
@@ -271,13 +258,14 @@ const ContactTable = () => {
       )}
 
       {/* Edit Moderator Modal */}
-      {isEditModeratorModalOpen && (
-        <EditModeratorModal
-          isOpen={isEditModeratorModalOpen}
-          onClose={handleEditModeratorCloseModal}
-          user={currentModerator}
-          onsave={handleSaveModerator}
+      {isEditContactModalOpen && (
+        <AddContactModal 
+        onClose={handleEditContactCloseModal}
+        contactToEdit={currentContact}
+        isEditing={isEditing}
         />
+
+       
       )}
     </div>
   );
