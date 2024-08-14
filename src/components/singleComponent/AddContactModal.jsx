@@ -19,7 +19,6 @@ const AddContactModal = ({ onClose }) => {
 console.log(user)
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
-    console.log(`Checkbox ${name} is ${checked ? "checked" : "unchecked"}`);
     setRoles((prevRoles) => ({
       ...prevRoles,
       [name]: checked,
@@ -52,6 +51,15 @@ console.log(user)
         }
       );
 
+
+    // Optionally, log the response status and statusText
+    console.log('Status Text:', response.statusText);
+
+    // If the response has a body, you can log that as well
+    const responseData = await response.json();
+    console.log('Response Data:', responseData);
+
+
       if (response.ok) {
         setSuccessMessage("Contact created successfully.");
         setError(null);
@@ -61,9 +69,11 @@ console.log(user)
         setSuccessMessage(null);
       }
     } catch (error) {
-      setError("An error occurred while sending the invitation.");
+      console.log(error)
+      setError(error.message);
       setSuccessMessage(null);
     } finally {
+      console.log(error)
       onClose()
     }
   };
