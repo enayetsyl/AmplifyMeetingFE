@@ -17,7 +17,7 @@ const Login = () => {
   const {  setUser } = useGlobalContext();
   const [formData, setFormData] = useState({
     email: '',
-    password: '',
+    password: 'Ab123456@',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');

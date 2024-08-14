@@ -18,11 +18,11 @@ export default function DashboardLayout({ children }) {
     setIsLogoutModalOpen(false);
   };
 
-  useEffect(() => {
-    if (user === null) {
-      router.push("/login"); // Redirect to login page if user is null
-    }
-  }, [user, router]);
+  // useEffect(() => {
+  //   if (user === null) {
+  //     router.push("/login"); // Redirect to login page if user is null
+  //   }
+  // }, [user, router]);
 
   return (
     <div className="min-h-screen flex flex-col h-full">

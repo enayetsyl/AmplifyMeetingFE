@@ -9,6 +9,7 @@ import { FaUser } from 'react-icons/fa';
 import { RiPencilFill } from 'react-icons/ri';
 import { IoTrashSharp } from 'react-icons/io5';
 import axios from 'axios';
+import Pagination from '../shared/Pagination';
 
 const ProjectTable = ({ projects, setProjects }) => {
   console.log("prop", projects);

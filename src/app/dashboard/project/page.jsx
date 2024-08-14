@@ -61,7 +61,7 @@ const Page = () => {
   };
 
   return (
-    <div>
+ 
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center">
       <div className="bg-white h-20 w-full border-b">
         <div className="px-10 flex justify-between items-center pt-5">
@@ -79,7 +79,7 @@ const Page = () => {
                 }
               className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d]"
             />
-           </Link>
+           
           </div>
         </div>
       </div>

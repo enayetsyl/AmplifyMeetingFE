@@ -66,11 +66,11 @@ const DashboardSidebar = ({handleLogoutModalOpen}) => {
               <p className="text-base text-[#6A7E88] font-semibold">Projects</p>
             </div>
           </Link>
-          <Link href="/dashboard/moderators">
+          <Link href="/dashboard/contacts">
             <div className="flex justify-center items-center gap-3 pt-5">
               <MdOutlinePets className="text-base text-[#6A7E88]" />
               <p className="text-base text-[#6A7E88] font-semibold">
-                Moderators
+                Contacts
               </p>
             </div>
           </Link>
