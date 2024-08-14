@@ -11,7 +11,7 @@ import EditModeratorModal from './EditModeratorModal';
 import ViewContactModal from './ViewContactModal';
 import AddContactModal from './AddContactModal';
 
-const ContactTable = ({contacts, currentContact, setCurrentContact, isEditing, setIsEditing}) => {
+const ContactTable = ({contacts, setContacts, currentContact, setCurrentContact, isEditing, setIsEditing}) => {
   
   // const [filteredModerators, setFilteredModerators] = useState([]);
   // const [searchQuery, setSearchQuery] = useState('');
@@ -97,43 +97,33 @@ const ContactTable = ({contacts, currentContact, setCurrentContact, isEditing, s
     setIsModalOpen(false);
   };
 
-  // const handleClickOutside = (event) => {
-  //   if (modalRef.current && !modalRef.current.contains(event.target)) {
-  //     closeModal();
-  //   }
-  // };
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      closeModal();
+    }
+  };
 
 
 
-  // const handleDeleteModerator = async (moderatorId) => {
-  //   try {
-  //     const response = await fetch(`http://localhost:3000/api/delete/moderator?id=${moderatorId}`, {
-  //       method: 'DELETE',
-  //     });
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //       alert(data.message);
-  //       setContacts((prevModerators) =>
-  //         prevModerators.filter((moderator) => moderator.id !== moderatorId)
-  //       );
-  //     } else {
-  //       alert(data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error deleting moderator:', error);
-  //     alert('Error deleting moderator.');
-  //   }
-  // };
-
-
-  // const handleSaveModerator = (updatedModerator) => {
-  //   setContacts((prevModerators) =>
-  //     prevModerators.map((moderator) =>
-  //       moderator.id === updatedModerator.id ? updatedModerator : moderator
-  //     )
-  //   );
-  //   setIsEditContactModalOpen(false);
-  // };
+  const handleDeleteContact = async (contactId) => {
+    try {
+      const response = await fetch(`http://localhost:8008/api/delete/contact/${contactId}`, {
+        method: 'DELETE',
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+        setContacts((prevContacts) =>
+          prevContacts.filter((contact) => contact._id !== contactId)
+        );
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error deleting moderator:', error);
+      alert('Error deleting moderator.');
+    }
+  };
 
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -209,7 +199,7 @@ const ContactTable = ({contacts, currentContact, setCurrentContact, isEditing, s
                       </button>
                       <button
                         className="flex items-center justify-start px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleDeleteModerator(contact.id)}
+                        onClick={() => handleDeleteContact(contact._id)}
                       >
                         Delete
                       </button>
