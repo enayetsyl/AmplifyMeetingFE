@@ -79,7 +79,6 @@ const Page = () => {
                 }
               className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d]"
             />
-           
           </div>
         </div>
       </div>
@@ -106,7 +105,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="flex-grow mx-auto">
+      <div className="flex-grow mx-auto md">
         {loading ? (
           <p>Loading...</p>
         ) : projects && projects.length > 0 ? (
@@ -133,6 +132,8 @@ const Page = () => {
           </Button>
         </div>
       </div>
+      
+    </div>
     </div>
   );
 };
