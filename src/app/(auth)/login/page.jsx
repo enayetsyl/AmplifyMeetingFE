@@ -11,11 +11,13 @@ import logo from '../../../../public/logo.jpg';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/shared/Button';
+import { useGlobalContext } from '@/context/GlobalContext';
 const Login = () => {
   const router = useRouter()
+  const {  setUser } = useGlobalContext();
   const [formData, setFormData] = useState({
     email: '',
-    password: '',
+    password: 'Ab123456@',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -35,7 +37,7 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       });
-      console.log('User signed in:', response.data);
+      setUser(response.data)
       localStorage.setItem("token",response.data.accessToken)
       router.push(`/dashboard/my-profile/${response.data._id}`)
       // Handle successful sign-in (e.g., redirect to dashboard, store token, etc.)

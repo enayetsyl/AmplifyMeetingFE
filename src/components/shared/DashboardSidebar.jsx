@@ -13,11 +13,11 @@ import { IoIosLogOut } from "react-icons/io";
 import LogoutModal from "../singleComponent/LogoutModal";
 import Link from "next/link";
 
-const DashboardSidebar = () => {
+const DashboardSidebar = ({handleLogoutModalOpen}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
   const modalRef = useRef(null);
 
   const handleModalOpen = () => {
@@ -26,13 +26,7 @@ const DashboardSidebar = () => {
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  const handleLogoutModalOpen = () => {
-    setIsLogoutModalOpen(true);
-  };
 
-  const handleCloseLogoutModal = () => {
-    setIsLogoutModalOpen(false);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,7 +48,13 @@ const DashboardSidebar = () => {
 
   return (
     <>
-    <div className="md:block hidden">
+      <div className="md:hidden fixed top-4 left-4 z-30">
+        <FaBars
+          className="text-custom-dark-blue-1 h-6 w-6 cursor-pointer"
+          onClick={handleSidebarToggle}
+        />
+      </div>
+    <div className={`${isSidebarOpen ? 'block' : 'hidden'} md:block `}>
       <div className="w-[260px] min-h-screen h-full dashboard_sidebar_bg  flex flex-col justify-center items-center">
         <div className="py-10 ">
           <Logo />
@@ -66,11 +66,11 @@ const DashboardSidebar = () => {
               <p className="text-base text-[#6A7E88] font-semibold">Projects</p>
             </div>
           </Link>
-          <Link href="/dashboard/moderators">
+          <Link href="/dashboard/contacts">
             <div className="flex justify-center items-center gap-3 pt-5">
               <MdOutlinePets className="text-base text-[#6A7E88]" />
               <p className="text-base text-[#6A7E88] font-semibold">
-                Moderators
+                Contacts
               </p>
             </div>
           </Link>
@@ -103,7 +103,7 @@ const DashboardSidebar = () => {
             {/* modal */}
             <div
               ref={modalRef}
-              className={`absolute bottom-12 -right-24 z-20 bg-white rounded-lg h-[90px] w-[125px] profile_dropdown_shadow flex flex-col justify-center items-start px-3 gap-4 ${
+              className={`absolute bottom-12 -right-24 z-50 bg-white rounded-lg h-[90px] w-[125px] profile_dropdown_shadow flex flex-col justify-center items-start px-3 gap-4  ${
                 isModalOpen ? "block" : "hidden"
               }`}
             >
@@ -117,7 +117,7 @@ const DashboardSidebar = () => {
                 <IoIosLogOut className="text-[#697e89] h-3 w-3" />
                 <p
                   className="text-sm text-[#697e89]"
-                  onClick={handleLogoutModalOpen}
+                  onClick={(e)=>handleLogoutModalOpen(e)}
                 >
                   Logout
                 </p>
@@ -126,7 +126,7 @@ const DashboardSidebar = () => {
           </div>
         </div>
       </div>
-      {isLogoutModalOpen && <LogoutModal onClose={handleCloseLogoutModal} />}
+      
     </div>
     <div className="block md:hidden">
       {/* Hamburger Icon for smaller screens */}

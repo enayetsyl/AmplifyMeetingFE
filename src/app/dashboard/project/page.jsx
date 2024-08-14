@@ -61,7 +61,7 @@ const Page = () => {
   };
 
   return (
-    <div>
+ 
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center">
       <div className="bg-white h-20 w-full border-b">
         <div className="px-10 flex justify-between items-center pt-5">

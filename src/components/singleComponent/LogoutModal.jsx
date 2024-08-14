@@ -1,20 +1,27 @@
 'use client'
 import React from 'react';
 import Button from '../shared/Button';
+import { useRouter } from 'next/navigation';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 const LogoutModal = ({ onClose }) => {
+  const {  setUser } = useGlobalContext();
+  
+  const router = useRouter()
   const handleLogout = () => {
     // Remove the token from local storage
     localStorage.removeItem('token');
+    setUser(null)
     // Perform any additional logout actions, such as redirecting to a login page
     // For example: window.location.href = '/login';
     // Close the modal
     onClose();
+    router.push('/login')
   };
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className='bg-gray-900 inset-0 border-opacity-50'></div>
+    <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+   
       <div className="bg-white p-8 rounded-2xl w-[420px] z-10">
         <h2 className="text-2xl font-semibold mb-1 text-custom-dark-blue-2">Log Out</h2>
         <p className='text-custom-gray-6 text-[11px] mb-10'>Are you sure you want to logout?</p>

@@ -16,8 +16,8 @@ const Register = () => {
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
-    confirmPassword: '',
+    password: 'Ab123456@',
+    confirmPassword: 'Ab123456@',
     terms: false,
   });
   const [errors, setErrors] = useState({});
@@ -48,14 +48,14 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+console.log('form data', formData)
     try {
       const response = await axios.post('http://localhost:8008/api/users/create', {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
         password: formData.password,
-        role: 'PrimaryAdmin'
+        terms: formData.terms
       });
       console.log('User created:', response.data);
       router.push('/login');
