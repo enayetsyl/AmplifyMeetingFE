@@ -1,127 +1,175 @@
-import React, { useState } from 'react';
-import HeadingBlue25px from '../shared/HeadingBlue25px';
-import InputField from '../shared/InputField';
-import { GoPlus } from 'react-icons/go';
-import Button from '../shared/Button';
-import HeadingLg from '../shared/HeadingLg';
-import { IoTrashSharp } from "react-icons/io5";
-import ParagraphLg from '../shared/ParagraphLg';
-import Pagination from "../shared/Pagination"; // Make sure to import your Pagination component
+import React, { useState, useEffect } from "react";
+import HeadingBlue25px from "../shared/HeadingBlue25px";
+import InputField from "../shared/InputField";
+import { FaCircle } from "react-icons/fa";
+import FormDropdownLabel from "../shared/FormDropdownLabel";
+import Dropdown from "../shared/Dropdown";
+import { timeZone } from "@/constant/Index";
+import { generatePasscode } from "@/utils/generatePasscode"; // Adjust the import path as needed
 
-const Step3 = ({ formData, setFormData }) => {
-  const [newObserver, setNewObserver] = useState({ name: '', email: '' });
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+const Step3 = ({ formData, setFormData, contacts }) => {
+  const [selectedTimeZone, setSelectedTimeZone] = useState(formData.timeZone || "UTC-12:00 International Date Line West");
 
-  const addObserver = () => {
-    setFormData({
-      ...formData,
-      observers: [...formData.observers, newObserver],
-    });
-    setNewObserver({ name: '', email: '' });
+  // Function to refresh the passcode
+  const refreshPasscode = () => {
+    const newPasscode = generatePasscode();
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      meetingPasscode: newPasscode,
+    }));
   };
 
-  const updateNewObserver = (field, value) => {
-    setNewObserver({ ...newObserver, [field]: value });
+  // Automatically generate passcode when the component mounts or when the start date changes
+  useEffect(() => {
+    if (!formData.meetingPasscode) {
+      refreshPasscode();
+    }
+  }, [formData.startDate]);
+
+  // Update formData when time zone is selected
+  const handleTimeZoneSelect = (selectedTimeZone) => {
+    setSelectedTimeZone(selectedTimeZone);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      timeZone: selectedTimeZone,
+    }));
   };
 
-  const removeObserver = (index) => {
-    const updatedObservers = formData.observers.filter(
-      (_, i) => i !== index
-    );
-    setFormData({ ...formData, observers: updatedObservers });
+  // Update formData for other input fields
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  // Calculate the number of pages
-  const totalPages = Math.ceil(formData.observers.length / itemsPerPage);
-
-  // Get the observers for the current page
-  const currentObservers = formData.observers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
 
   return (
     <div className="px-5 md:px-0">
-      <HeadingBlue25px children="Observers" />
-      {/* Form container div */}
-      <div className="pt-5 w-full space-y-3">
-        <div className="w-full">
-          <div className="flex justify-start items-center gap-5 w-full flex-col md:flex-row">
-            <div className="w-full">
-              <InputField
-                label="Name"
-                type="text"
-                value={newObserver.name}
-                onChange={(e) =>
-                  updateNewObserver('name', e.target.value)
-                }
-              />
-            </div>
-            <div className="w-full">
-              <InputField
-                label="Email"
-                type="email"
-                value={newObserver.email}
-                onChange={(e) =>
-                  updateNewObserver('email', e.target.value)
-                }
-              />
-            </div>
-          </div>
-          <div className="flex md:justify-end justify-center">
-            <Button
-              type="submit"
-              variant="save"
-              children="Add New"
-              className="py-1 px-5 shadow-[0px_3px_6px_#09828F69] rounded-xl"
-              onClick={addObserver}
-              icon={<GoPlus />}
-            />
-          </div>
-        </div>
-      </div>
-      {/* Observer list div */}
-      <div className='pt-3'>
-        <HeadingLg children="Observer List" />
-        <div className="border-[0.5px] border-solid border-custom-dark-blue-1 rounded-xl h-[300px] overflow-y-scroll mt-2">
-          {/* table heading */}
-          <div className="flex justify-start items-center py-3 px-5 shadow-sm">
-            <div className="md:w-[30%] w-1/2">
-              <HeadingLg children="Name" />
-            </div>
-            <div className="md:w-[70%] w-1/2">
-              <HeadingLg children="Email" />
-            </div>
-          </div>
-          {/* table item */}
-          {currentObservers.map((observer, index) => (
-            <div className="flex justify-start items-center py-3 px-5 shadow-sm" key={index}>
-              <div className="md:w-[30%] w-1/2">
-                <ParagraphLg children={observer.name} />
-              </div>
-              <div className="md:w-[70%] w-1/2">
-                <ParagraphLg children={observer.email} />
-              </div>
-              <div className="md:w-[5%] w-[15%] flex justify-end">
-                <IoTrashSharp className='bg-custom-orange-1 text-white p-2 text-3xl rounded-xl cursor-pointer' onClick={() => removeObserver(index)} />
-              </div>
-            </div>
-          ))}
-        </div>
-        {/* Pagination */}
-        <div className="flex justify-end py-2">
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
+      <HeadingBlue25px>Add Meeting</HeadingBlue25px>
+      <div className="px-5 md:px-0 pt-10">
+        <div className="flex justify-start items-center gap-5">
+          <InputField
+            label="Title"
+            name="meetingTitle"
+            value={formData.meetingTitle}
+            onChange={handleInputChange}
+            placeholder="Meeting Title"
           />
-        )}
+          <div className="mb-1">
+            <label
+              htmlFor="meetingModerator"
+              className="block sm:text-sm font-semibold mb-2 text-sm text-black"
+            >
+              Moderator
+            </label>
+            <select
+              name="meetingModerator"
+              id="meetingModerator"
+              value={formData.meetingModerator}
+              onChange={handleInputChange}
+              className="px-4 py-1 sm:py-2 border border-[#000000] rounded-lg flex items-center justify-between w-full text-custom-dark-blue-1 z-50"
+            >
+              <option value="">Select Moderator</option>
+              {contacts.map((contact, index) => (
+                <option key={index} value={contact.firstName}>
+                  {contact.firstName} {contact.lastName}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <InputField
+          label="Description"
+          placeholder="Write Description"
+          className="w-full"
+          name="meetingDescription"
+          type="text"
+          value={formData.meetingDescription}
+          onChange={handleInputChange}
+        />
+        <div>
+          <div className="flex justify-start items-start gap-5 flex-col md:flex-row">
+            <div>
+              <p className="block text-sm font-semibold mb-2">Start Time</p>
+              <div className="flex items-center">
+                <input
+                  type="date"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none border-black"
+                />
+                <input
+                  type="time"
+                  name="startTime"
+                  value={formData.startTime}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none ml-2 border-black"
+                />
+              </div>
+            </div>
+            <div>
+              <FormDropdownLabel className="mb-2 z-50">Time Zone</FormDropdownLabel>
+              <Dropdown
+                options={timeZone}
+                selectedOption={selectedTimeZone}
+                onSelect={handleTimeZoneSelect}
+                className="w-full z-20"
+              />
+            </div>
+          </div>
+          <div className="flex justify-start items-end gap-10 mt-5">
+            <InputField
+              label="Duration"
+              type="text"
+              name="duration"
+              value={formData.duration}
+              onChange={handleInputChange}
+              className="w-full"
+            />
+            <div className="flex justify-start items-center gap-2">
+              <input
+                type="checkbox"
+                name="ongoing"
+                checked={formData.ongoing}
+                onChange={handleInputChange}
+                className="mr-2"
+              />
+              <label htmlFor="ongoing" className="text-sm font-semibold">
+                Ongoing/TBD
+              </label>
+            </div>
+            <div className="flex justify-start items-center gap-2">
+              <input
+                type="checkbox"
+                name="enableBreakoutRoom"
+                checked={formData.enableBreakoutRoom}
+                onChange={handleInputChange}
+                className="mr-2"
+              />
+              <label htmlFor="enableBreakoutRoom" className="text-sm font-semibold">
+                Breakout Room
+              </label>
+            </div>
+          </div>
+          <div className="flex justify-start items-end gap-5 mt-5">
+            <InputField
+              label="Passcode"
+              name="meetingPasscode"
+              type="text"
+              value={formData.meetingPasscode}
+              onChange={handleInputChange}
+              className="w-full"
+            />
+            <div
+              className="flex justify-start items-center gap-2 cursor-pointer"
+              onClick={refreshPasscode}
+            >
+              <FaCircle />
+              <p>Refresh</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

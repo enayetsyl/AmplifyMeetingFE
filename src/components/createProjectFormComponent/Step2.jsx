@@ -1,128 +1,96 @@
 import React, { useState, useEffect } from "react";
-import HeadingBlue25px from "../shared/HeadingBlue25px";
-import InputField from "../shared/InputField";
-import { GoPlus } from "react-icons/go";
-import Button from "../shared/Button";
 import HeadingLg from "../shared/HeadingLg";
-import { IoTrashSharp } from "react-icons/io5";
-import ParagraphLg from "../shared/ParagraphLg";
-import Pagination from "../shared/Pagination";
 
-const Step2 = ({ formData, setFormData }) => {
-  const [newParticipant, setNewParticipant] = useState({ name: "", email: "" });
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+const Step2 = ({ formData, setFormData, contacts, setContacts, isLoading }) => {
+ 
 
-  const addParticipant = () => {
-    setFormData({
-      ...formData,
-      participants: [...formData.participants, newParticipant],
-    });
-    setNewParticipant({ name: "", email: "" });
+  const handleRoleChange = (index, role) => {
+    const updatedContacts = [...contacts];
+    const contactRoles = updatedContacts[index].roles;
+
+    if (contactRoles.includes(role)) {
+      // Remove the role if it is already selected
+      updatedContacts[index].roles = contactRoles.filter(r => r !== role);
+    } else {
+      // Add the role if it is not already selected
+      updatedContacts[index].roles.push(role);
+    }
+
+    setContacts(updatedContacts);
+
+    // Update the formData in the parent component
+    const updatedPeople = [...formData.people];
+    updatedPeople[index] = {
+      ...updatedContacts[index],
+      roles: updatedContacts[index].roles,
+    };
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      people: updatedPeople
+    }));
   };
 
-  const updateNewParticipant = (field, value) => {
-    setNewParticipant({ ...newParticipant, [field]: value });
-  };
-
-  const removeParticipant = (index) => {
-    const updatedParticipants = formData.participants.filter(
-      (_, i) => i !== index
-    );
-    setFormData({ ...formData, participants: updatedParticipants });
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  // Calculate the number of pages
-  const totalPages = Math.ceil(formData.participants.length / itemsPerPage);
-
-  // Get the participants for the current page
-  const currentParticipants = formData.participants.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  if (isLoading) {
+    return <p className="text-center text-5xl text-custom-dark-blue-1 font-bold">Loading... Please wait</p>;
+  }
 
   return (
     <div className="px-5 md:px-0">
-      <p className="text-custom-teal text-2xl font-bold text-center">Participants</p>
-      {/* Form container div */}
-      <div className="pt-5 w-full space-y-3">
-        <div className="w-full">
-          <div className="flex justify-start items-center gap-5 w-full flex-col md:flex-row">
-            <div className="w-full">
-              <InputField
-                label="Name"
-                type="text"
-                value={newParticipant.name}
-                onChange={(e) => updateNewParticipant("name", e.target.value)}
-              />
-            </div>
-            <div className="w-full">
-              <InputField
-                label="Email"
-                type="email"
-                value={newParticipant.email}
-                onChange={(e) => updateNewParticipant("email", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="flex md:justify-end justify-center">
-            <Button
-              type="submit"
-              variant="save"
-              children="Add New"
-              className="md:py-1 py-2 px-5 shadow-[0px_3px_6px_#09828F69] rounded-xl mt-2 md:mt-0"
-              onClick={addParticipant}
-              icon={<GoPlus />}
-            />
-          </div>
-        </div>  
-      </div>
+      <p className="text-custom-teal text-2xl font-bold text-center">Add People</p>
+
       {/* participant list div */}
       <div className="pt-3">
         <HeadingLg children="Participant List" />
         <div className="border-[0.5px] border-solid border-custom-dark-blue-1 rounded-xl h-[300px] overflow-y-scroll mt-2">
-          {/* table heading */}
-          <div className="flex justify-start items-center py-3 px-5 shadow-sm">
-            <div className="md:w-[30%] w-1/2">
-              <HeadingLg children="Name" />
+          {contacts && contacts.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full">
+              <p className="text-center text-lg font-bold text-custom-dark-blue-1">NO PEOPLE FOUND</p>
+              <p className="text-center text-sm text-custom-dark-blue-2">Try sharing the project after creating the project.</p>
             </div>
-            <div className="md:w-[70%] w-1/2">
-              <HeadingLg children="Email" />
-            </div>
-          </div>
-          {/* table item */}
-          {currentParticipants.map((participant, index) => (
-            <div
-              className="flex justify-start items-center py-3 px-5 shadow-sm"
-              key={index}
-            >
-              <div className="md:w-[30%] w-1/2">
-                <ParagraphLg children={participant.name} />
-              </div>
-              <div className="md:w-[65%] w-1/2">
-                <ParagraphLg children={participant.email} />
-              </div>
-              <div className="w-[15%] flex justify-end">
-                <IoTrashSharp
-                  className="bg-custom-orange-1 text-white p-2 text-3xl rounded-xl cursor-pointer"
-                  onClick={() => removeParticipant(index)}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-        {/* Pagination */}
-        <div className="flex justify-end py-2">
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+          ) : (
+            <table className="w-full text-left">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 border-b-2 border-custom-dark-blue-1">Name</th>
+                  <th className="px-4 py-2 border-b-2 border-custom-dark-blue-1">Admin</th>
+                  <th className="px-4 py-2 border-b-2 border-custom-dark-blue-1">Moderator</th>
+                  <th className="px-4 py-2 border-b-2 border-custom-dark-blue-1">Observer</th>
+                </tr>
+              </thead>
+              <tbody>
+                {contacts?.map((contact, index) => (
+                  <tr key={index} className="hover:bg-gray-100">
+                    <td className="px-4 py-2 border-b border-custom-dark-blue-1">
+                      {contact.firstName} {contact.lastName}
+                    </td>
+                    <td className="px-4 py-2 border-b border-custom-dark-blue-1">
+                      <input
+                        type="checkbox"
+                        checked={contact.roles.includes('Admin')}
+                        onChange={() => handleRoleChange(index, 'Admin')}
+                        className="form-checkbox"
+                      />
+                    </td>
+                    <td className="px-4 py-2 border-b border-custom-dark-blue-1">
+                      <input
+                        type="checkbox"
+                        checked={contact.roles.includes('Moderator')}
+                        onChange={() => handleRoleChange(index, 'Moderator')}
+                        className="form-checkbox"
+                      />
+                    </td>
+                    <td className="px-4 py-2 border-b border-custom-dark-blue-1">
+                      <input
+                        type="checkbox"
+                        checked={contact.roles.includes('Observer')}
+                        onChange={() => handleRoleChange(index, 'Observer')}
+                        className="form-checkbox"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       </div>

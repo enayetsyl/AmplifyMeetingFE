@@ -1,21 +1,21 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import Button from '@/components/shared/Button';
-import Dropdown from '@/components/shared/Dropdown';
-import Search from '@/components/singleComponent/Search';
-import { MdAdd } from 'react-icons/md';
-import { FiRefreshCw } from 'react-icons/fi';
-import { statusOptions } from '@/constant/Index';
-import NoSearchResult from '@/components/singleComponent/NoSearchResult';
-import ProjectTable from '@/components/singleComponent/ProjectTable';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Button from "@/components/shared/Button";
+import Dropdown from "@/components/shared/Dropdown";
+import Search from "@/components/singleComponent/Search";
+import { MdAdd } from "react-icons/md";
+import { FiRefreshCw } from "react-icons/fi";
+import { statusOptions } from "@/constant/Index";
+import NoSearchResult from "@/components/singleComponent/NoSearchResult";
+import ProjectTable from "@/components/singleComponent/ProjectTable";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const router = useRouter()
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('All');
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -24,14 +24,17 @@ const Page = () => {
   const fetchProjects = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8008/api/get-all/project', {
-        params: { page, limit: 10 },
-      });
+      const response = await axios.get(
+        "http://localhost:8008/api/get-all/project",
+        {
+          params: { page, limit: 10 },
+        }
+      );
       console.log(response.data.projects);
       setProjects(response.data.projects);
       setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error("Error fetching projects:", error);
     } finally {
       setLoading(false);
     }
@@ -61,8 +64,7 @@ const Page = () => {
   };
 
   return (
- 
-    <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center">
+     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center">
       <div className="bg-white h-20 w-full border-b">
         <div className="px-10 flex justify-between items-center pt-5">
           <div>
@@ -74,9 +76,7 @@ const Page = () => {
               type="submit"
               variant="default"
               icon={<MdAdd />}
-              onClick={() =>
-                  router.push(`/dashboard/create-project`)
-                }
+              onClick={() => router.push(`/dashboard/create-project`)}
               className="rounded-xl w-[200px] text-center py-3 shadow-[0px_3px_6px_#2976a54d]"
             />
           </div>
@@ -85,9 +85,11 @@ const Page = () => {
       <div className="w-full bg-white">
         <div className="p-5 flex justify-between items-center ">
           <Search placeholder="Search project name" onSearch={handleSearch} />
-          <div className='flex justify-center items-center gap-5'>
+          <div className="flex justify-center items-center gap-5">
             <div className="flex justify-center items-center gap-3">
-              <h1 className="text-custom-dark-blue-1 text-2xl font-bold">Status</h1>
+              <h1 className="text-custom-dark-blue-1 text-2xl font-bold">
+                Status
+              </h1>
               <Dropdown
                 options={statusOptions}
                 selectedOption={selectedStatus}
@@ -95,11 +97,11 @@ const Page = () => {
               />
             </div>
             <Button
-              children='Refresh'
+              children="Refresh"
               icon={<FiRefreshCw />}
-              variant='plain'
-              type='submit'
-              className='font-semibold'
+              variant="plain"
+              type="submit"
+              className="font-semibold"
               onClick={handleRefresh}
             />
           </div>
@@ -109,7 +111,7 @@ const Page = () => {
         {loading ? (
           <p>Loading...</p>
         ) : projects && projects.length > 0 ? (
-          <ProjectTable projects={projects} setProjects={setProjects}/>
+          <ProjectTable projects={projects} setProjects={setProjects} />
         ) : (
           <NoSearchResult />
         )}
@@ -122,7 +124,9 @@ const Page = () => {
           >
             Previous
           </Button>
-          <span className="mx-4">Page {page} of {totalPages}</span>
+          <span className="mx-4">
+            Page {page} of {totalPages}
+          </span>
           <Button
             onClick={() => handlePageChange(page + 1)}
             disabled={page >= totalPages}
@@ -132,8 +136,6 @@ const Page = () => {
           </Button>
         </div>
       </div>
-      
-    </div>
     </div>
   );
 };
