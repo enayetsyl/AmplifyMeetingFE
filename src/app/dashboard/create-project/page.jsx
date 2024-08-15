@@ -23,12 +23,10 @@ const Page = () => {
     // Step 2: Add People
     people: [
       {
-        name: "",
-        email: "",
+        userId:"",
+        firstName: "",
+        lastName: "",
         role: "",
-        hasAccount: false,
-        isEditable: true,
-        inviteLink: "",
       },
     ],
   
@@ -138,15 +136,30 @@ const Page = () => {
   const validateForm = () => {
     switch (currentStep) {
       case 1:
-        return formData.projectName !== "" && formData.projectDescription !== "" && formData.endDate !== "";
+        return (
+          formData.projectName !== "" &&
+          formData.projectDescription !== "" &&
+          formData.endDate !== "" &&
+          formData.projectPasscode !== ""
+        );
       case 2:
-        return formData.people.every(person => person.name !== "" && person.email !== "" && person.role !== "");
+        // Ensure every person in the people array has a name, email, and role
+        return formData.people.every(
+          (person) => person.userId !== ""  &&person.firstName !== "" && person.lastName !== "" && person.role !== ""
+        );
       case 3:
-        return formData.meetingTitle !== "" && formData.meetingModerator !== "" && formData.startDate !== "" && formData.startTime !== "" && formData.timeZone !== "";
+        return (
+          formData.meetingTitle !== "" &&
+          formData.meetingModerator !== "" &&
+          formData.startDate !== "" &&
+          formData.startTime !== "" &&
+          formData.timeZone !== ""
+        );
       default:
         return true;
     }
   };
+  
   
   const nextStep = () => {
     if (validateForm()) {
