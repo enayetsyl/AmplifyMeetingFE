@@ -1,15 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import Button from '../shared/Button';
-import TableHead from '../shared/TableHead';
-import TableData from '../shared/TableData';
+import React, { useState, useEffect, useRef } from "react";
+import Button from "../shared/Button";
+import TableHead from "../shared/TableHead";
+import TableData from "../shared/TableData";
 import { BsFillEnvelopeAtFill, BsThreeDotsVertical } from "react-icons/bs";
-import { FaUser } from 'react-icons/fa';
-import { RiPencilFill } from 'react-icons/ri';
-import { IoTrashSharp } from 'react-icons/io5';
-import axios from 'axios';
-import Pagination from '../shared/Pagination';
+import { FaUser } from "react-icons/fa";
+import { RiPencilFill } from "react-icons/ri";
+import { IoTrashSharp } from "react-icons/io5";
+import axios from "axios";
 
 const ProjectTable = ({ projects, setProjects }) => {
   console.log("prop", projects);
@@ -20,10 +19,11 @@ const ProjectTable = ({ projects, setProjects }) => {
 
   const renderStatus = (status) => {
     const statusStyles = {
-      Open: "bg-custom-teal text-white",
+      Draft: "bg-custom-teal text-white",
       Closed: "bg-gray-400 text-white",
-      Started: "bg-custom-light-blue-1 text-white",
-      Ended: "bg-custom-red text-white",
+      Active: "bg-custom-light-blue-1 text-white",
+      Complete: "bg-custom-red text-white",
+      Inactive: "bg-gray-800 text-white",
     };
 
     return (
@@ -37,15 +37,48 @@ const ProjectTable = ({ projects, setProjects }) => {
     );
   };
 
-  const getButtonVariant = (action) => {
+  const getButtonVariant = (status) => {
     const actionVariants = {
-      Start: "save",
-      Delete: "closed",
-      Join: "primary",
-      Close: "default",
+      Draft: { label: "Edit", variant: "save" },
+      Active: { label: "Continue", variant: "primary" },
+      Complete: { label: "Close", variant: "default" },
+      Inactive: { label: "Reactivate", variant: "default" },
+      Closed: { label: "Archive", variant: "closed" },
     };
 
-    return actionVariants[action] || "default";
+    return actionVariants[status] || { label: "Action", variant: "default" };
+  };
+
+  const handleAction = (status, project) => {
+    switch (status) {
+      case "Draft":
+        // Redirect to edit page or open edit modal
+        console.log("Editing project:", project);
+        // Implement edit logic here
+        break;
+      case "Active":
+        // Continue project (perhaps redirect to the project page)
+        console.log("Continuing project:", project);
+        // Implement continue logic here
+        break;
+      case "Complete":
+        // Close project
+        console.log("Closing project:", project);
+        // Implement close logic here
+        break;
+      case "Inactive":
+        // Reactivate project
+        console.log("Reactivating project:", project);
+        // Implement reactivate logic here
+        break;
+      case "Closed":
+        // Archive project
+        console.log("Archiving project:", project);
+        // Implement archive logic here
+        break;
+      default:
+        console.log("No action defined for this status");
+    }
   };
 
   const toggleModal = (event, project) => {
@@ -78,81 +111,101 @@ const ProjectTable = ({ projects, setProjects }) => {
     };
   }, [isModalOpen]);
 
-  const handleDeleteProject = async () => {
-    try {
-      console.log("he")
-      // Ensure the endpoint URL matches your backend setu
-      await axios.delete(`http://localhost:8008/api/delete/project/${selectedProject._id}`);
-      setProjects((prevProjects) => prevProjects.filter(project => project._id !== selectedProject._id));
-      alert('Project deleted successfully');
-    } catch (error) {
-      console.error('Error deleting project:', error);
-      alert('Failed to delete project');
-    } finally {
+  const handleShareProject =  () => {
+   
       closeModal();
-    }
+    
   };
 
   return (
-    <div className='overflow-hidden'>
+    <div className="overflow-hidden">
       <div className="min-w-full overflow-x-auto p-8 border">
         <table className="min-w-full divide-y divide-gray-200 rounded-lg">
           <thead className="bg-custom-gray-2 rounded-lg py-2 w-full">
             <tr className="shadow-[0px_0px_26px_#00000029] w-full">
               <TableHead>Project Name</TableHead>
+              <TableHead>Tags</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Creator</TableHead>
-              <TableHead>Moderator (Host)</TableHead>
-              <TableHead>Start Time</TableHead>
-              <TableHead>Participants</TableHead>
-              <TableHead>Observers</TableHead>
-              <TableHead>Breakout Rooms</TableHead>
-              <TableHead>Polls</TableHead>
-              <TableHead>Interpreters</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Start Date</TableHead>
+              <TableHead>End Date</TableHead>
               <TableHead>Actions</TableHead>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200 rounded-lg">
             {projects.map((project) => (
-              <tr key={project._id} className='shadow-[0px_0px_26px_#00000029] w-full'>
-                <TableData>{project.name}</TableData>
+              <tr
+                key={project._id}
+                className="shadow-[0px_0px_26px_#00000029] w-full"
+              >
+                <TableData>{project.projectName}</TableData>
+
+                {/* Display Tags */}
+                <TableData>
+                  {project.tags.length > 0 ? (
+                    <div className="flex flex-wrap gap-1">
+                      {project.tags.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="bg-custom-gray-2 text-[10px] px-2 py-1 rounded"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="text-gray-400">No Tags</span>
+                  )}
+                </TableData>
+
+                {/* Display Status */}
                 <TableData>{renderStatus(project.status)}</TableData>
-                <TableData>{project.creator?.name || 'N/A'}</TableData>
-                <TableData>{project.moderator?.name || 'N/A'}</TableData>
-                <TableData>{new Date(project.startTime).toLocaleString()}</TableData>
-                <TableData>{project.participants.length}</TableData>
-                <TableData>{project.observers.length}</TableData>
-                <TableData>{project.breakoutRooms.length}</TableData>
-                <TableData>{project.polls.length}</TableData>
-                <TableData>{project.interpreters.length}</TableData>
-                <td className='flex justify-between items-center gap-2 relative'>
+
+                {/* Display Roles */}
+                <TableData>
+                  {project.role.length > 0
+                    ? project.role.join(", ")
+                    : "No Role"}
+                </TableData>
+
+                {/* Display Start Date and Time */}
+                <TableData>
+                  {new Date(project.startDate).toLocaleDateString()}{" "}
+                  {project.startTime}
+                </TableData>
+
+                {/* Display End Date */}
+                <TableData>
+                  {new Date(project.endDate).toLocaleDateString()}
+                </TableData>
+
+                <td className="flex justify-between items-center gap-2 relative">
                   <Button
-                    variant={getButtonVariant('Action')} // Replace 'Action' with the actual project action
-                    className='w-16 text-center text-[12px] rounded-xl py-1'
+                    variant={getButtonVariant(project.status).variant}
+                    className="w-20 text-center text-[12px] rounded-xl py-1"
+                    onClick={() => handleAction(project.status, project)}
                   >
-                    Action
+                    {getButtonVariant(project.status).label}
                   </Button>
-                  <BsThreeDotsVertical onClick={(e) => toggleModal(e, project)} className='cursor-pointer' />
+                  <BsThreeDotsVertical
+                    onClick={(e) => toggleModal(e, project)}
+                    className="cursor-pointer"
+                  />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-       
       </div>
-        <div className='flex justify-end py-3'>
-          {/* <Pagination 
-          currentPage={2} 
-          totalPages={5} 
-          onPageChange={handlePageChange}
-          /> */}
-          </div>
 
       {isModalOpen && (
         <div
           ref={modalRef}
           className="absolute bg-white shadow-[0px_3px_6px_#0000004A] rounded-lg"
-          style={{ top: modalPosition.top + 20, left: modalPosition.left - 100 }}
+          style={{
+            top: modalPosition.top + 20,
+            left: modalPosition.left - 100,
+          }}
         >
           <ul className="text-[12px]">
             <li
@@ -162,17 +215,26 @@ const ProjectTable = ({ projects, setProjects }) => {
               <FaUser />
               <span>View</span>
             </li>
-            <li className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2" onClick={closeModal}>
+            <li
+              className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
+              onClick={closeModal}
+            >
               <RiPencilFill />
               <span>Edit</span>
             </li>
-            <li className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2" onClick={handleDeleteProject}>
+            <li
+              className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
+              onClick={handleShareProject}
+            >
               <IoTrashSharp />
-              <span>Delete</span>
+              <span>Share</span>
             </li>
-            <li className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2" onClick={closeModal}>
+            <li
+              className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
+              onClick={closeModal}
+            >
               <BsFillEnvelopeAtFill />
-              <span>Resend Email</span>
+              <span>Assign Tag</span>
             </li>
           </ul>
         </div>

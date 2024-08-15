@@ -20,12 +20,15 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const user = {
+    _id : '66bb5b41e7e451974c1734c6'
+  }
 
   const fetchProjects = async (page = 1) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:8008/api/get-all/project",
+        `http://localhost:8008/api/get-all/project/${user._id}`,
         {
           params: { page, limit: 10 },
         }
@@ -66,6 +69,8 @@ const Page = () => {
   return (
      <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center">
       <div className="bg-white h-20 w-full border-b">
+
+        {/* Nav bar */}
         <div className="px-10 flex justify-between items-center pt-5">
           <div>
             <p className="text-2xl font-bold text-custom-teal">Projects</p>
@@ -82,31 +87,16 @@ const Page = () => {
           </div>
         </div>
       </div>
+
+      {/* Search Bar */}
       <div className="w-full bg-white">
-        <div className="p-5 flex justify-between items-center ">
+        <div className="p-5 flex justify-Start items-center ">
           <Search placeholder="Search project name" onSearch={handleSearch} />
-          <div className="flex justify-center items-center gap-5">
-            <div className="flex justify-center items-center gap-3">
-              <h1 className="text-custom-dark-blue-1 text-2xl font-bold">
-                Status
-              </h1>
-              <Dropdown
-                options={statusOptions}
-                selectedOption={selectedStatus}
-                onSelect={handleStatusSelect}
-              />
-            </div>
-            <Button
-              children="Refresh"
-              icon={<FiRefreshCw />}
-              variant="plain"
-              type="submit"
-              className="font-semibold"
-              onClick={handleRefresh}
-            />
-          </div>
+ 
         </div>
       </div>
+
+
       <div className="flex-grow mx-auto md">
         {loading ? (
           <p>Loading...</p>
