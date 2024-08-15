@@ -17,6 +17,19 @@ const ProjectTable = ({ projects, setProjects }) => {
   const [selectedProject, setSelectedProject] = useState(null);
   const modalRef = useRef();
 
+  const user = {
+    _id : '66bb5b41e7e451974c1734c6'  
+  };
+
+  const getRole = (project) => {
+    if (project.createdBy === user._id) {
+      return "Admin";
+    } else {
+      const person = project.people.find(p => p.userId === user._id);
+      return person ? person.role : "No Role";
+    }
+  };
+
   const renderStatus = (status) => {
     const statusStyles = {
       Draft: "bg-custom-teal text-white",
@@ -163,9 +176,7 @@ const ProjectTable = ({ projects, setProjects }) => {
 
                 {/* Display Roles */}
                 <TableData>
-                  {project.role.length > 0
-                    ? project.role.join(", ")
-                    : "No Role"}
+                  {getRole(project)}
                 </TableData>
 
                 {/* Display Start Date and Time */}
