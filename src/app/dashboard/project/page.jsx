@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/button";
 import Dropdown from "@/components/shared/Dropdown";
 import Search from "@/components/singleComponent/Search";
 import { MdAdd } from "react-icons/md";
