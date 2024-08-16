@@ -10,7 +10,7 @@ import registerImage from '../../../../public/register.jpg';
 import logo from '../../../../public/logo.jpg';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/shared/Button';
+import Button from '@/components/shared/button';
 import { useGlobalContext } from '@/context/GlobalContext';
 const Login = () => {
   const router = useRouter()
