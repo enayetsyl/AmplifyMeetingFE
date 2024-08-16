@@ -25,7 +25,7 @@ const page = () => {
   const fetchContacts = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8008/api/get-all/contact?page=1&limit=10"
+        "https://amplifymeetingbe.onrender.com/api/get-all/contact?page=1&limit=10"
       );
       const data = await response.json();
       console.log(data);
