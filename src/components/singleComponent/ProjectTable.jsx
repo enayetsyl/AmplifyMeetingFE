@@ -9,12 +9,15 @@ import { FaUser } from "react-icons/fa";
 import { RiPencilFill } from "react-icons/ri";
 import { IoTrashSharp } from "react-icons/io5";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import ViewProject from "./ViewProject";
 
 const ProjectTable = ({ projects, setProjects }) => {
   console.log("prop", projects);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [selectedProject, setSelectedProject] = useState(null);
+  const [viewProject, setViewProject] = useState(false);
   const modalRef = useRef();
 
   const user = {
@@ -94,6 +97,20 @@ const ProjectTable = ({ projects, setProjects }) => {
     }
   };
 
+
+  console.log('selected project', selectedProject)
+  const handleView = (project) => {
+    setSelectedProject(project);
+    setViewProject(true); 
+    closeModal();
+  };
+
+  const closeViewProject = () => {
+    setViewProject(false); // Hide ViewProject component
+    setSelectedProject(null);
+  };
+
+
   const toggleModal = (event, project) => {
     const { top, left } = event.currentTarget.getBoundingClientRect();
     setModalPosition({ top, left });
@@ -103,7 +120,7 @@ const ProjectTable = ({ projects, setProjects }) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedProject(null);
+ 
   };
 
   const handleClickOutside = (event) => {
@@ -132,82 +149,84 @@ const ProjectTable = ({ projects, setProjects }) => {
 
   return (
     <div className="overflow-hidden">
-      <div className="min-w-full overflow-x-auto p-8 border">
-        <table className="min-w-full divide-y divide-gray-200 rounded-lg">
-          <thead className="bg-custom-gray-2 rounded-lg py-2 w-full">
-            <tr className="shadow-[0px_0px_26px_#00000029] w-full">
-              <TableHead>Project Name</TableHead>
-              <TableHead>Tags</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Start Date</TableHead>
-              <TableHead>End Date</TableHead>
-              <TableHead>Actions</TableHead>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200 rounded-lg">
-            {projects.map((project) => (
-              <tr
-                key={project._id}
-                className="shadow-[0px_0px_26px_#00000029] w-full"
-              >
-                <TableData>{project.projectName}</TableData>
-
-                {/* Display Tags */}
-                <TableData>
-                  {project.tags.length > 0 ? (
-                    <div className="flex flex-wrap gap-1">
-                      {project.tags.map((tag, index) => (
-                        <span
-                          key={index}
-                          className="bg-custom-gray-2 text-[10px] px-2 py-1 rounded"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <span className="text-gray-400">No Tags</span>
-                  )}
-                </TableData>
-
-                {/* Display Status */}
-                <TableData>{renderStatus(project.status)}</TableData>
-
-                {/* Display Roles */}
-                <TableData>
-                  {getRole(project)}
-                </TableData>
-
-                {/* Display Start Date and Time */}
-                <TableData>
-                  {new Date(project.startDate).toLocaleDateString()}{" "}
-                  {project.startTime}
-                </TableData>
-
-                {/* Display End Date */}
-                <TableData>
-                  {new Date(project.endDate).toLocaleDateString()}
-                </TableData>
-
-                <td className="flex justify-between items-center gap-2 relative">
-                  <Button
-                    variant={getButtonVariant(project.status).variant}
-                    className="w-20 text-center text-[12px] rounded-xl py-1"
-                    onClick={() => handleAction(project.status, project)}
-                  >
-                    {getButtonVariant(project.status).label}
-                  </Button>
-                  <BsThreeDotsVertical
-                    onClick={(e) => toggleModal(e, project)}
-                    className="cursor-pointer"
-                  />
-                </td>
+      {!viewProject ? (
+        <div className="min-w-full overflow-x-auto p-8 border">
+          <table className="min-w-full divide-y divide-gray-200 rounded-lg">
+            <thead className="bg-custom-gray-2 rounded-lg py-2 w-full">
+              <tr className="shadow-[0px_0px_26px_#00000029] w-full">
+                <TableHead>Project Name</TableHead>
+                <TableHead>Tags</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead>Start Date</TableHead>
+                <TableHead>End Date</TableHead>
+                <TableHead>Actions</TableHead>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200 rounded-lg">
+              {projects.map((project) => (
+                <tr
+                  key={project._id}
+                  className="shadow-[0px_0px_26px_#00000029] w-full"
+                >
+                  <TableData>{project.projectName}</TableData>
+
+                  {/* Display Tags */}
+                  <TableData>
+                    {project.tags.length > 0 ? (
+                      <div className="flex flex-wrap gap-1">
+                        {project.tags.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="bg-custom-gray-2 text-[10px] px-2 py-1 rounded"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-gray-400">No Tags</span>
+                    )}
+                  </TableData>
+
+                  {/* Display Status */}
+                  <TableData>{renderStatus(project.status)}</TableData>
+
+                  {/* Display Roles */}
+                  <TableData>{getRole(project)}</TableData>
+
+                  {/* Display Start Date and Time */}
+                  <TableData>
+                    {new Date(project.startDate).toLocaleDateString()}{" "}
+                    {project.startTime}
+                  </TableData>
+
+                  {/* Display End Date */}
+                  <TableData>
+                    {new Date(project.endDate).toLocaleDateString()}
+                  </TableData>
+
+                  <td className="flex justify-between items-center gap-2 relative">
+                    <Button
+                      variant={getButtonVariant(project.status).variant}
+                      className="w-20 text-center text-[12px] rounded-xl py-1"
+                      onClick={() => handleAction(project.status, project)}
+                    >
+                      {getButtonVariant(project.status).label}
+                    </Button>
+                    <BsThreeDotsVertical
+                      onClick={(e) => toggleModal(e, project)}
+                      className="cursor-pointer"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <ViewProject project={selectedProject} onClose={closeViewProject} />
+      )}
 
       {isModalOpen && (
         <div
@@ -221,7 +240,7 @@ const ProjectTable = ({ projects, setProjects }) => {
           <ul className="text-[12px]">
             <li
               className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-              onClick={closeModal}
+              onClick={() => handleView(selectedProject)}
             >
               <FaUser />
               <span>View</span>

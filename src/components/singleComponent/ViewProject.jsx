@@ -1,25 +1,26 @@
-'use client';
-import Button from '@/components/shared/Button';
-import HeadingBlue25px from '@/components/shared/HeadingBlue25px';
-import HeadingLg from '@/components/shared/HeadingLg';
-import Pagination from '@/components/shared/Pagination';
-import ParagraphLg from '@/components/shared/ParagraphLg';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { RiPencilFill } from 'react-icons/ri';
+"use client";
+import Button from "@/components/shared/Button";
+import HeadingBlue25px from "@/components/shared/HeadingBlue25px";
+import HeadingLg from "@/components/shared/HeadingLg";
+import Pagination from "@/components/shared/Pagination";
+import ParagraphLg from "@/components/shared/ParagraphLg";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { RiPencilFill } from "react-icons/ri";
+import ParagraphBlue2 from "../shared/ParagraphBlue2";
 
-const page = () => {
-  const [activeTab, setActiveTab] = useState('Participants');
- 
+const ViewProject = ({ project }) => {
+  console.log("inside view project", project);
 
+  const [activeTab, setActiveTab] = useState("Participants");
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-const handlePageChange = () => {
-  //Add logic here
-}
+  const handlePageChange = () => {
+    //Add logic here
+  };
 
   return (
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center ">
@@ -33,88 +34,41 @@ const handlePageChange = () => {
       <div className="flex-grow px-10 w-full">
         {/* button */}
         <div className="flex justify-end py-5">
-         <Link href='/dashboard/edit-project'>
-         <Button
-            children="Edit"
-            type="submit"
-            variant="save"
-            icon={<RiPencilFill />}
-            className="rounded-xl  px-5 py-1 shadow-[0px_3px_6px_#2976a54d]"
-          />
-         </Link>
+          <Link href="/dashboard/edit-project">
+            <Button
+              children="Edit"
+              type="submit"
+              variant="save"
+              icon={<RiPencilFill />}
+              className="rounded-xl  px-5 py-1 shadow-[0px_3px_6px_#2976a54d]"
+            />
+          </Link>
         </div>
         {/*  general information  div*/}
         <div className="bg-white shadow-[0px_0px_12px_#00000029] rounded-xl p-5">
-          <HeadingBlue25px children="General Information" />
-          {/* top part */}
-          {/* heading */}
-          <div className="pt-4 grid grid-cols-4">
-            <HeadingLg children="Name" />
-            <HeadingLg children="Status" />
-            <HeadingLg children="Creator" />
-            <HeadingLg children="Moderator | Host" />
+          <div className="flex justify-start items-center gap-5">
+            <HeadingLg children="Project Name" />
+            <ParagraphBlue2 children={project?.projectName} />
           </div>
-          {/* content */}
-          <div className="pt-2 grid grid-cols-4">
-            <ParagraphLg children="Project 1: Cross Hatching" />
-            <Button
-              type="button"
-              variant="save"
-              children="Active"
-              className="py-1 px-3 rounded-xl w-20"
-            />
-            <ParagraphLg children="Juliet Frazier" />
-            <ParagraphLg children="Juliet Frazier" />
-          </div>
-          {/* middle part */}
-          {/* heading */}
-          <div className="pt-8 grid grid-cols-4">
-            <HeadingLg children="Start Time" />
-            <HeadingLg children="Time Zone" />
-            <div className="flex justify-start items-center gap-2">
-              <input type="checkbox" />
-              <HeadingLg children="Waiting Room" />
-            </div>
-            <HeadingLg children="Passcode" />
-          </div>
-          {/* content */}
-          <div className="pt-2 grid grid-cols-4">
-            <ParagraphLg children="12/21/2022 Wednesday, 04:00 PM" />
-
-            <ParagraphLg children="Pacific Standard Time UTC−08:00 (GMT-8)" />
-            <ParagraphLg children="" />
-            <ParagraphLg children="@12345*LosAngeles" />
-          </div>
-          {/* lower part */}
-          {/* heading */}
-          <div className="pt-8 ">
+          <div className="flex justify-start items-center gap-5">
             <HeadingLg children="Description" />
+            <ParagraphBlue2 children={project?.projectDescription} />
           </div>
-          {/* content */}
-          <div className="pt-2 pb-10 pr-32">
-            <ParagraphLg children="Hatching and crosshatching are some of the most valuable tools for generating value and texture in a drawing. These techniques use simple lines in various arrangements and densities to create a solid sense of atmospheric perspective and contour." />
+          <div className="flex justify-start items-center gap-5">
+            <HeadingLg children="Opened On" />
+            <ParagraphBlue2 children={project?.startDate} />
           </div>
-          <hr />
-          {/* interperter part */}
-          {/* middle part */}
-          {/* heading */}
-          <div className="pt-4 grid grid-cols-4">
-            <div className="flex justify-start items-center gap-2">
-              <input type="checkbox" />
-              <HeadingLg children="Interpreter" />
-            </div>
-            <HeadingLg children="Language" />
-
-            <HeadingLg children="Name" />
-            <HeadingLg children="Email" />
+          <div className="flex justify-start items-center gap-5">
+            <HeadingLg children="Expires In" />
+            <ParagraphBlue2 children={project?.endDate} />
           </div>
-          {/* content */}
-          <div className="pt-2 grid grid-cols-4 pb-5">
-            <ParagraphLg children="" />
-
-            <ParagraphLg children="English" />
-            <ParagraphLg children="Johnny Smith" />
-            <ParagraphLg children="johnnysmith231@gmail.com" />
+          <div className="flex justify-start items-center gap-5">
+            <HeadingLg children="Passcode" />
+            <ParagraphBlue2 children={project?.projectPasscode} />
+          </div>
+          <div className="flex justify-start items-center gap-5">
+            <HeadingLg children="Project Status" />
+            <ParagraphBlue2 children={project?.status} />
           </div>
         </div>
 
@@ -124,40 +78,40 @@ const handlePageChange = () => {
           <div className="flex justify-around space-x-10  border-b">
             <button
               className={`py-2 border-custom-dark-blue-1 ${
-                activeTab === 'Participants' ? 'border-b-2 ' : 'opacity-25'
+                activeTab === "Meetings" ? "border-b-2 " : "opacity-25"
               }`}
-              onClick={() => handleTabChange('Participants')}
+              onClick={() => handleTabChange("Meetings")}
             >
-              Participantss
+              Meetings
             </button>
             <button
               className={`py-2 border-custom-dark-blue-1 ${
-                activeTab === 'Observers' ? 'border-b-2 ' : 'opacity-25'
+                activeTab === "Members" ? "border-b-2 " : "opacity-25"
               }`}
-              onClick={() => handleTabChange('Observers')}
+              onClick={() => handleTabChange("Members")}
             >
-              Observers
+              Members
             </button>
             <button
               className={`py-2 border-custom-dark-blue-1 ${
-                activeTab === 'Breakout Rooms' ? 'border-b-2 ' : 'opacity-25'
+                activeTab === "Pools" ? "border-b-2 " : "opacity-25"
               }`}
-              onClick={() => handleTabChange('Breakout Rooms')}
+              onClick={() => handleTabChange("Pools")}
             >
-              Breakout Rooms
+              Pools
             </button>
             <button
               className={`py-2 border-custom-dark-blue-1 ${
-                activeTab === 'Polls' ? 'border-b-2 ' : 'opacity-25'
+                activeTab === "Repository" ? "border-b-2 " : "opacity-25"
               }`}
-              onClick={() => handleTabChange('Polls')}
+              onClick={() => handleTabChange("Repository")}
             >
-              Polls
+              Repository
             </button>
           </div>
 
           {/* tab content */}
-          {activeTab === 'Participants' && (
+          {activeTab === "Meetings" && (
             <div className="pt-5">
               <HeadingLg children="Participant List" />
               <div className="border-[0.5px] border-solid border-custom-dark-blue-1 rounded-xl h-[300px] overflow-y-scroll mt-2">
@@ -197,7 +151,7 @@ const handlePageChange = () => {
             </div>
           )}
 
-          {activeTab === 'Observers' && (
+          {activeTab === "Members" && (
             <div className="pt-5">
               <HeadingLg children="Observers List" />
               <div className="border-[0.5px] border-solid border-custom-dark-blue-1 rounded-xl h-[300px] overflow-y-scroll mt-2">
@@ -247,7 +201,7 @@ const handlePageChange = () => {
             </div>
           )}
 
-          {activeTab === 'Breakout Rooms' && (
+          {activeTab === "Pools" && (
             <div className="pt-5">
               <div className="flex justify-stat items-center px-3">
                 <div className="w-[25%]">
@@ -278,7 +232,7 @@ const handlePageChange = () => {
             </div>
           )}
 
-          {activeTab === 'Polls' && (
+          {activeTab === "Repository" && (
             <div className="pt-5">
               <HeadingLg children="You have created 2 polls for this meeting." />
               <div className="flex justify-start items-center px-3 mt-4">
@@ -296,7 +250,7 @@ const handlePageChange = () => {
                 </div>
               </div>
               {/* {formData.breakoutRooms.map((room, index) => ( */}
-              <div  className="py-3 space-y-3">
+              <div className="py-3 space-y-3">
                 <div className="flex justify-start items-center bg-white rounded-xl shadow-[0px_0px_6px_#00000029] p-3">
                   <ParagraphLg className="w-[25%]">
                     Poll 1: Sistine Chapel
@@ -318,12 +272,12 @@ const handlePageChange = () => {
             </div>
           )}
 
-          <div className='flex justify-end py-3'>
-          <Pagination 
-          currentPage={2} 
-          totalPages={5} 
-          onPageChange={handlePageChange}
-          />
+          <div className="flex justify-end py-3">
+            <Pagination
+              currentPage={2}
+              totalPages={5}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>
@@ -331,4 +285,4 @@ const handlePageChange = () => {
   );
 };
 
-export default page;
+export default ViewProject;

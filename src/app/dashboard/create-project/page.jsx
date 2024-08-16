@@ -32,7 +32,6 @@ const Page = () => {
   
     // Step 3: Add Meeting
     meetingTitle: "",
-
     meetingModerator: "",
     meetingDescription: "",
     startDate: "",
@@ -117,7 +116,6 @@ const Page = () => {
         contacts={contacts}
         setContacts={setContacts}
         isLoading={isLoading}
-       
         />;
       case 3:
         return <Step3 formData={formData} setFormData={setFormData}   contacts={contacts}
