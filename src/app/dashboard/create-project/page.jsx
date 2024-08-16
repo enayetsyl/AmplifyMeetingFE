@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/button";
 import Step1 from "@/components/createProjectFormComponent/Step1";
 import Step2 from "@/components/createProjectFormComponent/Step2";
 import Step3 from "@/components/createProjectFormComponent/Step3";
@@ -61,7 +61,7 @@ const Page = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:8008/api/get-all/contact/${user._id}`
+        `https://amplifymeetingbe.onrender.com/api/get-all/contact/${user._id}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch contacts: ${response.statusText}`);
@@ -94,7 +94,7 @@ const Page = () => {
     console.log(updatedFormData);
   
     try {
-      const response = await axios.post('http://localhost:8008/api/create/project', updatedFormData);
+      const response = await axios.post('https://amplifymeetingbe.onrender.com/api/create/project', updatedFormData);
       console.log(response);
       alert('Project created successfully!');
       router.push('/dashboard/project')

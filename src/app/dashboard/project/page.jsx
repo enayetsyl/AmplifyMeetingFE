@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/button";
 import Dropdown from "@/components/shared/Dropdown";
 import Search from "@/components/singleComponent/Search";
 import { MdAdd } from "react-icons/md";
@@ -28,7 +28,7 @@ const Page = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8008/api/get-all/project/${user._id}`,
+        `https://amplifymeetingbe.onrender.com/api/get-all/project/${user._id}`,
         {
           params: { page, limit: 10 },
         }

@@ -12,7 +12,7 @@ import { FaBell } from "react-icons/fa";
 import PasswordModal from "@/components/singleComponent/PasswordModal";
 import DeleteModal from "@/components/singleComponent/DeleteModal";
 import NotificationModal from "@/components/singleComponent/NotificationModal";
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/button";
 import HeadingParagaraph from "@/components/shared/HeadingParagaraph";
 import Link from "next/link";
 
@@ -90,7 +90,7 @@ const Page = () => {
 
   const deleteUser = async () => {
     try {
-      await axios.delete("http://localhost:8008/api/users/delete-by-id", {
+      await axios.delete("https://amplifymeetingbe.onrender.com/api/users/delete-by-id", {
         params: { id: id }, // replace with actual user ID
       });
       console.log("User deleted successfully");
@@ -111,7 +111,7 @@ const Page = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8008/api/users/find-by-id",
+          "https://amplifymeetingbe.onrender.com/api/users/find-by-id",
           {
             params: { id: id }, // replace 'user-id' with actual user ID
           }

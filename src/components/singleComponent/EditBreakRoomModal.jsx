@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import HeadingBlue25px from "../shared/HeadingBlue25px";
 import InputField from "../shared/InputField";
 import Dropdown from "../shared/Dropdown";
-import Button from "../shared/Button";
+import Button from "../shared/button";
 import { IoTrashSharp } from "react-icons/io5";
 import { breakoutRoomParticipant, language } from "@/constant/Index";
 import FormDropdownLabel from "../shared/FormDropdownLabel";
@@ -29,7 +29,7 @@ const EditBreakoutRoomModal = ({
     const fetchBreakoutRoom = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8008/get-breakout-room/${breakoutRoomId}`
+          `https://amplifymeetingbe.onrender.com/get-breakout-room/${breakoutRoomId}`
         );
         const data = response.data;
 
@@ -68,7 +68,7 @@ const EditBreakoutRoomModal = ({
   const handleSave = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8008/update-breakout-room/${breakoutRoomId}`,
+        `https://amplifymeetingbe.onrender.com/update-breakout-room/${breakoutRoomId}`,
         {
           name: newRoom.name,
           participants: newRoom.participants.map((p) => p._id),

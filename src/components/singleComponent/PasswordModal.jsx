@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import InputField from '../shared/InputField';
-import Button from '../shared/Button';
+import Button from '../shared/button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import ErrorModal from './ErrorModal';
 
@@ -33,7 +33,7 @@ const PasswordModal = ({ onClose, id }) => {
     if (validateForm()) {
      let token = localStorage.getItem("Token")
       try {
-        const response = await axios.post('http://localhost:8008/api/users/reset_password', {
+        const response = await axios.post('https://amplifymeetingbe.onrender.com/api/users/reset_password', {
           token: token,
           newPassword: newPassword,
         });

@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import HeadingH1 from '../shared/headingH1';
+import HeadingH1 from '../shared/HeadingH1';
 import ParagraphBlue2 from '../shared/ParagraphBlue2';
-import Button from '../shared/Button';
+import Button from '../shared/button';
 import BackToLogin from '../shared/BackToLogin';
 import { FaEnvelopeOpenText } from 'react-icons/fa';
 import InputField from '../shared/InputField';
@@ -21,7 +21,7 @@ const ForgotPasswordUI = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8008/api/users/forgotPassword', {
+      const response = await axios.post('https://amplifymeetingbe.onrender.com/api/users/forgotPassword', {
         email: email,
       });
       setMessage('Reset link sent to your email');

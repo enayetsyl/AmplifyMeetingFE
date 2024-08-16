@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import HeadingBlue25px from "../shared/HeadingBlue25px";
 import InputField from "../shared/InputField";
-import Button from "../shared/Button";
+import Button from "../shared/button";
 import { IoTrashSharp } from "react-icons/io5";
 import { GoPlus } from "react-icons/go";
 import FormDropdownLabel from "../shared/FormDropdownLabel";
@@ -16,7 +16,7 @@ const EditPoolModal = ({ onClose, formData, setFormData, pools }) => {
   useEffect(() => {
     const fetchPollById = async () => {
       try {
-        const response = await axios.get(`http://localhost:8008/api/get/poll-id/${pools}`);
+        const response = await axios.get(`https://amplifymeetingbe.onrender.com/api/get/poll-id/${pools}`);
         setPool(response.data);
         setLoading(false);
       } catch (error) {
@@ -110,7 +110,7 @@ const EditPoolModal = ({ onClose, formData, setFormData, pools }) => {
     try {
         console.log(pools)
       const response = await axios.put(
-        `http://localhost:8008/api/update-poll/${pools}`,
+        `https://amplifymeetingbe.onrender.com/api/update-poll/${pools}`,
         {
           pollName: newPool.name,
           isActive: newPool.active,

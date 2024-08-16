@@ -10,7 +10,7 @@ import registerImage from '../../../../public/register.jpg';
 import logo from '../../../../public/logo.jpg';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/shared/Button';
+import Button from '@/components/shared/button';
 import { useGlobalContext } from '@/context/GlobalContext';
 const Login = () => {
   const router = useRouter()
@@ -33,7 +33,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8008/api/users/signin', {
+      const response = await axios.post('https://amplifymeetingbe.onrender.com/api/users/signin', {
         email: formData.email,
         password: formData.password,
       });

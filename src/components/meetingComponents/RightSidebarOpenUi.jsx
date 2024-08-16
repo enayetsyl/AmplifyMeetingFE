@@ -1,6 +1,6 @@
 // RightSidebarOpenUi.js
 import React, { useEffect, useState } from "react";
-import Button from "../shared/Button";
+import Button from "../shared/button";
 import Image from "next/image";
 import { LuClipboardSignature } from "react-icons/lu";
 import { FaFolder, FaTrash, FaVideo } from "react-icons/fa";
@@ -43,7 +43,7 @@ const RightSidebarOpenUi = ({
     // Fetch initial files
     const fetchFiles = async () => {
       try {
-        const response = await axios.get('http://localhost:8008/api/files');
+        const response = await axios.get('https://amplifymeetingbe.onrender.com/api/files');
         setFileList(response.data);
       } catch (error) {
         console.error("Error fetching files:", error);
@@ -62,12 +62,12 @@ const RightSidebarOpenUi = ({
       formData.append('file', file);
   
       try {
-        await axios.post('http://localhost:8008/api/upload', formData, {
+        await axios.post('https://amplifymeetingbe.onrender.com/api/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
-        const response = await axios.get('http://localhost:8008/api/files');
+        const response = await axios.get('https://amplifymeetingbe.onrender.com/api/files');
         setFileList(response.data);
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -79,8 +79,8 @@ const RightSidebarOpenUi = ({
 
   const handleDeleteFile = async (fileId) => {
     try {
-      await axios.delete(`http://localhost:8008/api/files/${fileId}`);
-      const response = await axios.get('http://localhost:8008/api/files');
+      await axios.delete(`https://amplifymeetingbe.onrender.com/api/files/${fileId}`);
+      const response = await axios.get('https://amplifymeetingbe.onrender.com/api/files');
       setFileList(response.data);
     } catch (error) {
       console.error("Error deleting file:", error);

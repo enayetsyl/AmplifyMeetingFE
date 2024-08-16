@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InputField from "../shared/InputField";
-import Button from "../shared/Button";
+import Button from "../shared/button";
 
 const InviteModeratorModal = ({ onClose, projectId }) => {
   const [firstName, setFirstName] = useState("");
@@ -14,7 +14,7 @@ const InviteModeratorModal = ({ onClose, projectId }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8008/api/moderator-invitation/link",
+        "https://amplifymeetingbe.onrender.com/api/moderator-invitation/link",
         {
           method: "POST",
           headers: {

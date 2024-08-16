@@ -6,7 +6,7 @@ import Image from "next/image";
 import axios from "axios";
 import Logo from "@/components/shared/Logo";
 import InputField from "@/components/shared/InputField";
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/button";
 import joinMeetingImage from "../../../public/join-meeting.png";
 import Footer from "@/components/shared/Footer";
 
@@ -33,7 +33,7 @@ const Page = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8008/api/users/create",
+        "https://amplifymeetingbe.onrender.com/api/users/create",
         formData
       );
       if (response.status === 200) {

@@ -50,7 +50,7 @@ const Register = () => {
     if (!validateForm()) return;
 console.log('form data', formData)
     try {
-      const response = await axios.post('http://localhost:8008/api/users/create', {
+      const response = await axios.post('https://amplifymeetingbe.onrender.com/api/users/create', {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
