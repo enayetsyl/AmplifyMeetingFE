@@ -2,7 +2,7 @@
 import InputField from "@/components/shared/InputField";
 import Image from "next/image";
 import React, { useState } from "react";
-import logoutImage from "../../../../public/logout.png";
+import logoutImage from "../../../../public/logout.PNG";
 import logo from "../../../../public/logo.jpg";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -11,7 +11,7 @@ import Logo from "@/components/shared/Logo";
 import Link from "next/link";
 import HeadingH1 from "@/components/shared/HeadingH1";
 import ParagraphBlue2 from "@/components/shared/ParagraphBlue2";
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/button"
 
 const Login = () => {
   const [formData, setFormData] = useState({
