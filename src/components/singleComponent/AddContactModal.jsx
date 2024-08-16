@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import InputField from "../shared/InputField";
-import Button from "../shared/Button";
+import Button from "../shared/button";
 import { useGlobalContext } from "@/context/GlobalContext";
 
 const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
