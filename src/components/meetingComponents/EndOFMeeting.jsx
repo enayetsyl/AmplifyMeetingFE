@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../shared/Button";
+import Button from "../shared/button";
 import { GoPlus } from "react-icons/go";
 import { FaVideo } from "react-icons/fa";
 import { IoIosDocument } from "react-icons/io";
