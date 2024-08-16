@@ -102,7 +102,7 @@ const page = () => {
       </div>
 
       {/* Body */}
-      <div className="flex-grow w-full z-10">
+      <div className="flex-grow w-full ">
         <ContactTable contacts={contacts} setContacts={setContacts}
         currentContact={currentContact}
         setCurrentContact={setCurrentContact}
