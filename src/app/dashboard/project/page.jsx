@@ -28,7 +28,7 @@ const Page = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://amplifymeetingbe.onrender.com/api/get-all/project/${user._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/get-all/project/${user._id}`,
         {
           params: { page, limit: 10 },
         }

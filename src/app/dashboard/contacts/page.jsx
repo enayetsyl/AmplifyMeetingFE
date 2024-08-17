@@ -22,10 +22,14 @@ const page = () => {
     fetchContacts();
   }, []);
 
+  const user = {
+    _id : '66bb5b41e7e451974c1734c6'
+  }
+
   const fetchContacts = async () => {
     try {
       const response = await fetch(
-        "https://amplifymeetingbe.onrender.com/api/get-all/contact?page=1&limit=10"
+       `${process.env.NEXT_PUBLIC_API_URL}/api/get-all/contact?page=1&limit=10`
       );
       const data = await response.json();
       console.log(data);

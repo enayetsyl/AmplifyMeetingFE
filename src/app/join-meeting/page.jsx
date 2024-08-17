@@ -33,7 +33,7 @@ const Page = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://amplifymeetingbe.onrender.com/api/users/create",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/create`,
         formData
       );
       if (response.status === 200) {

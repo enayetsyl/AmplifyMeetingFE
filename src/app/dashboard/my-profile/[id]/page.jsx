@@ -90,7 +90,7 @@ const Page = () => {
 
   const deleteUser = async () => {
     try {
-      await axios.delete("https://amplifymeetingbe.onrender.com/api/users/delete-by-id", {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/users/delete-by-id`, {
         params: { id: id }, // replace with actual user ID
       });
       console.log("User deleted successfully");
@@ -111,7 +111,7 @@ const Page = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "https://amplifymeetingbe.onrender.com/api/users/find-by-id",
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/find-by-id`,
           {
             params: { id: id }, // replace 'user-id' with actual user ID
           }

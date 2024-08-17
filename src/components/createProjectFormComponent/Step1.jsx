@@ -22,6 +22,7 @@ useEffect(() => {
     refreshPasscode();
   }
 }, [formData.endDate]);
+
   return (
     <div className="px-5">
       <HeadingBlue25px children="General Information" />
@@ -33,8 +34,8 @@ useEffect(() => {
           <InputField
             label="Name"
             type="text"
-            value={formData.projectName}
-            onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </div>
 
@@ -42,13 +43,28 @@ useEffect(() => {
           <InputField
             label="Description"
             type="text"
-            value={formData.projectDescription}
+            value={formData.description}
             onChange={(e) =>
-              setFormData({ ...formData, projectDescription: e.target.value })
+              setFormData({ ...formData, description: e.target.value })
             }
           />
         </div>
 
+        <div>
+          <p className="block text-sm font-semibold mb-2">
+            Start Time
+          </p>
+          <div className="flex items-center">
+            <input
+              type="date"
+              value={formData.startDate}
+              onChange={(e) =>
+                setFormData({ ...formData, startDate: e.target.value })
+              }
+              className="w-full px-4 py-2 border-[0.5px] rounded-lg focus:outline-none border-black"
+            />
+          </div>
+        </div>
         <div>
           <p className="block text-sm font-semibold mb-2">
             End Time
