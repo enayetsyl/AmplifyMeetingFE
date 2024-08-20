@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import notify from "@/utils/notify";
 import { PiCirclesFourFill } from "react-icons/pi";
 import Dropdown from "../shared/Dropdown";
+import ChatDashboard from "./ChatDashboard";
 
 const LeftSidebarOpenUi = ({
   users,
@@ -59,7 +60,12 @@ const LeftSidebarOpenUi = ({
   const handleSearch = () => {
     // Write search functionality here
   };
+  const [selectedReceiverId, setSelectedReceiverId] = useState(null);
 
+  const handleUserClick = (userId) => {
+    console.log(userId)
+    setSelectedReceiverId(userId);
+  };
   const toggleRemoveAndWaitingOptionModal = (event, user) => {
     const { top, left } = event.currentTarget.getBoundingClientRect();
     setModalPosition({ top, left });
@@ -292,7 +298,7 @@ const LeftSidebarOpenUi = ({
                       {user.name}
                     </p>
                     <IoMdMic />
-                    <BsChatSquareDotsFill />
+                    <BsChatSquareDotsFill onClick={() => handleUserClick(user._id)} />
                     <BsThreeDotsVertical
                       onClick={(event) =>
                         toggleRemoveAndWaitingOptionModal(event, user)
@@ -463,6 +469,9 @@ const LeftSidebarOpenUi = ({
             </div>
           ))}
         </div>
+      )}
+      {selectedReceiverId && (
+        <ChatDashboard  receiverId={selectedReceiverId} />
       )}
       {isRemoveModalOpen && (
         <RemoveUserModal

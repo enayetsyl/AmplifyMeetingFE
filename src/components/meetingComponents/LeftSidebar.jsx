@@ -5,6 +5,7 @@ import userImage from "../../../public/user.jpg";
 import groupChatImage from "../../../public/group-chat.png";
 import LeftSidebarOpenUi from "./LeftSidebarOpenUi";
 import LeftSidebarCloseUi from "./LeftSidebarCloseUi";
+import axios from "axios";
 
 const LeftSidebar = ({
   users,
@@ -18,12 +19,16 @@ const LeftSidebar = ({
   setIsBreakoutRoom,
   breakoutRooms,
   setBreakoutRooms,
-  handleBreakoutRoomChange,selectedRoom, setSelectedRoom
+  handleBreakoutRoomChange,
+  selectedRoom,
+  setSelectedRoom,
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("participantList");
   const [currentUser, setCurrentUser] = useState(null);
+  const [isModerator, setIsModerator] = useState(false);
+
   const [selectedChat, setSelectedChat] = useState(null);
   const [isWaiting, setIsWaiting] = useState([
     {
@@ -150,81 +155,111 @@ const LeftSidebar = ({
   };
 
   const toggleRecordingButton = () => {
-    setIsRecordingOpen(!isRecordingOpen)
-  }
+    setIsRecordingOpen(!isRecordingOpen);
+  };
+  // useEffect(() => {
+  //   const checkRole = async () => {
+  //     try {
+  //       // Retrieve ID from localStorage
+  //       const localStorageId = localStorage.getItem('moderatorId');
 
+  //       if (localStorageId) {
+  //         // Make the API call
+  //         const response = await axios.get(`/api/get-all/meeting/66bfef7c87e3f9a74334bd72`);
+  //         const { moderator } = response.data;
+
+  //         // Compare the moderator ID from the response with the localStorage ID
+  //         if (localStorageId === moderator) {
+  //           setIsModerator(true);
+  //         } else {
+  //           setIsModerator(false);
+  //         }
+  //       } else {
+  //         console.error('No moderator ID found in localStorage');
+  //         setIsModerator(false);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //       setIsModerator(false);
+  //     }
+  //   };
+
+  //   checkRole();
+  // }, []); 
   return (
-    <div
-      className={`flex ${
-        isSidebarOpen ? "w-80" : "w-24"
-      } transition-width duration-300 bg-white h-screen rounded-r-xl relative`}
-    >
-      {isSidebarOpen ? (
-        <LuArrowLeftToLine
-          className="absolute top-4 right-2 text-black text-sm cursor-pointer "
-          onClick={toggleSidebar}
-        />
-      ) : (
-        <LuArrowRightToLine
-          className="absolute top-4 right-2 text-black text-sm cursor-pointer "
-          onClick={toggleSidebar}
-        />
-      )}
-
-      <div className="flex flex-col w-full ">
-        {/*  */}
+    <div >
+      <div
+        className={`flex ${
+          isSidebarOpen ? "w-80" : "w-24"
+        } transition-width duration-300 bg-white h-screen rounded-r-xl relative`}
+      >
         {isSidebarOpen ? (
-          // If side bar open
-          <LeftSidebarOpenUi
-            users={users}
-            setUsers={setUsers}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            currentUser={currentUser}
-            setCurrentUser={setCurrentUser}
-            selectedChat={selectedChat}
-            setSelectedChat={setSelectedChat}
-            isWaiting={isWaiting}
-            setIsWaiting={setIsWaiting}
-            handleTabClick={handleTabClick}
-            chatParticipants={chatParticipants}
-            role={role}
-            toggleWhiteBoard={toggleWhiteBoard}
-            toggleRecordingButton={toggleRecordingButton}
-            isBreakoutRoom={isBreakoutRoom}
-            setIsBreakoutRoom={setIsBreakoutRoom}
-            breakoutRooms={breakoutRooms}
-            setBreakoutRooms={setBreakoutRooms}
-            handleBreakoutRoomChange={handleBreakoutRoomChange}
-            selectedRoom={selectedRoom}
-            setSelectedRoom={setSelectedRoom}
+          <LuArrowLeftToLine
+            className="absolute top-4 right-2 text-black text-sm cursor-pointer "
+            onClick={toggleSidebar}
           />
         ) : (
-          <LeftSidebarCloseUi
-            users={users}
-            setUsers={setUsers}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            currentUser={currentUser}
-            setCurrentUser={setCurrentUser}
-            selectedChat={selectedChat}
-            setSelectedChat={setSelectedChat}
-            isWaiting={isWaiting}
-            setIsWaiting={setIsWaiting}
-            handleTabClick={handleTabClick}
-            chatParticipants={chatParticipants}
-            role={role}
-            toggleWhiteBoard={toggleWhiteBoard}
-            toggleRecordingButton={toggleRecordingButton}
-            isBreakoutRoom={isBreakoutRoom}
-            setIsBreakoutRoom={setIsBreakoutRoom}
-            breakoutRooms={breakoutRooms}
-            setBreakoutRooms={setBreakoutRooms}
-            handleBreakoutRoomChange={handleBreakoutRoomChange}
-            selectedRoom={selectedRoom}
-            setSelectedRoom={setSelectedRoom}
+          <LuArrowRightToLine
+            className="absolute top-4 right-2 text-black text-sm cursor-pointer "
+            onClick={toggleSidebar}
           />
         )}
+
+        <div className="flex flex-col w-full ">
+          {/*  */}
+          {isSidebarOpen ? (
+            // If side bar open
+            <LeftSidebarOpenUi
+              users={users}
+              setUsers={setUsers}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
+              selectedChat={selectedChat}
+              setSelectedChat={setSelectedChat}
+              isWaiting={isWaiting}
+              setIsWaiting={setIsWaiting}
+              handleTabClick={handleTabClick}
+              chatParticipants={chatParticipants}
+              role={role}
+              toggleWhiteBoard={toggleWhiteBoard}
+              toggleRecordingButton={toggleRecordingButton}
+              isBreakoutRoom={isBreakoutRoom}
+              setIsBreakoutRoom={setIsBreakoutRoom}
+              breakoutRooms={breakoutRooms}
+              setBreakoutRooms={setBreakoutRooms}
+              handleBreakoutRoomChange={handleBreakoutRoomChange}
+              selectedRoom={selectedRoom}
+              setSelectedRoom={setSelectedRoom}
+            />
+          ) : (
+            <LeftSidebarCloseUi
+              users={users}
+              setUsers={setUsers}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
+              selectedChat={selectedChat}
+              setSelectedChat={setSelectedChat}
+              isWaiting={isWaiting}
+              setIsWaiting={setIsWaiting}
+              handleTabClick={handleTabClick}
+              chatParticipants={chatParticipants}
+              role={role}
+              toggleWhiteBoard={toggleWhiteBoard}
+              toggleRecordingButton={toggleRecordingButton}
+              isBreakoutRoom={isBreakoutRoom}
+              setIsBreakoutRoom={setIsBreakoutRoom}
+              breakoutRooms={breakoutRooms}
+              setBreakoutRooms={setBreakoutRooms}
+              handleBreakoutRoomChange={handleBreakoutRoomChange}
+              selectedRoom={selectedRoom}
+              setSelectedRoom={setSelectedRoom}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
