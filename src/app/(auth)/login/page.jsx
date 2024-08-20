@@ -33,7 +33,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://amplifymeetingbe.onrender.com/api/users/signin', {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/signin`, {
         email: formData.email,
         password: formData.password,
       });

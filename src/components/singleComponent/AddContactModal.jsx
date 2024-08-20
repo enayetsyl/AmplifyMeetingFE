@@ -15,7 +15,10 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
   });
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const { user } = useGlobalContext();
+  // const { user } = useGlobalContext();
+  const user = {
+    _id : '66bb5b41e7e451974c1734c6'
+  }
   console.log(user);
 
   const handleCheckboxChange = (e) => {
@@ -25,7 +28,7 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
       [name]: checked,
     }));
   };
-  console.log('conatct to edit', contactToEdit)
+  console.log('contact to edit', contactToEdit)
   console.log('isEditing', isEditing)
 
   const handleSubmit = async (e) => {
@@ -36,8 +39,8 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
     try {
       const response = await fetch(
         isEditing
-          ? `https://amplifymeetingbe.onrender.com/api/update-contact/${contactToEdit._id}`
-          : "https://amplifymeetingbe.onrender.com/api/create/contact",
+          ? `${process.env.NEXT_PUBLIC_API_URL}/api/update-contact/${contactToEdit._id}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/api/create/contact`,
         {
           method: isEditing ? "PUT" : "POST",
           headers: {
@@ -49,6 +52,7 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
             email,
             companyName,
             roles: selectedRoles,
+            createdBy: user._id,
           }),
         }
       );

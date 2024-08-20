@@ -120,8 +120,7 @@ const ProjectTable = ({ projects, setProjects }) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
- 
-  };
+   };
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -169,7 +168,7 @@ const ProjectTable = ({ projects, setProjects }) => {
                   key={project._id}
                   className="shadow-[0px_0px_26px_#00000029] w-full"
                 >
-                  <TableData>{project.projectName}</TableData>
+                  <TableData>{project.name}</TableData>
 
                   {/* Display Tags */}
                   <TableData>
@@ -225,7 +224,9 @@ const ProjectTable = ({ projects, setProjects }) => {
           </table>
         </div>
       ) : (
-        <ViewProject project={selectedProject} onClose={closeViewProject} />
+        <ViewProject project={selectedProject} onClose={closeViewProject} 
+        user={user}
+        />
       )}
 
       {isModalOpen && (

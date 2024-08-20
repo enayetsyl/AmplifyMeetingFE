@@ -43,7 +43,7 @@ const BreakoutRoomModal = ({ onClose, formData, setFormData, roomToEdit }) => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.post('https://amplifymeetingbe.onrender.com/create-breakout-room', {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/create-breakout-room'`, {
         project: "66b09e0fa55a6fb9481f7f77", // assuming you have projectId in formData
         name: newRoom.name,
         participants: newRoom.participants.map(p => p._id),

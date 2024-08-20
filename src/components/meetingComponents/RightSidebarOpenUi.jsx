@@ -43,7 +43,7 @@ const RightSidebarOpenUi = ({
     // Fetch initial files
     const fetchFiles = async () => {
       try {
-        const response = await axios.get('https://amplifymeetingbe.onrender.com/api/files');
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/files`);
         setFileList(response.data);
       } catch (error) {
         console.error("Error fetching files:", error);
@@ -62,12 +62,12 @@ const RightSidebarOpenUi = ({
       formData.append('file', file);
   
       try {
-        await axios.post('https://amplifymeetingbe.onrender.com/api/upload', formData, {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
-        const response = await axios.get('https://amplifymeetingbe.onrender.com/api/files');
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/files`);
         setFileList(response.data);
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -79,8 +79,8 @@ const RightSidebarOpenUi = ({
 
   const handleDeleteFile = async (fileId) => {
     try {
-      await axios.delete(`https://amplifymeetingbe.onrender.com/api/files/${fileId}`);
-      const response = await axios.get('https://amplifymeetingbe.onrender.com/api/files');
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/files/${fileId}`);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/files`);
       setFileList(response.data);
     } catch (error) {
       console.error("Error deleting file:", error);

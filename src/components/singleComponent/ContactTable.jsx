@@ -107,7 +107,7 @@ const ContactTable = ({contacts, setContacts, currentContact, setCurrentContact,
 
   const handleDeleteContact = async (contactId) => {
     try {
-      const response = await fetch(`https://amplifymeetingbe.onrender.com/api/delete/contact/${contactId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/delete/contact/${contactId}`, {
         method: 'DELETE',
       });
       const data = await response.json();
@@ -166,12 +166,12 @@ const ContactTable = ({contacts, setContacts, currentContact, setCurrentContact,
           <tbody className="bg-white divide-y divide-gray-200 rounded-lg w-full">
             {contacts.map((contact, index) => (
               <tr key={index} className="shadow-[0px_0px_26px_#00000029] w-full ">
-                <TableData>{contact.firstName}{contact.lastName}</TableData>
+                <TableData>{contact.firstName} {contact.lastName}</TableData>
                 <TableData>{contact.email}</TableData>
                 <TableData>{contact.companyName}</TableData>
                 <TableData>{contact?.roles[0]},{contact?.roles[1]},{contact?.roles[2]}</TableData>
-                <TableData>{formatDate(contact.added_date)}</TableData>
-                <TableData>{formatDate(contact.last_updated_on)}</TableData>
+                <TableData>{formatDate(contact.addedDate)}</TableData>
+                <TableData>{formatDate(contact.lastUpdatedOn)}</TableData>
                 <td className="flex justify-between items-center gap-2 relative py-2">
                   <Button
                     variant="primary"

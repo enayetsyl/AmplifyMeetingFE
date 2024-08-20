@@ -18,19 +18,19 @@ const Step2 = ({ formData, setFormData, contacts, setContacts, isLoading }) => {
   
     if (role) {
       // Remove the initial empty person object if it exists
-      const updatedPeople = formData.people.filter(person => person._id);
+      const updatedMembers = formData.members.filter((member) => member.userId);
+
   
       // Add the selected contact
-      updatedPeople.push({
+      updatedMembers.push({
         userId: selectedContact._id,
-        firstName: selectedContact.firstName,
-        lastName: selectedContact.lastName,
+
         role: role,
       });
   
       setFormData((prevFormData) => ({
         ...prevFormData,
-        people: updatedPeople,
+        members: updatedMembers,
       }));
   
  

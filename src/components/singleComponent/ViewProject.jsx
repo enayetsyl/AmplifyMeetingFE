@@ -5,15 +5,21 @@ import HeadingLg from "@/components/shared/HeadingLg";
 import Pagination from "@/components/shared/Pagination";
 import ParagraphLg from "@/components/shared/ParagraphLg";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { RiPencilFill } from "react-icons/ri";
 import ParagraphBlue2 from "../shared/ParagraphBlue2";
+import axios from "axios";
+import MeetingTab from "../projectComponents/meetings/MeetingTab";
+import AddMeetingModal from "../projectComponents/meetings/AddMeetingModal";
 
-const ViewProject = ({ project }) => {
+const ViewProject = ({ project, onClose, user }) => {
   console.log("inside view project", project);
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("Meetings");
+  const [meetings, setMeetings] = useState([]);
+  const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false)
 
-  const [activeTab, setActiveTab] = useState("Participants");
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -21,6 +27,39 @@ const ViewProject = ({ project }) => {
   const handlePageChange = () => {
     //Add logic here
   };
+
+  // Fetching project meetings
+  const fetchMeetings = async (page = 1) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/get-all/meeting/${project._id}`,
+        {
+          params: { page, limit: 10 },
+        }
+      );
+      console.log(response.data);
+      setMeetings(response.data.meetings);
+      // setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMeetings();
+  }, []);
+
+  const handleAddMeetingModal = () => {
+   setIsAddMeetingModalOpen(true)
+  }
+  
+  const closeAddMeetingModal = () => {
+    setIsAddMeetingModalOpen(false)
+  }
+  
 
   return (
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center ">
@@ -48,11 +87,11 @@ const ViewProject = ({ project }) => {
         <div className="bg-white shadow-[0px_0px_12px_#00000029] rounded-xl p-5">
           <div className="flex justify-start items-center gap-5">
             <HeadingLg children="Project Name" />
-            <ParagraphBlue2 children={project?.projectName} />
+            <ParagraphBlue2 children={project?.name} />
           </div>
           <div className="flex justify-start items-center gap-5">
             <HeadingLg children="Description" />
-            <ParagraphBlue2 children={project?.projectDescription} />
+            <ParagraphBlue2 children={project?.description} />
           </div>
           <div className="flex justify-start items-center gap-5">
             <HeadingLg children="Opened On" />
@@ -113,40 +152,17 @@ const ViewProject = ({ project }) => {
           {/* tab content */}
           {activeTab === "Meetings" && (
             <div className="pt-5">
-              <HeadingLg children="Participant List" />
+              <div className="flex justify-between items-center">
+                <HeadingLg children="Meetings" />
+                <Button
+                  children="Add Meeting"
+                  className="px-4 py-2 rounded-xl"
+                  type="submit"
+                  onClick={handleAddMeetingModal}
+                />
+              </div>
               <div className="border-[0.5px] border-solid border-custom-dark-blue-1 rounded-xl h-[300px] overflow-y-scroll mt-2">
-                {/* table heading */}
-                <div className="flex justify-start items-center py-3 px-5 shadow-sm">
-                  <div className="w-[30%]">
-                    <HeadingLg children="Name" />
-                  </div>
-                  <div className="w-[70%]">
-                    <HeadingLg children="Email" />
-                  </div>
-                </div>
-                {/* table item */}
-                {/* {formData.participants.map((participant, index) => ( */}
-                <div className="flex justify-start items-center py-3 px-5 shadow-sm">
-                  <div className="w-[30%]">
-                    <ParagraphLg children="Juliet Frazier" />
-                    {/* <ParagraphLg children={participant.name} /> */}
-                  </div>
-                  <div className="w-[70%]">
-                    <ParagraphLg children="JulietFrazier123@gmail.com" />
-                    {/* <ParagraphLg children={participant.email} /> */}
-                  </div>
-                </div>
-                <div className="flex justify-start items-center py-3 px-5 shadow-sm">
-                  <div className="w-[30%]">
-                    <ParagraphLg children="Juliet Frazier" />
-                    {/* <ParagraphLg children={participant.name} /> */}
-                  </div>
-                  <div className="w-[70%]">
-                    <ParagraphLg children="JulietFrazier123@gmail.com" />
-                    {/* <ParagraphLg children={participant.email} /> */}
-                  </div>
-                </div>
-                {/* ))} */}
+                <MeetingTab meetings={meetings} />
               </div>
             </div>
           )}
@@ -271,7 +287,16 @@ const ViewProject = ({ project }) => {
               {/* ))} */}
             </div>
           )}
-
+          {
+            isAddMeetingModalOpen && (
+              <AddMeetingModal
+              onClose={closeAddMeetingModal}
+              project={project}
+              user={user}
+              refetchMeetings={fetchMeetings}
+              />
+            )
+          }
           <div className="flex justify-end py-3">
             <Pagination
               currentPage={2}

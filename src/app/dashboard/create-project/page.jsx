@@ -14,42 +14,43 @@ const Page = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1: General Information
-
-    projectName: "",
-    projectDescription: "",
-    endDate: "",
-    projectPasscode: "",
-  
+    name: "",  
+    description: "",  
+    startDate: "",
+    endDate: "",  
+    projectPasscode: "", 
+    createdBy: ""     ,
+    tags:[],
     // Step 2: Add People
-    people: [
+    members: [
       {
-        userId:"",
-        firstName: "",
-        lastName: "",
-        role: "",
+        userId: "",  
+        role: "",  
       },
     ],
-  
+    
     // Step 3: Add Meeting
-    meetingTitle: "",
-    meetingModerator: "",
-    meetingDescription: "",
-    startDate: "",
-    startTime: "",
-    timeZone: "",
-    duration: 0,
-    ongoing: false,
-    enableBreakoutRoom: false,
-    meetingPasscode: "",
+    meeting: {
+      title: "",  
+      moderator: "",  
+      description: "", 
+      startDate: "",  
+      startTime: "",  
+      timeZone: "",  
+      duration: "",  
+      ongoing: false,  
+      enableBreakoutRoom: false,  
+      meetingPasscode: "",  
+    }
   });
   const router = useRouter()
 
   
   // console.log('form data', formData)
-  
   const user = {
     _id : '66bb5b41e7e451974c1734c6'
   }
+  
   const [contacts, setContacts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -61,12 +62,13 @@ const Page = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `https://amplifymeetingbe.onrender.com/api/get-all/contact/${user._id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/get-all/contact/${user._id}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch contacts: ${response.statusText}`);
       }
       const data = await response.json();
+      console.log('contact data', data)
       setContacts(data);
     } catch (error) {
       console.error("Error fetching contacts:", error);
@@ -94,7 +96,7 @@ const Page = () => {
     console.log(updatedFormData);
   
     try {
-      const response = await axios.post('https://amplifymeetingbe.onrender.com/api/create/project', updatedFormData);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/create/project`, updatedFormData);
       console.log(response);
       alert('Project created successfully!');
       router.push('/dashboard/project')
@@ -135,23 +137,25 @@ const Page = () => {
     switch (currentStep) {
       case 1:
         return (
-          formData.projectName !== "" &&
-          formData.projectDescription !== "" &&
+          formData.name !== "" &&
+          formData.description !== "" &&
           formData.endDate !== "" &&
           formData.projectPasscode !== ""
         );
       case 2:
         // Ensure every person in the people array has a name, email, and role
-        return formData.people.every(
-          (person) => person.userId !== ""  &&person.firstName !== "" && person.lastName !== "" && person.role !== ""
+        return formData.members.every(
+          (person) =>  person.role !== ""
         );
       case 3:
         return (
-          formData.meetingTitle !== "" &&
-          formData.meetingModerator !== "" &&
-          formData.startDate !== "" &&
-          formData.startTime !== "" &&
-          formData.timeZone !== ""
+          formData.meeting.title !== "" &&
+          formData.meeting.moderator !== "" &&
+          formData.meeting.startDate !== "" &&
+          formData.meeting.startTime !== "" &&
+          formData.meeting.timeZone !== "" &&
+          formData.meeting.duration !== "" &&
+          formData.meeting.meetingPasscode !== "" 
         );
       default:
         return true;
