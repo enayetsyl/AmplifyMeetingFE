@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
+import { v4 as uuidv4 } from "uuid"; // Importing uuid
 
-const ChatDashboard = ({
-  user = { _id: "66c4510b9cfdde50793bfd83" },
-  receiverId,
-}) => {
+const ChatDashboard = ({ receiverId }) => {
+  const getUserID = () => {
+    const userAgent = navigator.userAgent;
+    if (userAgent.includes("Edg/")) {
+      return "66c4510b9cfdde50793bfd83"; // Replace with your static ID for Edge
+    } else if (userAgent.includes("Chrome")) {
+      return "2"; // Replace with your static ID for Chrome
+    } else {
+      return uuidv4(); // Generate a dynamic ID for other browsers
+    }
+  };
+
+  const [user] = useState({ _id: getUserID() }); // Auto-generate _id based on the browser
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [socket, setSocket] = useState(null);
+
   useEffect(() => {
     // Fetch users from the database
     fetch("http://localhost:8008/api/users")
@@ -36,33 +47,14 @@ const ChatDashboard = ({
       console.log("Connected to server");
     });
 
-    newSocket.on("getOnlineUser", (data) => {
-      document.getElementById(`${data.user_id}-status`).textContent = "Online";
-      document
-        .getElementById(`${data.user_id}-status`)
-        .classList.remove("offline-status");
-      document
-        .getElementById(`${data.user_id}-status`)
-        .classList.add("online-status");
-    });
-
-    newSocket.on("getOfflineUser", (data) => {
-      document.getElementById(`${data.user_id}-status`).textContent = "Offline";
-      document
-        .getElementById(`${data.user_id}-status`)
-        .classList.remove("online-status");
-      document
-        .getElementById(`${data.user_id}-status`)
-        .classList.add("offline-status");
-    });
-
     newSocket.on("loadNewChat", (data) => {
-      if (user._id === data.receiver_id && receiverId === data.sender_id) {
-        setChatHistory((prevChats) => [
-          ...prevChats,
-          { message: data.message, isCurrentUser: false },
-        ]);
-      }
+      console.log(data);
+      // if (user._id === data.receiver_id && receiverId === data.sender_id) {
+      setChatHistory((prevChats) => [
+        ...prevChats,
+        { message: data.message, isCurrentUser: false },
+      ]);
+      // }
       scrollChat();
     });
 
@@ -78,7 +70,7 @@ const ChatDashboard = ({
     return () => {
       newSocket.disconnect();
     };
-  }, [receiverId, user._id]);
+  }, [user._id, receiverId]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -162,6 +154,10 @@ const ChatDashboard = ({
                     : "distance-user-chat"
                 }
               >
+                {console.log(chat,"chat")}
+                <h5 className="bg-black text-white border-2 rounded-full px-2 mr-5 w-52 h-5">
+                  {user._id}
+                </h5>
                 <h5>{chat.message}</h5>
               </div>
             ))}

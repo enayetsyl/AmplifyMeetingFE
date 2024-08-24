@@ -43,7 +43,7 @@ const RightSidebarOpenUi = ({
     // Fetch initial files
     const fetchFiles = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/files`);
+        const response = await axios.get(`http://localhost:8008/api/files`);
         setFileList(response.data);
       } catch (error) {
         console.error("Error fetching files:", error);
@@ -62,12 +62,12 @@ const RightSidebarOpenUi = ({
       formData.append('file', file);
   
       try {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, formData, {
+        await axios.post(`http://localhost:8008/api/upload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/files`);
+        const response = await axios.get(`http://localhost:8008/api/files`);
         setFileList(response.data);
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -79,8 +79,8 @@ const RightSidebarOpenUi = ({
 
   const handleDeleteFile = async (fileId) => {
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/files/${fileId}`);
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/files`);
+      await axios.delete(`http://localhost:8008/api/files/${fileId}`);
+      const response = await axios.get(`http://localhost:8008/api/files`);
       setFileList(response.data);
     } catch (error) {
       console.error("Error deleting file:", error);
@@ -281,6 +281,7 @@ const RightSidebarOpenUi = ({
               key={file.id}
               className="flex items-center justify-between bg-gray-200 py-3 rounded"
             >
+              {console.log(file)}
               <div className="flex items-center space-x-2">
                 <FaFolder className="h-3 w-3 text-custom-gray-3" />
                 <span className="text-xs text-custom-gray-3">

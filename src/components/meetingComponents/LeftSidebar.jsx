@@ -191,7 +191,7 @@ const LeftSidebar = ({
       <div
         className={`flex ${
           isSidebarOpen ? "w-80" : "w-24"
-        } transition-width duration-300 bg-white h-screen rounded-r-xl relative`}
+        } transition-width duration-300 bg-white h-screen rounded-r-xl relative ${role=="Observer"&&"hidden"}`}
       >
         {isSidebarOpen ? (
           <LuArrowLeftToLine

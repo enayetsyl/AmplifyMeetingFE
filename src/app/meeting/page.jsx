@@ -7,15 +7,34 @@ import userImage from "../../../public/user.jpg";
 import axios from "axios";
 
 const page = () => {
-  const [users, setUsers] = useState();
-  useEffect(() => {
-    const fetchUsers = async () => {
-      let a = await axios.get("http://localhost:8008/users");
-      console.log(a.data);
-      setUsers(a.data);
-    };
-    fetchUsers();
-  }, []);
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      name: "Victoria Armstrong",
+      image: userImage,
+    },
+    {
+      id: 2,
+      name: "Rebecca Nitin",
+      image: userImage,
+    },
+    {
+      id: 3,
+      name: "Juliet Frazier",
+      image: userImage,
+    },
+    {
+      id: 4,
+      name: "Hohnny Lewis",
+      image: userImage,
+    },
+    {
+      id: 5,
+      name: "Raina Smith",
+      image: userImage,
+    },
+  ]);
+
   const [observers, setObservers] = useState([
     {
       id: 10,
@@ -43,6 +62,7 @@ const page = () => {
       image: userImage,
     },
   ]);
+
   const [isWhiteBoardOpen, setIsWhiteBoardOpen] = useState(false);
   const [isRecordingOpen, setIsRecordingOpen] = useState(false);
 
@@ -82,18 +102,24 @@ const page = () => {
       ],
     },
   ]);
+
   const [selectedRoom, setSelectedRoom] = useState(breakoutRooms[0]);
-  // const role = 'Participant'
-  // const role = 'Observer'
-  const role = 'Moderator'
-  // const role = "Admin";
+  const [role, setRole] = useState("Observer");
 
   const meetingStatus = "Ongoing";
-  // const meetingStatus = 'End'
-
   const projectStatus = "Open";
-  // const projectStatus = 'Paused'
-  // const projectStatus = 'Closed'
+
+  useEffect(() => {
+    const userAgent = navigator.userAgent;
+
+    if (userAgent.includes("Edg")) {
+      setRole("Moderator");
+    } else if (userAgent.includes("Chrome")) {
+      setRole("Participant");
+    } else {
+      setRole("Observer");
+    }
+  }, []);
 
   const handleBreakoutRoomChange = (roomName) => {
     const room = breakoutRooms.find((room) => room.roomName === roomName);
@@ -101,8 +127,8 @@ const page = () => {
   };
 
   return (
-    <div className="flex justify-between  min-h-screen max-h-screen meeting_bg">
-      <div className="h-full ">
+    <div className="flex justify-between min-h-screen max-h-screen meeting_bg">
+      <div className="h-full">
         <LeftSidebar
           users={users}
           setUsers={setUsers}
@@ -120,7 +146,7 @@ const page = () => {
           setSelectedRoom={setSelectedRoom}
         />
       </div>
-      <div className="flex-1 w-full max-h-[100 vh] overflow-hidden">
+      <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
         <MeetingView
           role={role}
           users={users}

@@ -298,7 +298,7 @@ const LeftSidebarOpenUi = ({
                       {user.name}
                     </p>
                     <IoMdMic />
-                    <BsChatSquareDotsFill onClick={() => handleUserClick(user._id)} />
+                    <BsChatSquareDotsFill onClick={() => handleUserClick(user.id)} />
                     <BsThreeDotsVertical
                       onClick={(event) =>
                         toggleRemoveAndWaitingOptionModal(event, user)
@@ -471,7 +471,7 @@ const LeftSidebarOpenUi = ({
         </div>
       )}
       {selectedReceiverId && (
-        <ChatDashboard  receiverId={selectedReceiverId} />
+        <ChatDashboard  receiverId={selectedReceiverId} users={users}/>
       )}
       {isRemoveModalOpen && (
         <RemoveUserModal
