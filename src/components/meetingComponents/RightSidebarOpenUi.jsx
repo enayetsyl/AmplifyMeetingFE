@@ -276,9 +276,9 @@ const RightSidebarOpenUi = ({
             <p className="text-xs text-custom-gray-3 mr-11">Size</p>
           </div>
           {/* files */}
-          {fileList.map((file) => (
+          {fileList.map((file,index) => (
             <div
-              key={file.id}
+              key={index}
               className="flex items-center justify-between bg-gray-200 py-3 rounded"
             >
               {console.log(file)}

@@ -24,7 +24,7 @@ const Step2 = ({ formData, setFormData, contacts, setContacts, isLoading }) => {
       // Add the selected contact
       updatedMembers.push({
         userId: selectedContact._id,
-
+        email: selectedContact.email,
         role: role,
       });
   

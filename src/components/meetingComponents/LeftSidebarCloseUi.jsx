@@ -30,6 +30,8 @@ const LeftSidebarCloseUi = ({
   handleBreakoutRoomChange,
   selectedRoom,
   setSelectedRoom,
+  waitingRoom,
+  acceptParticipant,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 

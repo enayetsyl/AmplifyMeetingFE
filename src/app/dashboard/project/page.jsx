@@ -11,6 +11,7 @@ import { statusOptions } from "@/constant/Index";
 import NoSearchResult from "@/components/singleComponent/NoSearchResult";
 import ProjectTable from "@/components/singleComponent/ProjectTable";
 import { useRouter } from "next/navigation";
+import { useGlobalContext } from "@/context/GlobalContext";
 
 const Page = () => {
   const router = useRouter();
@@ -20,9 +21,7 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const user = {
-    _id : '66bb5b41e7e451974c1734c6'
-  }
+ const {user} = useGlobalContext()
 
   const fetchProjects = async (page = 1) => {
     setLoading(true);

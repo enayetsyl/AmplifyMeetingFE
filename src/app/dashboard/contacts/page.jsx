@@ -29,11 +29,11 @@ const page = () => {
   const fetchContacts = async () => {
     try {
       const response = await fetch(
-       `${process.env.NEXT_PUBLIC_API_URL}/api/get-all/contact?page=1&limit=10`
+       `${process.env.NEXT_PUBLIC_API_URL}/api/get-all/contact/${user._id}`
       );
       const data = await response.json();
       console.log(data);
-      setContacts(data.contacts);
+      setContacts(data);
 
       // setFilteredModerators(data.moderators);
     } catch (error) {

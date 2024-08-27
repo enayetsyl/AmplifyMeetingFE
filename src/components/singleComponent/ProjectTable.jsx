@@ -98,7 +98,6 @@ const ProjectTable = ({ projects, setProjects }) => {
   };
 
 
-  console.log('selected project', selectedProject)
   const handleView = (project) => {
     setSelectedProject(project);
     setViewProject(true); 

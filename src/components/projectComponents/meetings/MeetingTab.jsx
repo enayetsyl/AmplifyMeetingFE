@@ -1,5 +1,8 @@
 import TableData from "@/components/shared/TableData";
 import TableHead from "@/components/shared/TableHead";
+import { useGlobalContext } from "@/context/GlobalContext";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { BsFillEnvelopeAtFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
@@ -12,13 +15,14 @@ const MeetingTab = ({ meetings }) => {
   const [selectedMeeting, setSelectedMeeting] = useState(null)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const modalRef = useRef();
+  const {user} = useGlobalContext()
   const toggleModal = (event, meeting) => {
     const { top, left } = event.currentTarget.getBoundingClientRect();
     setModalPosition({ top, left });
    setSelectedMeeting(meeting);
     setIsModalOpen(!isModalOpen);
   };
-
+  const router = useRouter()
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -43,6 +47,23 @@ const MeetingTab = ({ meetings }) => {
 
    const handleShareMeeting = () => {
      closeModal()
+   }
+   
+   const handleJoinMeeting = (meeting) => {
+    console.log('meeting moderator id', meeting.moderator._id)
+    console.log('user id', user._id)
+    console.log('meeting id', meeting._id)
+    if(meeting.moderator.email === user.email){
+      const fullName = `${user.firstName} ${user.lastName}`;
+      console.log(fullName)
+      router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Moderator`);
+    } else{
+      const fullName = `${user.firstName} ${user.lastName}`;
+      console.log(fullName)
+      router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Admin`);
+
+    }
+     
    }
    
 
@@ -70,28 +91,32 @@ const MeetingTab = ({ meetings }) => {
           </tr>
         </thead>
         <tbody>
-          {meetings.map((meeting, index) => (
+          {meetings?.map((meeting, index) => (
             <tr key={index} className="hover:bg-gray-100">
               <TableData >
-                {meeting.title}
+                {meeting?.title}
               </TableData>
               {/*  {new Date(meeting.startDate).toLocaleDateString()}{" "}
                     {meeting.startTime} */}
               <TableData >
-              {new Date(meeting.startDate).toLocaleDateString()}{" "}
-              {meeting.startTime}
+              {new Date(meeting?.startDate).toLocaleDateString()}{" "}
+              {meeting?.startTime}
               </TableData>
               <TableData >
-                {meeting.timeZone}
+                {meeting?.timeZone}
               </TableData>
               <TableData >
-                {meeting.moderator.firstName}
+                {meeting?.moderator?.firstName}
               </TableData>
               <TableData >
                 <div className="flex justify-start items-center gap-2">
-                <button className="text-blue-500 hover:text-blue-700">
+               
+                <button className="text-blue-500 hover:text-blue-700"
+                onClick={()=>handleJoinMeeting(meeting)}
+                >
                   Join
                 </button>
+           
                 <BsThreeDotsVertical
                 onClick={(e) => toggleModal(e, meeting)}
                       className="cursor-pointer"

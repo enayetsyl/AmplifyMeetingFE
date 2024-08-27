@@ -22,6 +22,8 @@ const LeftSidebar = ({
   handleBreakoutRoomChange,
   selectedRoom,
   setSelectedRoom,
+  waitingRoom,
+  acceptParticipant,
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -157,35 +159,7 @@ const LeftSidebar = ({
   const toggleRecordingButton = () => {
     setIsRecordingOpen(!isRecordingOpen);
   };
-  // useEffect(() => {
-  //   const checkRole = async () => {
-  //     try {
-  //       // Retrieve ID from localStorage
-  //       const localStorageId = localStorage.getItem('moderatorId');
-
-  //       if (localStorageId) {
-  //         // Make the API call
-  //         const response = await axios.get(`/api/get-all/meeting/66bfef7c87e3f9a74334bd72`);
-  //         const { moderator } = response.data;
-
-  //         // Compare the moderator ID from the response with the localStorage ID
-  //         if (localStorageId === moderator) {
-  //           setIsModerator(true);
-  //         } else {
-  //           setIsModerator(false);
-  //         }
-  //       } else {
-  //         console.error('No moderator ID found in localStorage');
-  //         setIsModerator(false);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //       setIsModerator(false);
-  //     }
-  //   };
-
-  //   checkRole();
-  // }, []); 
+ 
   return (
     <div >
       <div
@@ -232,6 +206,8 @@ const LeftSidebar = ({
               handleBreakoutRoomChange={handleBreakoutRoomChange}
               selectedRoom={selectedRoom}
               setSelectedRoom={setSelectedRoom}
+              waitingRoom={waitingRoom}
+              acceptParticipant={acceptParticipant}
             />
           ) : (
             <LeftSidebarCloseUi
@@ -257,6 +233,8 @@ const LeftSidebar = ({
               handleBreakoutRoomChange={handleBreakoutRoomChange}
               selectedRoom={selectedRoom}
               setSelectedRoom={setSelectedRoom}
+              waitingRoom={waitingRoom}
+              acceptParticipant={acceptParticipant}
             />
           )}
         </div>

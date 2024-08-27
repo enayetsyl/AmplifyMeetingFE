@@ -25,7 +25,8 @@ const Page = () => {
     members: [
       {
         userId: "",  
-        role: "",  
+        role: "", 
+        email: "" 
       },
     ],
     

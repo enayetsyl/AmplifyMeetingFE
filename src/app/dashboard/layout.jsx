@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function DashboardLayout({ children }) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const { user } = useGlobalContext();
+  const { user, setUser } = useGlobalContext();
   const router = useRouter();
   const handleLogoutModalOpen = (e) => {
     setIsLogoutModalOpen(true);
@@ -17,12 +17,17 @@ export default function DashboardLayout({ children }) {
   const handleCloseLogoutModal = () => {
     setIsLogoutModalOpen(false);
   };
+    
 
-  // useEffect(() => {
-  //   if (user === null) {
-  //     router.push("/login"); // Redirect to login page if user is null
-  //   }
-  // }, [user, router]);
+
+  useEffect(() => {
+    // Check if user is defined and if it's an empty object
+    if (!user || Object.keys(user).length === 0) {
+      console.log("User is empty or undefined, navigating to login page");
+      // Navigate to the login page
+      router.push("/login");
+    }
+  }, [user, router]);
 
   return (
     <div className="min-h-screen flex flex-col h-full">
@@ -31,11 +36,14 @@ export default function DashboardLayout({ children }) {
         <div className="sticky top-0 w-[260px] h-screen z-10">
           <DashboardSidebar handleLogoutModalOpen={handleLogoutModalOpen} 
           isLogoutModalOpen={isLogoutModalOpen}
+          user={user}
           />
         </div>
         <div className="flex-grow h-full ">{children}</div>
       </div>
-      {isLogoutModalOpen && <LogoutModal onClose={handleCloseLogoutModal} />}
+      {isLogoutModalOpen && <LogoutModal onClose={handleCloseLogoutModal} 
+    
+      />}
       {/* footer */}
       <Footer />
     </div>

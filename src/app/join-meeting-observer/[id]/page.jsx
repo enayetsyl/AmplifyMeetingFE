@@ -4,18 +4,26 @@ import React, { useState } from "react";
 import Logo from "@/components/shared/Logo";
 import InputField from "@/components/shared/InputField";
 import Button from "@/components/shared/button";
-import joinMeetingImage from "../../../public/join-meeting-edited.png";
+import joinMeetingImage from "../../../../public/join-meeting-edited.png";
 import Footer from "@/components/shared/Footer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useParams, useRouter } from 'next/navigation';
+import axios from "axios";
 
 const page = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    passcode: "",
+    fullName: "",
+    passcode:""
+    
   });
   const [showPasscode, setShowPasscode] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const params = useParams();
+  const router = useRouter();
+  const meetingId = params.id;
+
+  console.log("meetingid", meetingId);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,10 +33,32 @@ const page = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form and handle submission
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/verify-meeting-passcode`, {
+        meetingId,
+        passcode: formData.passcode,
+      });
+
+      if (response.status === 200) {
+        // Passcode is correct, proceed to join the meeting
+        console.log("Navigating to meeting with fullName:", formData.fullName);
+        router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);
+
+        
+
+      } 
+     
+    } catch (error) {
+     
+      if (error.response && error.response.status === 401) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("An error occurred. Please try again.");
+      }
+    }
   };
 
   return (
@@ -44,12 +74,13 @@ const page = () => {
             Join Meeting
           </h1>
           <div className="lg:flex lg:justify-between lg:items-center gap-5 w-full 2xl:px-28">
-            <InputField label="First Name" name="firstName" type="text" />
-            <InputField label="Last Name" name="lastName" type="text" />
+            <InputField label="Full Name" name="fullName" type="text"
+            value={formData.fullName}
+            onChange={handleChange}
+            />
+            
           </div>
-          <div className="w-full 2xl:px-28">
-            <InputField label="Email" name="email" type="email" />
-          </div>
+        
           <div className="w-full 2xl:px-28">
             <InputField
               label="Passcode"
@@ -74,6 +105,7 @@ const page = () => {
               type="submit"
               variant="primary"
               className="w-full py-2 rounded-xl"
+              onClick={handleSubmit}
             />
           </div>
         </div>

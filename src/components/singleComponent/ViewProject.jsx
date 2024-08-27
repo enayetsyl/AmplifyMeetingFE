@@ -19,7 +19,7 @@ const ViewProject = ({ project, onClose, user }) => {
   const [meetings, setMeetings] = useState([]);
   const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false)
 
-
+  console.log('project id inside view meeting', project._id)
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -34,11 +34,11 @@ const ViewProject = ({ project, onClose, user }) => {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/get-all/meeting/${project._id}`,
-        {
-          params: { page, limit: 10 },
-        }
+        // {
+        //   params: { page, limit: 10 },
+        // }
       );
-      console.log(response.data);
+      console.log('view project meeting data fetch',response.data);
       setMeetings(response.data.meetings);
       // setTotalPages(response.data.totalPages);
     } catch (error) {

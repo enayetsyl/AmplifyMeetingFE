@@ -164,8 +164,8 @@ const ContactTable = ({contacts, setContacts, currentContact, setCurrentContact,
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200 rounded-lg w-full">
-            {contacts.map((contact, index) => (
-              <tr key={index} className="shadow-[0px_0px_26px_#00000029] w-full ">
+            {contacts?.map((contact, index) => (
+              <tr key={contact._id} className="shadow-[0px_0px_26px_#00000029] w-full ">
                 <TableData>{contact.firstName} {contact.lastName}</TableData>
                 <TableData>{contact.email}</TableData>
                 <TableData>{contact.companyName}</TableData>

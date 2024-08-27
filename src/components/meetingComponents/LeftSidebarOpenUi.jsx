@@ -46,6 +46,9 @@ const LeftSidebarOpenUi = ({
   handleBreakoutRoomChange,
   selectedRoom,
   setSelectedRoom,
+  waitingRoom,
+  acceptParticipant,
+
 }) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -426,32 +429,34 @@ const LeftSidebarOpenUi = ({
         </div>
       )}
       {/* waiting list */}
-      {isWaiting && activeTab === "participantList" && role === "Moderator" && (
+      {waitingRoom?.length > 0 && activeTab === "participantList" && role === "Moderator" && (
         <div className="flex-grow pt-2 bg-custom-gray-8 p-4 rounded-xl mb-4 overflow-y-auto mx-4">
           <div className="flex justify-between items-center py-2">
-            <h1 className="font-bold text-sm ">Waiting ({isWaiting.length})</h1>
+            <h1 className="font-bold text-sm ">Waiting ({waitingRoom?.length})</h1>
             <Button
               variant="primary"
               type="submit"
               children="Admit All"
               className="text-xs px-2 py-1 rounded-lg text-white"
+              onClick={() => waitingRoom?.forEach(participant => acceptParticipant(participant))}
+            
             />
           </div>
           {/* participant continer */}
-          {isWaiting?.map((user) => (
+          {waitingRoom?.map((user) => (
             <div
               className="flex justify-center items-center gap-2 py-1"
-              key={user.name}
+              key={user?.fullName}
             >
               <Image
-                src={user.image}
+                src={user?.image}
                 alt="user image"
                 height={40}
                 width={40}
                 className="rounded-2xl border-[3px] border-white border-solid"
               />
               <p className="text-[#1a1a1a] text-[10px] flex-grow">
-                {user.name}
+                {user?.name}
               </p>
               <div className="flex justify-center items-center gap-1">
                 <Button
@@ -459,11 +464,13 @@ const LeftSidebarOpenUi = ({
                   type="submit"
                   children="Admit"
                   className="text-xs px-2 py-1 rounded-lg text-white"
+                  onClick={() => acceptParticipant(user)}
                 />
                 <Button
                   type="submit"
                   children="Remove"
                   className="text-xs px-2 py-1 rounded-lg text-white"
+                  
                 />
               </div>
             </div>

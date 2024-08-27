@@ -1,25 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from 'next/navigation';
 import Image from "next/image";
 import axios from "axios";
 import Logo from "@/components/shared/Logo";
 import InputField from "@/components/shared/InputField";
 import Button from "@/components/shared/button";
-import joinMeetingImage from "../../../public/join-meeting.png";
+import joinMeetingImage from "../../../../public/join-meeting.png";
 import Footer from "@/components/shared/Footer";
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "default@Password123", // you can use a hidden input for this if needed
-    role: "Participant", // or any default role
+    fullName: "",
   });
 
-  const router = useRouter();
+  const params = useParams();
+  const meetingId = params.id;
+  const router = useRouter()
+  console.log(meetingId); 
+
+  console.log("meetingid", meetingId);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,29 +32,12 @@ const Page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users/create`,
-        formData
-      );
-      if (response.status === 200) {
-        alert("login succesful");
-        router.push("/upload-photo");
-      }
-    } catch (error) {
-      console.error(
-        "Error creating user:",
-        error.response?.data?.message || error.message
-      );
-    }
+    router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Participant`);
   };
 
   return (
     <div>
-      <div
-        className="bg-white lg:flex lg:justify-center lg:items-center"
-     
-      >
+      <div className="bg-white lg:flex lg:justify-center lg:items-center">
         {/* left div */}
         <div className="w-full lg:w-[40%] flex flex-col justify-center items-center px-10">
           <div className="pt-5">
@@ -66,38 +50,23 @@ const Page = () => {
             onSubmit={handleSubmit}
             className="flex flex-col justify-center items-center gap-5 w-full"
           >
-            <div className="lg:flex lg:justify-start lg:items-center lg:gap-5 w-full">
+            <div className="lg:flex lg:justify-start lg:items-center lg:gap-5 w/full">
               <InputField
-                label="First Name"
-                name="firstName"
+                label="Full Name"
+                name="fullName"
                 type="text"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
-              <InputField
-                label="Last Name"
-                name="lastName"
-                type="text"
-                value={formData.lastName}
+                value={formData.fullName}
                 onChange={handleChange}
               />
             </div>
-            <div className="w-full ">
-              <InputField
-                label="Email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="w-full  lg:pt-2">
+            <div className="w-full lg:pt-2 min-h-[60vh]">
               <Button
-                children="Join Meeting"
                 type="submit"
                 variant="primary"
                 className="w-full py-2 rounded-xl mb-10 lg:mb-0"
-              />
+              >
+                Join Meeting
+              </Button>
             </div>
           </form>
         </div>

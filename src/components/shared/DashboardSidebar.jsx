@@ -13,7 +13,7 @@ import { IoIosLogOut } from "react-icons/io";
 import LogoutModal from "../singleComponent/LogoutModal";
 import Link from "next/link";
 
-const DashboardSidebar = ({handleLogoutModalOpen, isLogoutModalOpen}) => {
+const DashboardSidebar = ({handleLogoutModalOpen, isLogoutModalOpen, user}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,25 +26,27 @@ const DashboardSidebar = ({handleLogoutModalOpen, isLogoutModalOpen}) => {
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  
 
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setIsModalOpen(false);
-      }
-    };
 
-    if (isModalOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (modalRef.current && !modalRef.current.contains(event.target)) {
+  //       setIsModalOpen(false);
+  //     }
+  //   };
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isModalOpen]);
+  //   if (isModalOpen) {
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //   } else {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   }
+
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [isModalOpen]);
 
   return (
     <>
@@ -88,10 +90,10 @@ const DashboardSidebar = ({handleLogoutModalOpen, isLogoutModalOpen}) => {
             {/* name and email */}
             <div>
               <p className="text-custom-dark-blue-1 font-bold text-base">
-                Johnny Silver
+                {user?.firstName} {user?.lastName}
               </p>
               <p className="text-[11px]  text-custom-dark-blue-1">
-                JohnnSilvie02@gmail.com
+                {user?.email}
               </p>
             </div>
             {/* icon */}
@@ -113,11 +115,11 @@ const DashboardSidebar = ({handleLogoutModalOpen, isLogoutModalOpen}) => {
                   <p className="text-sm text-[#697e89]">My Profile</p>
                 </div>
               </Link>
-              <div className="flex justify-start items-center gap-2 cursor-pointer">
+              <div className="flex justify-start items-center gap-2 cursor-pointer "onClick={(e)=>handleLogoutModalOpen(e)}>
                 <IoIosLogOut className="text-[#697e89] h-3 w-3" />
                 <p
                   className="text-sm text-[#697e89]"
-                  onClick={(e)=>handleLogoutModalOpen(e)}
+                  
                 >
                   Logout
                 </p>
@@ -175,10 +177,10 @@ const DashboardSidebar = ({handleLogoutModalOpen, isLogoutModalOpen}) => {
             {/* name and email */}
             <div>
               <p className="text-custom-dark-blue-1 font-bold text-base">
-                Johnny Silver
+                {user?.firstName} {user?.lastName}
               </p>
               <p className="text-[11px] text-custom-dark-blue-1">
-                JohnnSilvie02@gmail.com
+                {user?.email}
               </p>
             </div>
             {/* icon */}
@@ -188,7 +190,7 @@ const DashboardSidebar = ({handleLogoutModalOpen, isLogoutModalOpen}) => {
             />
 
             {/* modal */}
-            <div
+            {/* <div
               ref={modalRef}
               className={`absolute bottom-12 -right-24 z-20 bg-white rounded-lg h-[90px] w-[125px] profile_dropdown_shadow flex flex-col justify-center items-start px-3 gap-4 ${
                 isModalOpen ? "block" : "hidden"
@@ -209,11 +211,11 @@ const DashboardSidebar = ({handleLogoutModalOpen, isLogoutModalOpen}) => {
                   Logout
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
-      {isLogoutModalOpen && <LogoutModal onClose={handleCloseLogoutModal} />}
+      {/* {isLogoutModalOpen && <LogoutModal onClose={handleCloseLogoutModal} />} */}
 
       {/* Overlay for small screens when the sidebar is open */}
       {isSidebarOpen && (

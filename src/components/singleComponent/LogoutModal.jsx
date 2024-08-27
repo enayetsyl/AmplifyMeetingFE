@@ -9,14 +9,10 @@ const LogoutModal = ({ onClose }) => {
   
   const router = useRouter()
   const handleLogout = () => {
-    // Remove the token from local storage
-    localStorage.removeItem('token');
+    localStorage.clear();
     setUser(null)
-    // Perform any additional logout actions, such as redirecting to a login page
-    // For example: window.location.href = '/login';
-    // Close the modal
-    onClose();
     router.push('/login')
+    onClose();
   };
 
   return (
