@@ -143,8 +143,8 @@ return (
   <>
     <div className="flex justify-between min-h-screen max-h-screen meeting_bg">
       {role === "Participant" &&  !isAdmitted ? (
-        <div className="flex items-center justify-center w-full h-full">
-          <h1 className="text-2xl font-bold">Hello Participant, please wait...</h1>
+        <div className="flex items-center justify-center w-full min-h-screen bg-white ">
+          <h1 className="text-2xl font-bold">Please wait, the meeting host will let you in soon.</h1>
         </div>
       ) : role === "Participant" && isAdmitted ? (
         // Main participant UI goes here
@@ -290,8 +290,8 @@ return (
           </div>
         </>
       ) : (
-        <div className="flex items-center justify-center w-full h-full">
-          <h1 className="text-2xl font-bold">Hello Observer</h1>
+        <div className="flex items-center justify-center w-full min-h-screen bg-white ">
+          <h1 className="text-2xl font-bold">Please wait, the meeting host will let you in soon.</h1>
         </div>
       )
         
