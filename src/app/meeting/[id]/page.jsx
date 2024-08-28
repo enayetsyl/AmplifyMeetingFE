@@ -24,7 +24,7 @@ const page = () => {
   const [isAdmitted, setIsAdmitted] = useState(false);
   const [socket, setSocket] = useState(null);
 
-  console.log('is admitted', isAdmitted)
+  console.log('isMeetingOngoing', isMeetingOngoing)
   // const meetingStatus = "Ongoing";
   const projectStatus = "Open";
 
@@ -122,6 +122,21 @@ const page = () => {
     setUsers((prevUsers) => [...prevUsers, participant]);
   };
   
+  const startMeeting = () => {
+    setIsMeetingOngoing(true);
+    socket.emit("startMeeting"); // Emit event to notify that the meeting has started
+  };
+  
+  useEffect(() => {
+    socket?.on("meetingStarted", () => {
+      setIsMeetingOngoing(true);
+    });
+  
+    return () => {
+      socket?.off("meetingStarted");
+    };
+  }, [socket]);
+  
 
 
 return (
@@ -173,7 +188,7 @@ return (
         <div className="flex items-center justify-center w-full h-full">
           <button
             className="px-4 py-2 font-bold text-white bg-blue-500 rounded"
-            onClick={() => setIsMeetingOngoing(true)}
+            onClick={startMeeting}
           >
             Start Meeting
           </button>
@@ -227,11 +242,60 @@ return (
             />
           </div>
         </>
+      ) : role === "Observer" && isMeetingOngoing ? (
+        <>
+          <div className="h-full">
+            <LeftSidebar
+              users={users}
+              setUsers={setUsers}
+              role={role}
+              isWhiteBoardOpen={isWhiteBoardOpen}
+              setIsWhiteBoardOpen={setIsWhiteBoardOpen}
+              isRecordingOpen={isRecordingOpen}
+              setIsRecordingOpen={setIsRecordingOpen}
+              isBreakoutRoom={isBreakoutRoom}
+              setIsBreakoutRoom={setIsBreakoutRoom}
+              breakoutRooms={breakoutRooms}
+              setBreakoutRooms={setBreakoutRooms}
+              handleBreakoutRoomChange={handleBreakoutRoomChange}
+              selectedRoom={selectedRoom}
+              setSelectedRoom={setSelectedRoom}
+            />
+          </div>
+          <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
+            <MeetingView
+              role={role}
+              users={users}
+              isWhiteBoardOpen={isWhiteBoardOpen}
+              setIsWhiteBoardOpen={setIsWhiteBoardOpen}
+              meetingStatus={isMeetingOngoing}
+              isRecordingOpen={isRecordingOpen}
+              setIsRecordingOpen={setIsRecordingOpen}
+              isBreakoutRoom={isBreakoutRoom}
+              setIsBreakoutRoom={setIsBreakoutRoom}
+              breakoutRooms={breakoutRooms}
+              setBreakoutRooms={setBreakoutRooms}
+              projectStatus={projectStatus}
+            />
+          </div>
+          <div className="h-full">
+            <RightSidebar
+              observers={observers}
+              setObservers={setObservers}
+              isBreakoutRoom={isBreakoutRoom}
+              setIsBreakoutRoom={setIsBreakoutRoom}
+              breakoutRooms={breakoutRooms}
+              setBreakoutRooms={setBreakoutRooms}
+            />
+          </div>
+        </>
       ) : (
         <div className="flex items-center justify-center w-full h-full">
           <h1 className="text-2xl font-bold">Hello Observer</h1>
         </div>
-      )}
+      )
+        
+      }
     </div>
   </>
 );
