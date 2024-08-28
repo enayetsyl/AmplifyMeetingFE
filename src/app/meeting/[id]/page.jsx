@@ -7,10 +7,12 @@ import userImage from "../../../../public/user.jpg";
 import axios from "axios";
 import {  useSearchParams } from "next/navigation";
 import io from "socket.io-client";
+import { useGlobalContext } from "@/context/GlobalContext";
 
 const page = () => {
   const [users, setUsers] = useState([]);
-
+  const {user } = useGlobalContext()
+  console.log('user', user)
   const [observers, setObservers] = useState([]);
 
   const searchParams = useSearchParams();
