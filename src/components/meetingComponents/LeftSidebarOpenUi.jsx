@@ -48,6 +48,8 @@ const LeftSidebarOpenUi = ({
   setSelectedRoom,
   waitingRoom,
   acceptParticipant,
+  messages,
+  sendMessage,
 
 }) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
@@ -57,6 +59,15 @@ const LeftSidebarOpenUi = ({
   const [userToRemove, setUserToRemove] = useState(null);
   const [userToMove, setUserToMove] = useState(null);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+  const [inputMessage, setInputMessage] = useState('');
+
+  const handleSendMessage = () => {
+    if (inputMessage.trim()) {
+      console.log('message sent:', inputMessage);
+      sendMessage(inputMessage);
+      setInputMessage('');
+    }
+  };
 
   const modalRef = useRef();
 
@@ -197,15 +208,15 @@ const LeftSidebarOpenUi = ({
             {selectedRoom.participants.map((user) => (
               <div
                 className="flex justify-start items-center gap-2 py-1"
-                key={user.id}
+                key={user.name}
               >
-                <Image
+                {/* <Image
                   src={user.image}
                   alt="user image"
                   height={40}
                   width={40}
                   className="rounded-2xl border-[3px] border-white border-solid"
-                />
+                /> */}
                 <p className="text-[#1a1a1a] text-sm flex-grow">{user.name}</p>
               </div>
             ))}
@@ -288,15 +299,15 @@ const LeftSidebarOpenUi = ({
                 {users?.map((user) => (
                   <div
                     className="flex justify-center items-center gap-2 py-1"
-                    key={user.id}
+                    key={user.name}
                   >
-                    <Image
+                    {/* <Image
                       src={user.image}
                       alt="user image"
                       height={40}
                       width={40}
                       className="rounded-2xl border-[3px] border-white border-solid"
-                    />
+                    /> */}
                     <p className="text-[#1a1a1a] text-[10px] flex-grow">
                       {user.name}
                     </p>
@@ -343,33 +354,33 @@ const LeftSidebarOpenUi = ({
             {/* Participant chat */}
             {activeTab === "participantChat" &&
               !selectedChat &&
-              chatParticipants.map((chat) => (
+              users.map((chat) => (
                 <div
-                  key={chat.id}
+                  key={chat.name}
                   className="bg-custom-gray-2 p-2 flex justify-center items-center gap-2 border-b border-solid border-custom-gray-1 cursor-pointer"
                   onClick={() => setSelectedChat(chat)}
                 >
-                  <Image
+                  {/* <Image
                     src={chat.image}
                     alt="chat-user-image"
                     height={40}
                     width={40}
                     className="rounded-[50%]"
-                  />
+                  /> */}
                   <div className="flex-grow-1 text-xs ">
                     <p className="pb-1 font-bold">{chat.name}</p>
-                    <p className={`${chat.unreadCount > 0 ? "font-bold" : ""}`}>
+                    {/* <p className={`${chat.unreadCount > 0 ? "font-bold" : ""}`}>
                       {chat.messagePreview}
-                    </p>
+                    </p> */}
                   </div>
-                  <div className="flex flex-col justify-end items-end text-xs">
+                  {/* <div className="flex flex-col justify-end items-end text-xs">
                     <p className="pb-1">{chat.time}</p>
                     {chat.unreadCount > 0 && (
                       <p className="py-0.5 px-1.5 text-white bg-[#ff2b2b] rounded-[50%]">
                         {chat.unreadCount}
                       </p>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               ))}
 
@@ -377,13 +388,13 @@ const LeftSidebarOpenUi = ({
               <div className="flex-grow pt-2  rounded-xl flex flex-col justify-center items-center">
                 {/* chat name and image */}
                 <div className="flex w-full items-center justify-center gap-2 mb-4 bg-custom-gray-4 p-2">
-                  <Image
+                  {/* <Image
                     src={selectedChat.image}
                     alt="chat-user-image"
                     height={30}
                     width={30}
                     className="rounded-[50%]"
-                  />
+                  /> */}
                   <p className="text-[#1a1a1a] text-[12px] font-bold flex-1">
                     {selectedChat.name}
                   </p>
@@ -394,17 +405,17 @@ const LeftSidebarOpenUi = ({
                 </div>
                 {/* chat message */}
                 <div className="flex flex-col gap-2 flex-grow">
-                  {selectedChat.messages.map((message, index) => (
+                  {messages.map((message, index) => (
                     <div
                       key={index}
                       className="flex items-center justify-between gap-2"
                     >
                       <p className="text-[#1a1a1a] text-[12px] f">
-                        <span className="font-bold">{message.sender}:</span>{" "}
-                        {message.content}
+                        <span className="font-bold">{message.sender.name}:</span>{" "}
+                        {message.message}
                       </p>
                       <p className="text-[#1a1a1a] text-[10px] text-end">
-                        {message.time}
+                      {new Date(message.timestamp).toLocaleTimeString()}
                       </p>
                     </div>
                   ))}
@@ -415,11 +426,16 @@ const LeftSidebarOpenUi = ({
                     type="text"
                     placeholder="Type Message"
                     className="rounded-lg py-1 px-2 placeholder:text-[10px]"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                   />
                   <div className="absolute right-11 cursor-pointer">
                     <MdInsertEmoticon />
                   </div>
-                  <div className="py-1.5 px-1.5 bg-custom-orange-2 rounded-[50%] text-white cursor-pointer text-sm">
+                  <div className="py-1.5 px-1.5 bg-custom-orange-2 rounded-[50%] text-white cursor-pointer text-sm"
+                  onClick={handleSendMessage}
+                  >
                     <IoSend />
                   </div>
                 </div>
@@ -430,7 +446,7 @@ const LeftSidebarOpenUi = ({
       )}
       {/* waiting list */}
       {waitingRoom?.length > 0 && activeTab === "participantList" && role === "Moderator" && (
-        <div className="flex-grow pt-2 bg-custom-gray-8 p-4 rounded-xl mb-4 overflow-y-auto mx-4">
+        <div className="flex-grow pt-2 bg-custom-gray-8 p-4 rounded-xl mb-4 overflow-y-auto mx-4" key={waitingRoom?.length}>
           <div className="flex justify-between items-center py-2">
             <h1 className="font-bold text-sm ">Waiting ({waitingRoom?.length})</h1>
             <Button
@@ -448,13 +464,13 @@ const LeftSidebarOpenUi = ({
               className="flex justify-center items-center gap-2 py-1"
               key={user?.fullName}
             >
-              <Image
+              {/* <Image
                 src={user?.image}
                 alt="user image"
                 height={40}
                 width={40}
                 className="rounded-2xl border-[3px] border-white border-solid"
-              />
+              /> */}
               <p className="text-[#1a1a1a] text-[10px] flex-grow">
                 {user?.name}
               </p>
@@ -477,9 +493,9 @@ const LeftSidebarOpenUi = ({
           ))}
         </div>
       )}
-      {selectedReceiverId && (
+      {/* {selectedReceiverId && (
         <ChatDashboard  receiverId={selectedReceiverId} users={users}/>
-      )}
+      )} */}
       {isRemoveModalOpen && (
         <RemoveUserModal
           onClose={closeRemoveUserModal}

@@ -24,6 +24,8 @@ const LeftSidebar = ({
   setSelectedRoom,
   waitingRoom,
   acceptParticipant,
+  messages,
+  sendMessage,
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -208,6 +210,8 @@ const LeftSidebar = ({
               setSelectedRoom={setSelectedRoom}
               waitingRoom={waitingRoom}
               acceptParticipant={acceptParticipant}
+              messages={messages}
+              sendMessage={sendMessage}
             />
           ) : (
             <LeftSidebarCloseUi

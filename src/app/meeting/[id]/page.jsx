@@ -5,20 +5,23 @@ import RightSidebar from "@/components/meetingComponents/RightSidebar";
 import React, { useEffect, useState } from "react";
 import userImage from "../../../../public/user.jpg";
 import axios from "axios";
-import {  useSearchParams } from "next/navigation";
+import {  useParams, useSearchParams } from "next/navigation";
 import io from "socket.io-client";
 import { useGlobalContext } from "@/context/GlobalContext";
 
 const page = () => {
   const [users, setUsers] = useState([]);
   const {user } = useGlobalContext()
-  console.log('user', user)
+  // console.log('user', user)
   const [observers, setObservers] = useState([]);
 
   const searchParams = useSearchParams();
   const fullName = searchParams.get('fullName');
   const userRole = searchParams.get('role');
   const [role, setRole] = useState("");
+  const params = useParams();
+  // console.log('params', params)
+  console.log('role', role)
 
   const [isMeetingOngoing, setIsMeetingOngoing] = useState(false)
 
@@ -60,85 +63,135 @@ const page = () => {
     },
 
   ]);
-
   const [selectedRoom, setSelectedRoom] = useState(breakoutRooms[0]);
 
-
+  const [peers, setPeers] = useState([]);
+  const [streams, setStreams] = useState([]);
+  const [messages, setMessages] = useState([]);
 
   const handleBreakoutRoomChange = (roomName) => {
     const room = breakoutRooms.find((room) => room.roomName === roomName);
     setSelectedRoom(room);
   };
 
+
+  console.log('peer', peers)
+  console.log('users', users)
+  console.log('streams', streams)
+  console.log('messages received from be', messages)
+
   useEffect(() => {
     // Initialize the socket connection
     const newSocket = io("http://localhost:8008/participant-namespace");
     setSocket(newSocket);
 
-    // Listen for participant admission
-    newSocket.on("participantAdmitted", (participant) => {
-      if (participant.name === fullName) {
-        console.log("You have been admitted to the meeting!");
-        setIsAdmitted(true); // Update the UI to show the meeting
-      }
+    newSocket.on("meetingStarted", (waitingList) => {
+      setWaitingRoom(waitingList);
+      setIsMeetingOngoing(true);
     });
 
-    // Listen for updates to the waiting room (for moderators)
-    newSocket.on("waitingRoomUpdate", (updatedWaitingRoom) => {
-      setWaitingRoom(updatedWaitingRoom);
+    newSocket.on("newParticipantWaiting", (participant) => {
+      setWaitingRoom(prev => [...prev, participant]);
     });
+
+    newSocket.on("participantAdmitted", (participant, isMeetingStarted) => {
+      console.log('Participant admitted event received:', participant, isMeetingStarted);
+      console.log('Current role:', role);
+      console.log('Current socket ID:', newSocket.id);
+    
+      setWaitingRoom(prev => prev.filter(p => p.socketId !== participant.socketId));
+      if (role === "Participant" && participant.socketId === newSocket.id) {
+        console.log('Participant admitted, updating states');
+        setIsAdmitted(true);
+        setIsMeetingOngoing(isMeetingStarted);
+      }
+      addToPeersOrStreams(participant);
+    });
+
+    newSocket.on("userJoined", (user) => {
+      addToPeersOrStreams(user);
+    });
+
+  
+
+    newSocket.on("participantLeft", (socketId) => {
+      setPeers(prev => prev.filter(p => p.socketId !== socketId));
+      setStreams(prev => prev.filter(s => s.socketId !== socketId));
+    });
+
+    newSocket.on("activeParticipantsUpdated", (participants) => {
+      setPeers(participants);
+    });
+
+    newSocket.on("newMessage", (message) => {
+      setMessages(prev => [...prev, message]);
+    });
+
+    if (fullName && userRole) {
+      newSocket.emit("joinMeeting", { name: fullName, role: userRole });
+      newSocket.emit("joinRoom", params.id);
+   
+    }
+
 
     return () => {
       newSocket.disconnect();
+      socket?.emit("leaveRoom", { name: fullName, role: userRole });
     };
-  }, [fullName]);
+  }, [fullName, userRole, role, messages, setMessages, params.id]);
+
+  useEffect(() => {
+    if (socket && params.id) {
+      socket.emit("getChatHistory", params.id);
+    }
+  }, [socket, params.id]);
 
   useEffect(() => {
     if (fullName && userRole) {
       if (userRole === "Participant") {
         setRole("Participant");
-        socket?.emit("joinMeeting", { name: fullName });
+   
       } else if (userRole === "Observer") {
-        setObservers((prevObservers) => [
-          ...prevObservers,
-          { id: prevObservers.length + 50, name: fullName, image: userImage },
-        ]);
-        setRole("Observer");
+               setRole("Observer");
       } else if (userRole === "Moderator") {
         setRole("Moderator");
       } else if (userRole === "Admin") {
-        setObservers((prevObservers) => [
-          ...prevObservers,
-          { id: prevObservers.length + 50, name: fullName, image: userImage },
-        ]);
-        setRole("Admin");
+              setRole("Admin");
       }
     }
-  }, [fullName, userRole, socket]);
+    console.log('Role set to:', userRole);
+  }, [fullName, userRole]);
 
   const acceptParticipant = (participant) => {
+    console.log('acceptParticipant', participant)
     socket.emit("admitParticipant", participant.socketId);
-    setWaitingRoom((prevWaitingRoom) =>
-      prevWaitingRoom.filter((p) => p.socketId !== participant.socketId)
-    );
-    setUsers((prevUsers) => [...prevUsers, participant]);
+
+  };
+
+  const addToPeersOrStreams = (participant) => {
+    if (participant.role === "Participant") {
+      setPeers(prev => [...prev, participant]);
+    } else if (participant.role === "Moderator") {
+      setPeers(prev => [...prev, participant]);
+      setStreams(prev => [...prev, participant]);
+    } else{
+      setStreams(prev => [...prev, participant]);
+    }
   };
   
   const startMeeting = () => {
-    setIsMeetingOngoing(true);
-    socket.emit("startMeeting"); // Emit event to notify that the meeting has started
+    socket.emit("startMeeting", { meetingId: params.id });
   };
   
-  useEffect(() => {
-    socket?.on("meetingStarted", () => {
-      setIsMeetingOngoing(true);
+    
+  const sendMessage = (message) => {
+    console.log('message at the page component', message)
+    socket.emit("sendMessage", {
+      meetingId: params.id,
+      sender: { id: socket.id, name: fullName, role: userRole },
+      message
     });
-  
-    return () => {
-      socket?.off("meetingStarted");
-    };
-  }, [socket]);
-  
+  };
 
 
 return (
@@ -153,7 +206,7 @@ return (
         <>
           <div className="h-full">
             <LeftSidebar
-              users={users}
+              users={peers}
               setUsers={setUsers}
               role={role}
               isWhiteBoardOpen={isWhiteBoardOpen}
@@ -167,12 +220,14 @@ return (
               handleBreakoutRoomChange={handleBreakoutRoomChange}
               selectedRoom={selectedRoom}
               setSelectedRoom={setSelectedRoom}
+              messages={messages}
+              sendMessage={sendMessage}
             />
           </div>
           <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
             <MeetingView
               role={role}
-              users={users}
+              users={peers}
               isWhiteBoardOpen={isWhiteBoardOpen}
               setIsWhiteBoardOpen={setIsWhiteBoardOpen}
               meetingStatus={isMeetingOngoing}
@@ -199,7 +254,7 @@ return (
         <>
           <div className="h-full">
             <LeftSidebar
-              users={users}
+              users={peers}
               setUsers={setUsers}
               role={role}
               isWhiteBoardOpen={isWhiteBoardOpen}
@@ -215,12 +270,14 @@ return (
               setSelectedRoom={setSelectedRoom}
               waitingRoom={waitingRoom}
               acceptParticipant={acceptParticipant}
+              messages={messages}
+              sendMessage={sendMessage}
             />
           </div>
           <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
             <MeetingView
               role={role}
-              users={users}
+              users={peers}
               isWhiteBoardOpen={isWhiteBoardOpen}
               setIsWhiteBoardOpen={setIsWhiteBoardOpen}
               meetingStatus={isMeetingOngoing}

@@ -117,12 +117,12 @@ const ChatDashboard = ({ receiverId }) => {
                 className="list-group-item list-group-item-dark cursor-pointer user-list"
                 data-id={userItem._id}
               >
-                <img
+                {/* <img
                   src={`http://127.0.0.1:3000/${userItem.image}`}
                   alt=""
                   width="50px"
                   height="50px"
-                />
+                /> */}
                 {userItem.name}
                 <sup
                   className={

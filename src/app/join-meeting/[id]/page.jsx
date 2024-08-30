@@ -18,9 +18,9 @@ const Page = () => {
   const params = useParams();
   const meetingId = params.id;
   const router = useRouter()
-  console.log(meetingId); 
+  // console.log(meetingId); 
 
-  console.log("meetingid", meetingId);
+  // console.log("meetingid", meetingId);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
