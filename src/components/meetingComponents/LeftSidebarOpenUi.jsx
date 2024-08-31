@@ -50,7 +50,8 @@ const LeftSidebarOpenUi = ({
   acceptParticipant,
   messages,
   sendMessage,
-
+  userName,
+  meetingId
 }) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -61,13 +62,33 @@ const LeftSidebarOpenUi = ({
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [inputMessage, setInputMessage] = useState('');
 
+  // const handleSendMessage = () => {
+  //   if (inputMessage.trim()) {
+  //     console.log('message sent:', inputMessage);
+  //     sendMessage(inputMessage);
+  //     setInputMessage('');
+  //   }
+  // };
+
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
-      console.log('message sent:', inputMessage);
-      sendMessage(inputMessage);
-      setInputMessage('');
+      const newMessage = {
+        meetingId: meetingId,
+        senderName: userName,
+        receiverName: selectedChat.name,
+        message: inputMessage.trim(),
+      };
+  
+      console.log("Sending message:", newMessage);
+      sendMessage(newMessage);
+      setInputMessage("");
     }
   };
+  
+
+  console.log('messages', messages)
+  console.log('userName', userName)
+  console.log('current user name', currentUser?.name)
 
   const modalRef = useRef();
 
@@ -205,10 +226,10 @@ const LeftSidebarOpenUi = ({
 
           <div className="flex-grow overflow-y-auto">
             <h1 className="font-bold pb-3 text">Participants List</h1>
-            {selectedRoom.participants.map((user) => (
+            {users?.map((user) => (
               <div
                 className="flex justify-start items-center gap-2 py-1"
-                key={user.name}
+                key={user?.name}
               >
                 {/* <Image
                   src={user.image}
@@ -217,7 +238,7 @@ const LeftSidebarOpenUi = ({
                   width={40}
                   className="rounded-2xl border-[3px] border-white border-solid"
                 /> */}
-                <p className="text-[#1a1a1a] text-sm flex-grow">{user.name}</p>
+                <p className="text-[#1a1a1a] text-sm flex-grow">{user?.name}</p>
               </div>
             ))}
           </div>
@@ -299,7 +320,7 @@ const LeftSidebarOpenUi = ({
                 {users?.map((user) => (
                   <div
                     className="flex justify-center items-center gap-2 py-1"
-                    key={user.name}
+                    key={user?.name}
                   >
                     {/* <Image
                       src={user.image}
@@ -312,7 +333,7 @@ const LeftSidebarOpenUi = ({
                       {user.name}
                     </p>
                     <IoMdMic />
-                    <BsChatSquareDotsFill onClick={() => handleUserClick(user.id)} />
+                    <BsChatSquareDotsFill onClick={() => handleUserClick(user?.id)} />
                     <BsThreeDotsVertical
                       onClick={(event) =>
                         toggleRemoveAndWaitingOptionModal(event, user)
@@ -353,36 +374,21 @@ const LeftSidebarOpenUi = ({
 
             {/* Participant chat */}
             {activeTab === "participantChat" &&
-              !selectedChat &&
-              users.map((chat) => (
-                <div
-                  key={chat.name}
-                  className="bg-custom-gray-2 p-2 flex justify-center items-center gap-2 border-b border-solid border-custom-gray-1 cursor-pointer"
-                  onClick={() => setSelectedChat(chat)}
-                >
-                  {/* <Image
-                    src={chat.image}
-                    alt="chat-user-image"
-                    height={40}
-                    width={40}
-                    className="rounded-[50%]"
-                  /> */}
-                  <div className="flex-grow-1 text-xs ">
-                    <p className="pb-1 font-bold">{chat.name}</p>
-                    {/* <p className={`${chat.unreadCount > 0 ? "font-bold" : ""}`}>
-                      {chat.messagePreview}
-                    </p> */}
-                  </div>
-                  {/* <div className="flex flex-col justify-end items-end text-xs">
-                    <p className="pb-1">{chat.time}</p>
-                    {chat.unreadCount > 0 && (
-                      <p className="py-0.5 px-1.5 text-white bg-[#ff2b2b] rounded-[50%]">
-                        {chat.unreadCount}
-                      </p>
-                    )}
-                  </div> */}
-                </div>
-              ))}
+  !selectedChat &&
+  users
+    .filter((user) => user.name !== userName)
+    .map((user) => (
+      <div
+        key={user.name}
+        className="bg-custom-gray-2 p-2 flex justify-center items-center gap-2 border-b border-solid border-custom-gray-1 cursor-pointer"
+        onClick={() => setSelectedChat(user)}
+      >
+        <div className="flex-grow-1 text-xs ">
+          <p className="pb-1 font-bold">{user.name}</p>
+        </div>
+      </div>
+    ))}
+
 
             {activeTab === "participantChat" && selectedChat && (
               <div className="flex-grow pt-2  rounded-xl flex flex-col justify-center items-center">
@@ -405,21 +411,42 @@ const LeftSidebarOpenUi = ({
                 </div>
                 {/* chat message */}
                 <div className="flex flex-col gap-2 flex-grow">
-                  {messages.map((message, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between gap-2"
-                    >
-                      <p className="text-[#1a1a1a] text-[12px] f">
-                        <span className="font-bold">{message.sender.name}:</span>{" "}
-                        {message.message}
-                      </p>
-                      <p className="text-[#1a1a1a] text-[10px] text-end">
-                      {new Date(message.timestamp).toLocaleTimeString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+  {messages
+    .filter(
+      (message) =>
+        (message.senderName === selectedChat.name &&
+          message.receiverName === userName) ||
+        (message.senderName === userName &&
+          message.receiverName === selectedChat.name)
+    )
+    .map((message, index) => (
+      <div
+        key={index}
+        className={`flex items-center gap-2 ${
+          message.senderName === userName ? 'justify-start' : 'justify-end'
+        }`}
+      >
+        <div
+          className={`flex flex-col ${
+            message.senderName === userName ? 'items-start' : 'items-end'
+          }`}
+        >
+          <p className={`text-[12px] ${
+            message.senderName === userName ? 'text-blue-600' : 'text-green-600'
+          }`}>
+            <span className="font-bold">
+              {message.senderName}:
+            </span>{" "}
+            {message.message}
+          </p>
+          <p className="text-[#1a1a1a] text-[10px]">
+            {new Date(message.createdAt).toLocaleTimeString()}
+          </p>
+        </div>
+      </div>
+    ))}
+</div>
+
                 {/* send message */}
                 <div className="flex justify-between items-center gap-2 relative">
                   <input

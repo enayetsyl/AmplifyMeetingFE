@@ -14,7 +14,7 @@ const page = () => {
   const {user } = useGlobalContext()
   // console.log('user', user)
   const [observers, setObservers] = useState([]);
-
+  const moderatorFullName = `${user?.firstName} ${user?.lastName}`
   const searchParams = useSearchParams();
   const fullName = searchParams.get('fullName');
   const userRole = searchParams.get('role');
@@ -123,9 +123,9 @@ const page = () => {
       setPeers(participants);
     });
 
-    newSocket.on("newMessage", (message) => {
-      setMessages(prev => [...prev, message]);
-    });
+    // newSocket.on("newMessage", (message) => {
+    //   setMessages(prev => [...prev, message]);
+    // });
 
     if (fullName && userRole) {
       newSocket.emit("joinMeeting", { name: fullName, role: userRole });
@@ -138,13 +138,26 @@ const page = () => {
       newSocket.disconnect();
       socket?.emit("leaveRoom", { name: fullName, role: userRole });
     };
-  }, [fullName, userRole, role, messages, setMessages, params.id]);
+  }, [fullName, userRole, role,  params.id]);
 
   useEffect(() => {
     if (socket && params.id) {
       socket.emit("getChatHistory", params.id);
     }
   }, [socket, params.id]);
+
+
+  useEffect(() => {
+    socket?.on("newMessage", (message) => {
+      setMessages(prev => [...prev, message]);
+    });
+
+    socket?.on("chatHistory", (messages) => {
+      setMessages(messages);
+    });
+  },[socket, setMessages])
+
+
 
   useEffect(() => {
     if (fullName && userRole) {
@@ -187,9 +200,7 @@ const page = () => {
   const sendMessage = (message) => {
     console.log('message at the page component', message)
     socket.emit("sendMessage", {
-      meetingId: params.id,
-      sender: { id: socket.id, name: fullName, role: userRole },
-      message
+     message
     });
   };
 
@@ -222,6 +233,8 @@ return (
               setSelectedRoom={setSelectedRoom}
               messages={messages}
               sendMessage={sendMessage}
+              userName={fullName}
+              meetingId={params.id}
             />
           </div>
           <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
@@ -272,6 +285,8 @@ return (
               acceptParticipant={acceptParticipant}
               messages={messages}
               sendMessage={sendMessage}
+              userName={moderatorFullName}
+              meetingId={params.id}
             />
           </div>
           <div className="flex-1 w-full max-h-[100vh] overflow-hidden">

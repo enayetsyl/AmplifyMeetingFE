@@ -26,6 +26,8 @@ const LeftSidebar = ({
   acceptParticipant,
   messages,
   sendMessage,
+  userName,
+  meetingId
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -212,6 +214,8 @@ const LeftSidebar = ({
               acceptParticipant={acceptParticipant}
               messages={messages}
               sendMessage={sendMessage}
+              userName={userName}
+              meetingId={meetingId} 
             />
           ) : (
             <LeftSidebarCloseUi
