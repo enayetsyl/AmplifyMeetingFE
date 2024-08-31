@@ -111,6 +111,10 @@ const page = () => {
     newSocket.on("userJoined", (user) => {
       addToPeersOrStreams(user);
     });
+    newSocket.on("observerJoined", (user) => {
+      console.log('observer joined event received:', user);
+      setIsMeetingOngoing(true)
+    });
 
   
 
