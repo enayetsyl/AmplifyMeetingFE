@@ -12,8 +12,8 @@ import axios from "axios";
 
 const page = () => {
   const [formData, setFormData] = useState({
-    fullName: "",
-    passcode:""
+    fullName: "Observer 1",
+    passcode:"BIJEhh"
     
   });
   const [showPasscode, setShowPasscode] = useState(false);
