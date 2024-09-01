@@ -12,8 +12,8 @@ import { useGlobalContext } from "@/context/GlobalContext";
 const page = () => {
   const [users, setUsers] = useState([]);
   const { user } = useGlobalContext();
+  const [participants, setParticipants] = useState([]);
   const [observers, setObservers] = useState([]);
-  const moderatorFullName = `${user?.firstName} ${user?.lastName}`;
   const searchParams = useSearchParams();
   const fullName = searchParams.get("fullName");
   const userRole = searchParams.get("role");
@@ -70,159 +70,24 @@ const page = () => {
     setSelectedRoom(room);
   };
 
-  console.log("peer", peers);
-  console.log("streams", streams);
 
-  useEffect(() => {
-    // Initialize the socket connection
-    const newSocket = io("http://localhost:8008/participant-namespace");
-    setSocket(newSocket);
-
-    newSocket.on("meetingStarted", (waitingList) => {
-      setWaitingRoom(waitingList);
-      setIsMeetingOngoing(true);
-    });
-
-    newSocket.on("newParticipantWaiting", (waitingList) => {
-      setWaitingRoom(waitingList);
-    });
-
-    newSocket.on(
-      "participantAdmitted",
-      (activeParticipants, isMeetingStarted, waitingRoom) => {
-        setWaitingRoom(waitingRoom);
-
-        // Check if the current user is admitted
-        const isCurrentUserAdmitted = activeParticipants.some(
-          (p) => p.socketId === newSocket.id
-        );
-
-        if (role === "Participant" && isCurrentUserAdmitted) {
-          setIsAdmitted(true);
-          setIsMeetingOngoing(isMeetingStarted);
-        }
-        setPeers(activeParticipants);
-      }
-    );
-
-    newSocket.on("userJoined", (user) => {
-      addToPeersOrStreams(user);
-    });
-    newSocket.on("observerJoined", (observerList) => {
-      setStreams(observerList);
-      setIsMeetingOngoing(true);
-    });
-
-    newSocket.on("moderatorJoined", (observerList, activeParticipants) => {
-      setStreams(observerList)
-      setPeers(activeParticipants);
-    })
-
-    // newSocket.on("participantLeft", (socketId) => {
-    //   setPeers(prev => prev.filter(p => p.socketId !== socketId));
-    //   setStreams(prev => prev.filter(s => s.socketId !== socketId));
-    // });
-
-    newSocket.on("activeParticipantsUpdated", (participants) => {
-      setPeers(participants);
-    });
-
-    newSocket.on("observerLeft", (observerList) => {
-      setStreams(observerList);
-    });
-
-    if (fullName && userRole) {
-      newSocket.emit("joinMeeting", { name: fullName, role: userRole, meetingId: params.id });
-      newSocket.emit("joinRoom", params.id);
-    }
-    if (moderatorFullName && role) {
-      newSocket.emit("moderatorJoinMeeting", { name: moderatorFullName, role: role, meetingId: params.id });
-      newSocket.emit("joinRoom", params.id);
-    }
-
-    return () => {
-      newSocket.disconnect();
-      socket?.emit("leaveRoom", { name: fullName, role: userRole });
-    };
-  }, [fullName, userRole, role, params.id, moderatorFullName]);
-
-  useEffect(() => {
-    if (socket && params.id) {
-      socket.emit("getChatHistory", params.id);
-    }
-  }, [socket, params.id]);
-
-  useEffect(() => {
-    socket?.on("newMessage", (message) => {
-      setMessages((prev) => [...prev, message]);
-    });
-
-    socket?.on("chatHistory", (messages) => {
-      setMessages(messages);
-    });
-  }, [socket, setMessages]);
-
-  useEffect(() => {
-   
-      if (userRole === "Participant") {
-        setRole("Participant");
-      } else if (userRole === "Observer") {
-        setRole("Observer");
-      } else if (userRole === "Admin") {
-        setRole("Admin");
-      } else  {
-        setRole("Moderator");
-      }
- 
-  }, [ userRole]);
   
   
 
   const acceptParticipant = (participant) => {
-    socket.emit("admitParticipant", participant.socketId);
+    
   };
 
   const addToPeersOrStreams = (participant) => {
-    if (participant.role === "Participant") {
-      setPeers((prev) => {
-        if (!prev.some(p => p.socketId === participant.socketId)) {
-          return [...prev, participant];
-        }
-        return prev;
-      });
-    } else if (participant.role === "Moderator") {
-      setPeers((prev) => {
-        if (!prev.some(p => p.socketId === participant.socketId)) {
-          return [...prev, participant];
-        }
-        return prev;
-      });
-      setStreams((prev) => {
-        if (!prev.some(s => s.socketId === participant.socketId)) {
-          return [...prev, participant];
-        }
-        return prev;
-      });
-    } else {
-      setStreams((prev) => {
-        if (!prev.some(s => s.socketId === participant.socketId)) {
-          return [...prev, participant];
-        }
-        return prev;
-      });
-    }
+    
   };
   
   const startMeeting = () => {
-    socket.emit("startMeeting", { meetingId: params.id });
-    setIsMeetingOngoing(true);
+   
   };
 
-  const sendMessage = (message) => {
-    console.log("message at the page component", message);
-    socket.emit("sendMessage", {
-      message,
-    });
+  const sendMessage = () => {
+ 
   };
 
   return (
@@ -276,16 +141,7 @@ const page = () => {
               />
             </div>
           </>
-        ) : role === "Moderator" && !isMeetingOngoing ? (
-          <div className="flex items-center justify-center w-full h-full">
-            <button
-              className="px-4 py-2 font-bold text-white bg-blue-500 rounded"
-              onClick={startMeeting}
-            >
-              Start Meeting
-            </button>
-          </div>
-        ) : role === "Moderator" && isMeetingOngoing ? (
+        ) :  userRole === "Moderator" ? (
           <>
             <div className="h-full">
               <LeftSidebar
@@ -307,7 +163,7 @@ const page = () => {
                 acceptParticipant={acceptParticipant}
                 messages={messages}
                 sendMessage={sendMessage}
-                userName={moderatorFullName}
+                userName={fullName}
                 meetingId={params.id}
               />
             </div>

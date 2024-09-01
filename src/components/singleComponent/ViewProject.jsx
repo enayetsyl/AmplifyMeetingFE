@@ -13,13 +13,11 @@ import MeetingTab from "../projectComponents/meetings/MeetingTab";
 import AddMeetingModal from "../projectComponents/meetings/AddMeetingModal";
 
 const ViewProject = ({ project, onClose, user }) => {
-  console.log("inside view project", project);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("Meetings");
   const [meetings, setMeetings] = useState([]);
   const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false)
 
-  console.log('project id inside view meeting', project._id)
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -38,7 +36,6 @@ const ViewProject = ({ project, onClose, user }) => {
         //   params: { page, limit: 10 },
         // }
       );
-      console.log('view project meeting data fetch',response.data);
       setMeetings(response.data.meetings);
       // setTotalPages(response.data.totalPages);
     } catch (error) {

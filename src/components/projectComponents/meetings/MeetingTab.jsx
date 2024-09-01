@@ -1,6 +1,7 @@
 import TableData from "@/components/shared/TableData";
 import TableHead from "@/components/shared/TableHead";
 import { useGlobalContext } from "@/context/GlobalContext";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -48,13 +49,20 @@ const MeetingTab = ({ meetings }) => {
      closeModal()
    }
    
-   const handleJoinMeeting = (meeting) => {
+   const handleJoinMeeting = async (meeting) => {
       if(meeting.moderator.email === user.email){
       const fullName = `${user.firstName} ${user.lastName}`;
-      router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Moderator`);
+
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/start-meeting`, {user, meetingId: meeting._id})
+
+      if(response?.data?.liveMeeting?.ongoing){
+        router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Moderator`);
+      }else{
+        console.log('Received error from backend', response?.data?.error)
+      }
     } else{
       const fullName = `${user.firstName} ${user.lastName}`;
-      router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Admin`);
+      // router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Admin`);
 
     }
      

@@ -35,29 +35,23 @@ const page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/verify-meeting-passcode`, {
-        meetingId,
-        passcode: formData.passcode,
-      });
+ try {
 
-      if (response.status === 200) {
-        // Passcode is correct, proceed to join the meeting
-        
-        router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/join-meeting-observer`, {name: formData.fullName, role:"observer", passcode: formData.passcode, meetingId: meetingId});
 
-        
+  if(response?.data?.message === "Observer added to the meeting"){
+    router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(fullName)}&role=Observer`);
+  }  
+ } catch (error) {
 
-      } 
-     
-    } catch (error) {
-     
-      if (error.response && error.response.status === 401) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage("An error occurred. Please try again.");
-      }
-    }
+  if(error?.response?.data?.message === "Observer already added to the meeting" ){
+    router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(fullName)}&role=Observer`);
+  } else{
+    console.log('Received error from backend', error?.response?.data?.message)
+  }
+ }
+
+   
   };
 
   return (
