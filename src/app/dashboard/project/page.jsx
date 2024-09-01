@@ -32,7 +32,6 @@ const Page = () => {
           params: { page, limit: 10 },
         }
       );
-      console.log(response.data.projects);
       setProjects(response.data.projects);
       setTotalPages(response.data.totalPages);
     } catch (error) {

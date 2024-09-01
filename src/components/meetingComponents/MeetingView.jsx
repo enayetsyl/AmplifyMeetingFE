@@ -35,7 +35,6 @@ const MeetingView = ({
   projectStatus
 }) => {
 
-  console.log('inside meeting view', meetingStatus)
   return (
     <div className="px-5 py-5 flex flex-col justify-between items-between h-full">
       <div className="h-1/5">

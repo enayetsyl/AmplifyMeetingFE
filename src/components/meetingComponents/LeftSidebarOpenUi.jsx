@@ -86,9 +86,7 @@ const LeftSidebarOpenUi = ({
   };
   
 
-  console.log('messages', messages)
-  console.log('userName', userName)
-  console.log('current user name', currentUser?.name)
+ 
 
   const modalRef = useRef();
 

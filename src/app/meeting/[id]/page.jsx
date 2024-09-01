@@ -12,7 +12,6 @@ import { useGlobalContext } from "@/context/GlobalContext";
 const page = () => {
   const [users, setUsers] = useState([]);
   const {user } = useGlobalContext()
-  // console.log('user', user)
   const [observers, setObservers] = useState([]);
   const moderatorFullName = `${user?.firstName} ${user?.lastName}`
   const searchParams = useSearchParams();
@@ -20,8 +19,7 @@ const page = () => {
   const userRole = searchParams.get('role');
   const [role, setRole] = useState("");
   const params = useParams();
-  // console.log('params', params)
-  console.log('role', role)
+  
 
   const [isMeetingOngoing, setIsMeetingOngoing] = useState(false)
 
@@ -76,9 +74,7 @@ const page = () => {
 
 
   console.log('peer', peers)
-  console.log('users', users)
   console.log('streams', streams)
-  console.log('messages received from be', messages)
 
   useEffect(() => {
     // Initialize the socket connection
@@ -95,13 +91,9 @@ const page = () => {
     });
 
     newSocket.on("participantAdmitted", (participant, isMeetingStarted) => {
-      console.log('Participant admitted event received:', participant, isMeetingStarted);
-      console.log('Current role:', role);
-      console.log('Current socket ID:', newSocket.id);
     
       setWaitingRoom(prev => prev.filter(p => p.socketId !== participant.socketId));
       if (role === "Participant" && participant.socketId === newSocket.id) {
-        console.log('Participant admitted, updating states');
         setIsAdmitted(true);
         setIsMeetingOngoing(isMeetingStarted);
       }
@@ -112,7 +104,6 @@ const page = () => {
       addToPeersOrStreams(user);
     });
     newSocket.on("observerJoined", (user) => {
-      console.log('observer joined event received:', user);
       setIsMeetingOngoing(true)
     });
 
@@ -127,10 +118,7 @@ const page = () => {
       setPeers(participants);
     });
 
-    // newSocket.on("newMessage", (message) => {
-    //   setMessages(prev => [...prev, message]);
-    // });
-
+   
     if (fullName && userRole) {
       newSocket.emit("joinMeeting", { name: fullName, role: userRole });
       newSocket.emit("joinRoom", params.id);
@@ -176,11 +164,9 @@ const page = () => {
               setRole("Admin");
       }
     }
-    console.log('Role set to:', userRole);
   }, [fullName, userRole]);
 
   const acceptParticipant = (participant) => {
-    console.log('acceptParticipant', participant)
     socket.emit("admitParticipant", participant.socketId);
 
   };

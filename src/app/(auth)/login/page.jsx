@@ -32,14 +32,12 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData.email, formData.password)
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/signin`, {
         email: formData.email,
         password: formData.password,
       });
       setUser(response.data)
-      console.log('user in login', response.data)
       localStorage.setItem("token",response.data.accessToken)
 
       localStorage.setItem("user", JSON.stringify(response.data));

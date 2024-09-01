@@ -10,7 +10,6 @@ import { IoTrashSharp } from "react-icons/io5";
 import { RiPencilFill } from "react-icons/ri";
 
 const MeetingTab = ({ meetings }) => {
-  console.log('Inside meeting tab, meetings', meetings)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState(null)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
@@ -50,16 +49,11 @@ const MeetingTab = ({ meetings }) => {
    }
    
    const handleJoinMeeting = (meeting) => {
-    console.log('meeting moderator id', meeting.moderator._id)
-    console.log('user id', user._id)
-    console.log('meeting id', meeting._id)
-    if(meeting.moderator.email === user.email){
+      if(meeting.moderator.email === user.email){
       const fullName = `${user.firstName} ${user.lastName}`;
-      console.log(fullName)
       router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Moderator`);
     } else{
       const fullName = `${user.firstName} ${user.lastName}`;
-      console.log(fullName)
       router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Admin`);
 
     }

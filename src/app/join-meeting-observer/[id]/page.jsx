@@ -23,7 +23,6 @@ const page = () => {
   const router = useRouter();
   const meetingId = params.id;
 
-  console.log("meetingid", meetingId);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +43,7 @@ const page = () => {
 
       if (response.status === 200) {
         // Passcode is correct, proceed to join the meeting
-        console.log("Navigating to meeting with fullName:", formData.fullName);
+        
         router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);
 
         
