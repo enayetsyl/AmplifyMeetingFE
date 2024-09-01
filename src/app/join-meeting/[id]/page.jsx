@@ -12,7 +12,7 @@ import Footer from "@/components/shared/Footer";
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    fullName: "Partiicipant 1",
+    fullName: "Participant 1",
   });
 
   const params = useParams();
