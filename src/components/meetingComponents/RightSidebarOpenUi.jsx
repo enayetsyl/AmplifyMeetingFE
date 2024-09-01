@@ -19,7 +19,7 @@ import { IoClose, IoRemoveCircle, IoSend } from "react-icons/io5";
 import { MdInsertEmoticon, MdMoveDown } from "react-icons/md";
 import RemoveUserModal from "../singleComponent/RemoveUserModal";
 import MoveToWaitingRoomModal from "../singleComponent/MoveToWaitingRoomModal";
-import axios from 'axios';
+import axios from "axios";
 
 const RightSidebarOpenUi = ({
   observers,
@@ -35,7 +35,7 @@ const RightSidebarOpenUi = ({
   handleTabClick,
   chatParticipants,
   files,
-  handleSearch
+  handleSearch,
 }) => {
   const [fileList, setFileList] = useState(files);
 
@@ -59,13 +59,13 @@ const RightSidebarOpenUi = ({
     if (file) {
       console.log(file); // Debug log
       const formData = new FormData();
-      formData.append('file', file);
-  
+      formData.append("file", file);
+
       try {
         await axios.post(`http://localhost:8008/api/upload`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            "Content-Type": "multipart/form-data",
+          },
         });
         const response = await axios.get(`http://localhost:8008/api/files`);
         setFileList(response.data);
@@ -74,8 +74,6 @@ const RightSidebarOpenUi = ({
       }
     }
   };
-  
-  
 
   const handleDeleteFile = async (fileId) => {
     try {
@@ -146,17 +144,10 @@ const RightSidebarOpenUi = ({
             {observers?.map((observer) => (
               <div
                 className="flex justify-center items-center gap-2 py-1"
-                key={observer.id}
+                key={observer?.id}
               >
-                <Image
-                  src={observer.image}
-                  alt="observer image"
-                  height={40}
-                  width={40}
-                  className="rounded-2xl border-[3px] border-white border-solid"
-                />
                 <p className="text-[#1a1a1a] text-[10px] flex-grow">
-                  {observer.name}
+                  {observer?.name}
                 </p>
 
                 <BsChatSquareDotsFill />
@@ -174,13 +165,6 @@ const RightSidebarOpenUi = ({
               className="bg-custom-gray-2 p-2 flex justify-center items-center gap-2 border-b border-solid border-custom-gray-1 cursor-pointer"
               onClick={() => setSelectedChat(chat)}
             >
-              <Image
-                src={chat.image}
-                alt="chat-user-image"
-                height={40}
-                width={40}
-                className="rounded-[50%]"
-              />
               <div className="flex-grow-1 text-xs ">
                 <p className="pb-1 font-bold">{chat.name}</p>
                 <p className={`${chat.unreadCount > 0 ? "font-bold" : ""}`}>
@@ -202,13 +186,6 @@ const RightSidebarOpenUi = ({
           <div className="flex-grow pt-2 rounded-xl flex flex-col justify-center items-center">
             {/* chat name and image */}
             <div className="flex w-full items-center justify-center gap-2 mb-4 bg-custom-gray-4 p-2">
-              <Image
-                src={selectedChat.image}
-                alt="chat-user-image"
-                height={30}
-                width={30}
-                className="rounded-[50%]"
-              />
               <p className="text-[#1a1a1a] text-[12px] font-bold flex-1">
                 {selectedChat.name}
               </p>
@@ -259,14 +236,9 @@ const RightSidebarOpenUi = ({
             document hub
           </h1>
           <label className="bg-custom-orange-1 text-white rounded-xl py-1 px-3 text-xs cursor-pointer">
-  Upload File
-  <input
-    type="file"
-    className="hidden"
-    onChange={handleFileUpload}
-  />
-</label>
-
+            Upload File
+            <input type="file" className="hidden" onChange={handleFileUpload} />
+          </label>
         </div>
         {/* Upload file div */}
         <div className="bg-custom-gray-8 rounded-xl mx-4 p-2 overflow-y-auto">
@@ -276,22 +248,17 @@ const RightSidebarOpenUi = ({
             <p className="text-xs text-custom-gray-3 mr-11">Size</p>
           </div>
           {/* files */}
-          {fileList.map((file,index) => (
+          {fileList.map((file, index) => (
             <div
               key={index}
               className="flex items-center justify-between bg-gray-200 py-3 rounded"
             >
-              {console.log(file)}
               <div className="flex items-center space-x-2">
                 <FaFolder className="h-3 w-3 text-custom-gray-3" />
-                <span className="text-xs text-custom-gray-3">
-                  {file.name}
-                </span>
+                <span className="text-xs text-custom-gray-3">{file.name}</span>
               </div>
               <div className="flex items-center space-x-4">
-                <span className="text-xs text-custom-gray-3">
-                  {file.size}
-                </span>
+                <span className="text-xs text-custom-gray-3">{file.size}</span>
                 <button
                   className="text-red-600 hover:text-red-800"
                   onClick={() => handleDeleteFile(file._id)}

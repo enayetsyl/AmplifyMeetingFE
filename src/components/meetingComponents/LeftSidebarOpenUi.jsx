@@ -51,7 +51,7 @@ const LeftSidebarOpenUi = ({
   messages,
   sendMessage,
   userName,
-  meetingId
+  meetingId,
 }) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -60,15 +60,7 @@ const LeftSidebarOpenUi = ({
   const [userToRemove, setUserToRemove] = useState(null);
   const [userToMove, setUserToMove] = useState(null);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
-  const [inputMessage, setInputMessage] = useState('');
-
-  // const handleSendMessage = () => {
-  //   if (inputMessage.trim()) {
-  //     console.log('message sent:', inputMessage);
-  //     sendMessage(inputMessage);
-  //     setInputMessage('');
-  //   }
-  // };
+  const [inputMessage, setInputMessage] = useState("");
 
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
@@ -78,16 +70,14 @@ const LeftSidebarOpenUi = ({
         receiverName: selectedChat.name,
         message: inputMessage.trim(),
       };
-  
+
       console.log("Sending message:", newMessage);
       sendMessage(newMessage);
       setInputMessage("");
     }
   };
-  
 
- 
-
+  console.log('user in left sidebar', users)
   const modalRef = useRef();
 
   const handleSearch = () => {
@@ -96,7 +86,7 @@ const LeftSidebarOpenUi = ({
   const [selectedReceiverId, setSelectedReceiverId] = useState(null);
 
   const handleUserClick = (userId) => {
-    console.log(userId)
+    console.log(userId);
     setSelectedReceiverId(userId);
   };
   const toggleRemoveAndWaitingOptionModal = (event, user) => {
@@ -220,7 +210,6 @@ const LeftSidebarOpenUi = ({
               </ul>
             )}
           </div>
-        
 
           <div className="flex-grow overflow-y-auto">
             <h1 className="font-bold pb-3 text">Participants List</h1>
@@ -320,18 +309,14 @@ const LeftSidebarOpenUi = ({
                     className="flex justify-center items-center gap-2 py-1"
                     key={user?.name}
                   >
-                    {/* <Image
-                      src={user.image}
-                      alt="user image"
-                      height={40}
-                      width={40}
-                      className="rounded-2xl border-[3px] border-white border-solid"
-                    /> */}
+                  
                     <p className="text-[#1a1a1a] text-[10px] flex-grow">
-                      {user.name}
+                      {user?.name}
                     </p>
                     <IoMdMic />
-                    <BsChatSquareDotsFill onClick={() => handleUserClick(user?.id)} />
+                    <BsChatSquareDotsFill
+                      onClick={() => handleUserClick(user?.id)}
+                    />
                     <BsThreeDotsVertical
                       onClick={(event) =>
                         toggleRemoveAndWaitingOptionModal(event, user)
@@ -372,21 +357,20 @@ const LeftSidebarOpenUi = ({
 
             {/* Participant chat */}
             {activeTab === "participantChat" &&
-  !selectedChat &&
-  users
-    .filter((user) => user.name !== userName)
-    .map((user) => (
-      <div
-        key={user.name}
-        className="bg-custom-gray-2 p-2 flex justify-center items-center gap-2 border-b border-solid border-custom-gray-1 cursor-pointer"
-        onClick={() => setSelectedChat(user)}
-      >
-        <div className="flex-grow-1 text-xs ">
-          <p className="pb-1 font-bold">{user.name}</p>
-        </div>
-      </div>
-    ))}
-
+              !selectedChat &&
+              users
+                .filter((user) => user.name !== userName)
+                .map((user) => (
+                  <div
+                    key={user.name}
+                    className="bg-custom-gray-2 p-2 flex justify-center items-center gap-2 border-b border-solid border-custom-gray-1 cursor-pointer"
+                    onClick={() => setSelectedChat(user)}
+                  >
+                    <div className="flex-grow-1 text-xs ">
+                      <p className="pb-1 font-bold">{user.name}</p>
+                    </div>
+                  </div>
+                ))}
 
             {activeTab === "participantChat" && selectedChat && (
               <div className="flex-grow pt-2  rounded-xl flex flex-col justify-center items-center">
@@ -409,41 +393,49 @@ const LeftSidebarOpenUi = ({
                 </div>
                 {/* chat message */}
                 <div className="flex flex-col gap-2 flex-grow">
-  {messages
-    .filter(
-      (message) =>
-        (message.senderName === selectedChat.name &&
-          message.receiverName === userName) ||
-        (message.senderName === userName &&
-          message.receiverName === selectedChat.name)
-    )
-    .map((message, index) => (
-      <div
-        key={index}
-        className={`flex items-center gap-2 ${
-          message.senderName === userName ? 'justify-start' : 'justify-end'
-        }`}
-      >
-        <div
-          className={`flex flex-col ${
-            message.senderName === userName ? 'items-start' : 'items-end'
-          }`}
-        >
-          <p className={`text-[12px] ${
-            message.senderName === userName ? 'text-blue-600' : 'text-green-600'
-          }`}>
-            <span className="font-bold">
-              {message.senderName}:
-            </span>{" "}
-            {message.message}
-          </p>
-          <p className="text-[#1a1a1a] text-[10px]">
-            {new Date(message.createdAt).toLocaleTimeString()}
-          </p>
-        </div>
-      </div>
-    ))}
-</div>
+                  {messages
+                    .filter(
+                      (message) =>
+                        (message.senderName === selectedChat.name &&
+                          message.receiverName === userName) ||
+                        (message.senderName === userName &&
+                          message.receiverName === selectedChat.name)
+                    )
+                    .map((message, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-center gap-2 ${
+                          message.senderName === userName
+                            ? "justify-start"
+                            : "justify-end"
+                        }`}
+                      >
+                        <div
+                          className={`flex flex-col ${
+                            message.senderName === userName
+                              ? "items-start"
+                              : "items-end"
+                          }`}
+                        >
+                          <p
+                            className={`text-[12px] ${
+                              message.senderName === userName
+                                ? "text-blue-600"
+                                : "text-green-600"
+                            }`}
+                          >
+                            <span className="font-bold">
+                              {message.senderName}:
+                            </span>{" "}
+                            {message.message}
+                          </p>
+                          <p className="text-[#1a1a1a] text-[10px]">
+                            {new Date(message.createdAt).toLocaleTimeString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                </div>
 
                 {/* send message */}
                 <div className="flex justify-between items-center gap-2 relative">
@@ -453,13 +445,14 @@ const LeftSidebarOpenUi = ({
                     className="rounded-lg py-1 px-2 placeholder:text-[10px]"
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                   />
                   <div className="absolute right-11 cursor-pointer">
                     <MdInsertEmoticon />
                   </div>
-                  <div className="py-1.5 px-1.5 bg-custom-orange-2 rounded-[50%] text-white cursor-pointer text-sm"
-                  onClick={handleSendMessage}
+                  <div
+                    className="py-1.5 px-1.5 bg-custom-orange-2 rounded-[50%] text-white cursor-pointer text-sm"
+                    onClick={handleSendMessage}
                   >
                     <IoSend />
                   </div>
@@ -470,54 +463,57 @@ const LeftSidebarOpenUi = ({
         </div>
       )}
       {/* waiting list */}
-      {waitingRoom?.length > 0 && activeTab === "participantList" && role === "Moderator" && (
-        <div className="flex-grow pt-2 bg-custom-gray-8 p-4 rounded-xl mb-4 overflow-y-auto mx-4" key={waitingRoom?.length}>
-          <div className="flex justify-between items-center py-2">
-            <h1 className="font-bold text-sm ">Waiting ({waitingRoom?.length})</h1>
-            <Button
-              variant="primary"
-              type="submit"
-              children="Admit All"
-              className="text-xs px-2 py-1 rounded-lg text-white"
-              onClick={() => waitingRoom?.forEach(participant => acceptParticipant(participant))}
-            
-            />
-          </div>
-          {/* participant continer */}
-          {waitingRoom?.map((user) => (
-            <div
-              className="flex justify-center items-center gap-2 py-1"
-              key={user?.fullName}
-            >
-              {/* <Image
-                src={user?.image}
-                alt="user image"
-                height={40}
-                width={40}
-                className="rounded-2xl border-[3px] border-white border-solid"
-              /> */}
-              <p className="text-[#1a1a1a] text-[10px] flex-grow">
-                {user?.name}
-              </p>
-              <div className="flex justify-center items-center gap-1">
-                <Button
-                  variant="primary"
-                  type="submit"
-                  children="Admit"
-                  className="text-xs px-2 py-1 rounded-lg text-white"
-                  onClick={() => acceptParticipant(user)}
-                />
-                <Button
-                  type="submit"
-                  children="Remove"
-                  className="text-xs px-2 py-1 rounded-lg text-white"
-                  
-                />
-              </div>
+      {waitingRoom?.length > 0 &&
+        activeTab === "participantList" &&
+        role === "Moderator" && (
+          <div
+            className="flex-grow pt-2 bg-custom-gray-8 p-4 rounded-xl mb-4 overflow-y-auto mx-4"
+            key={waitingRoom?.length}
+          >
+            <div className="flex justify-between items-center py-2">
+              <h1 className="font-bold text-sm ">
+                Waiting ({waitingRoom?.length})
+              </h1>
+              <Button
+                variant="primary"
+                type="submit"
+                children="Admit All"
+                className="text-xs px-2 py-1 rounded-lg text-white"
+                onClick={() =>
+                  waitingRoom?.forEach((participant) =>
+                    acceptParticipant(participant)
+                  )
+                }
+              />
             </div>
-          ))}
-        </div>
-      )}
+            {/* participant container */}
+            {waitingRoom?.map((user) => (
+              <div
+                className="flex justify-center items-center gap-2 py-1"
+                key={user?.name}
+              >
+            
+                <p className="text-[#1a1a1a] text-[10px] flex-grow">
+                  {user?.name}
+                </p>
+                <div className="flex justify-center items-center gap-1">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    children="Admit"
+                    className="text-xs px-2 py-1 rounded-lg text-white"
+                    onClick={() => acceptParticipant(user)}
+                  />
+                  <Button
+                    type="submit"
+                    children="Remove"
+                    className="text-xs px-2 py-1 rounded-lg text-white"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       {/* {selectedReceiverId && (
         <ChatDashboard  receiverId={selectedReceiverId} users={users}/>
       )} */}

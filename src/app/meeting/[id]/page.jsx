@@ -16,6 +16,9 @@ const page = () => {
   const [observers, setObservers] = useState([]);
   const searchParams = useSearchParams();
   const fullName = searchParams.get("fullName");
+  console.log("searchParams:", searchParams.toString());
+  console.log("fullName:", searchParams.get("fullName"));
+
   const userRole = searchParams.get("role");
   const [role, setRole] = useState("");
   const params = useParams();
@@ -27,7 +30,7 @@ const page = () => {
   const [socket, setSocket] = useState(null);
 
   console.log("isMeetingOngoing", isMeetingOngoing);
-  // const meetingStatus = "Ongoing";
+  const meetingStatus = "Ongoing";
   const projectStatus = "Open";
 
   const [isWhiteBoardOpen, setIsWhiteBoardOpen] = useState(false);
@@ -70,43 +73,247 @@ const page = () => {
     setSelectedRoom(room);
   };
 
+  // Use effect for getting waiting list
+  useEffect(() => {
+    let intervalId;
 
-  
-  
+    if (userRole === "Moderator") {
+      // Initial call
+      getWaitingList(params.id);
 
-  const acceptParticipant = (participant) => {
-    
-  };
+      // Set up interval to call getWaitingList every 10 seconds
+      intervalId = setInterval(() => {
+        getWaitingList(params.id);
+      }, 10000);
+    }
 
-  const addToPeersOrStreams = (participant) => {
-    
-  };
-  
-  const startMeeting = () => {
-   
-  };
+    // Clean up function to clear the interval when component unmounts or userRole changes
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [userRole, params.id]);
 
-  const sendMessage = () => {
+  // Use effect for getting participant and observer list for moderator
+  useEffect(() => {
+    let intervalId;
+
+    if (userRole === "Moderator") {
+      // Initial call
+      getParticipantList(params.id);
+      getObserverList(params.id);
+
+      // Set up interval to call getParticipantList every 10 seconds
+      intervalId = setInterval(() => {
+        getParticipantList(params.id);
+        getObserverList(params.id);
+      }, 10000);
+    }
+
+    // Clean up function to clear the interval when component unmounts or userRole changes
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [userRole, params.id]);
+
  
+  // Use effect for getting participant list for participant
+  useEffect(() => {
+    let intervalId;
+
+    if (userRole === "Participant") {
+      // Initial call
+      getParticipantList(params.id);
+
+      // Set up interval to call getParticipantList every 10 seconds
+      intervalId = setInterval(() => {
+        getParticipantList(params.id);
+      }, 10000);
+    }
+
+    // Clean up function to clear the interval when component unmounts or userRole changes
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [userRole, params.id]);
+
+ 
+  // Use effect for admitting participant into meeting after acceptance
+  useEffect(() => {
+    let intervalId;
+
+    if (userRole === "Participant" && !isAdmitted) {
+      // Initial call
+      getParticipantList(params.id);
+
+      // Set up interval to call getWaitingList every 10 seconds
+      intervalId = setInterval(() => {
+        getParticipantList(params.id);
+      }, 10000);
+    }
+
+    // Clean up function to clear the interval when component unmounts or userRole changes
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [userRole, params.id, isAdmitted]);
+
+  // Use effect to check if the participant is in the list and admit them
+  useEffect(() => {
+    // Check if any participant matches the fullName
+    const participantFound = participants.some(
+      (participant) => participant.name === fullName
+    );
+
+    if (participantFound && !isAdmitted) {
+      console.log("participant matched with fullName", fullName);
+      setIsAdmitted(true);
+    }
+  }, [participants, fullName, isAdmitted]);
+
+  // Use effect for getting meeting status
+
+  useEffect(() => {
+    let intervalId;
+
+    if (userRole === "Observer" && !isMeetingOngoing) {
+      // Initial call
+      getMeetingStatus(params.id);
+
+      // Set up interval to call getWaitingList every 10 seconds
+      intervalId = setInterval(() => {
+        getMeetingStatus(params.id);
+      }, 10000);
+    }
+
+    // Clean up function to clear the interval when component unmounts or userRole changes
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [userRole, params.id, isMeetingOngoing]);
+
+  // Use effect for getting observer list for observer
+  useEffect(() => {
+    let intervalId;
+
+    if (userRole === "Observer") {
+      // Initial call
+      getObserverList(params.id);
+
+      // Set up interval to call getParticipantList every 10 seconds
+      intervalId = setInterval(() => {
+        getObserverList(params.id);
+      }, 10000);
+    }
+
+    // Clean up function to clear the interval when component unmounts or userRole changes
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [userRole, params.id]);
+  console.log("participants", participants);
+  console.log("observers", observers);
+
+  const getWaitingList = async (meetingId) => {
+    try {
+      console.log("getWaitingList called");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/waiting-list/${meetingId}`
+      );
+      setWaitingRoom(response?.data?.waitingRoom);
+      console.log("response", response);
+    } catch (error) {
+      console.log(error?.response?.data?.message);
+    }
   };
+
+  const getParticipantList = async (meetingId) => {
+    try {
+      console.log("getParticipantList called");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/participant-list/${meetingId}`
+      );
+      setParticipants(response?.data?.participantsList);
+      console.log("response", response);
+    } catch (error) {
+      console.log("Error in getting participant list", error);
+    }
+  };
+
+  const getObserverList = async (meetingId) => {
+    try {
+      console.log("getObserverList called");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/observer-list/${meetingId}`
+      );
+      setObservers(response?.data?.observersList);
+    } catch (error) {
+      console.log("Error in getting observer list", error);
+    }
+  };
+
+  const acceptParticipant = async (participant) => {
+    try {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/accept-from-waiting-list`,
+        {
+          participant: participant,
+          meetingId: params.id,
+        }
+      );
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const getMeetingStatus = async (meetingId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/get-meeting-status/${meetingId}`
+      );
+
+      if (response?.data?.meetingStatus === true) {
+        setIsMeetingOngoing(true);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const addToPeersOrStreams = (participant) => {};
+
+  const startMeeting = () => {};
+
+  const sendMessage = () => {};
 
   return (
     <>
       <div className="flex justify-between min-h-screen max-h-screen meeting_bg">
-        {role === "Participant" && !isAdmitted ? (
+        {userRole === "Participant" && !isAdmitted ? (
           <div className="flex items-center justify-center w-full min-h-screen bg-white ">
             <h1 className="text-2xl font-bold">
               Please wait, the meeting host will let you in soon.
             </h1>
           </div>
-        ) : role === "Participant" && isAdmitted ? (
+        ) : userRole === "Participant" && isAdmitted ? (
           // Main participant UI goes here
           <>
             <div className="h-full">
               <LeftSidebar
-                users={peers}
+                users={participants}
                 setUsers={setUsers}
-                role={role}
+                role={userRole}
                 isWhiteBoardOpen={isWhiteBoardOpen}
                 setIsWhiteBoardOpen={setIsWhiteBoardOpen}
                 isRecordingOpen={isRecordingOpen}
@@ -126,11 +333,11 @@ const page = () => {
             </div>
             <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
               <MeetingView
-                role={role}
-                users={peers}
+                role={userRole}
+                users={participants}
                 isWhiteBoardOpen={isWhiteBoardOpen}
                 setIsWhiteBoardOpen={setIsWhiteBoardOpen}
-                meetingStatus={isMeetingOngoing}
+                meetingStatus={meetingStatus}
                 isRecordingOpen={isRecordingOpen}
                 setIsRecordingOpen={setIsRecordingOpen}
                 isBreakoutRoom={isBreakoutRoom}
@@ -141,13 +348,13 @@ const page = () => {
               />
             </div>
           </>
-        ) :  userRole === "Moderator" ? (
+        ) : userRole === "Moderator" ? (
           <>
             <div className="h-full">
               <LeftSidebar
-                users={peers}
+                users={participants}
                 setUsers={setUsers}
-                role={role}
+                role={userRole}
                 isWhiteBoardOpen={isWhiteBoardOpen}
                 setIsWhiteBoardOpen={setIsWhiteBoardOpen}
                 isRecordingOpen={isRecordingOpen}
@@ -169,11 +376,11 @@ const page = () => {
             </div>
             <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
               <MeetingView
-                role={role}
+                role={userRole}
                 users={peers}
                 isWhiteBoardOpen={isWhiteBoardOpen}
                 setIsWhiteBoardOpen={setIsWhiteBoardOpen}
-                meetingStatus={isMeetingOngoing}
+                meetingStatus={meetingStatus}
                 isRecordingOpen={isRecordingOpen}
                 setIsRecordingOpen={setIsRecordingOpen}
                 isBreakoutRoom={isBreakoutRoom}
@@ -194,9 +401,9 @@ const page = () => {
               />
             </div>
           </>
-        ) : role === "Observer" && isMeetingOngoing ? (
+        ) : userRole === "Observer" && isMeetingOngoing ? (
           <>
-            <div className="h-full">
+            {/* <div className="h-full">
               <LeftSidebar
                 users={users}
                 setUsers={setUsers}
@@ -213,11 +420,11 @@ const page = () => {
                 selectedRoom={selectedRoom}
                 setSelectedRoom={setSelectedRoom}
               />
-            </div>
+            </div> */}
             <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
               <MeetingView
-                role={role}
-                users={users}
+                role={userRole}
+                users={participants}
                 isWhiteBoardOpen={isWhiteBoardOpen}
                 setIsWhiteBoardOpen={setIsWhiteBoardOpen}
                 meetingStatus={isMeetingOngoing}
