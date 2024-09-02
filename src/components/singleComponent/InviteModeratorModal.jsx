@@ -14,7 +14,7 @@ const InviteModeratorModal = ({ onClose, projectId }) => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/moderator-invitation/link`,
+        `https://amplifybe.onrender.com/api/moderator-invitation/link`,
         {
           method: "POST",
           headers: {

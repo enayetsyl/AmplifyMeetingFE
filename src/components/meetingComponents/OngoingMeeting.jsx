@@ -15,6 +15,7 @@ import { IoIosMicOff } from "react-icons/io";
 
 const OngoingMeeting = ({ users, iframeLink, role }) => {
   console.log("iframeLink inside ongoing meeting", iframeLink);
+  console.log("role ongoing meeting", role);
   return (
     <div className="pt-2 bg-black flex-1 rounded-xl flex flex-col justify-center items-center">
       {/* top bar */}
@@ -38,7 +39,7 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
             width="100%"
             height="500px"
             allowFullScreen
-            
+            style={{ pointerEvents: 'none' }}
           ></iframe>) : (<iframe
             src={iframeLink}
             frameBorder="0"

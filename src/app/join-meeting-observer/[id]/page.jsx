@@ -37,7 +37,7 @@ const page = () => {
 
  try {
 
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/join-meeting-observer`, {name: formData.fullName, role:"observer", passcode: formData.passcode, meetingId: meetingId});
+  const response = await axios.post(`https://amplifybe.onrender.com/api/live-meeting/join-meeting-observer`, {name: formData.fullName, role:"observer", passcode: formData.passcode, meetingId: meetingId});
 
   if(response?.data?.message === "Observer added to the meeting"){
     router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);

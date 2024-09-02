@@ -36,7 +36,7 @@ const EditModeratorModal = ({
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/update/moderator/${user._id}`,
+        `https://amplifybe.onrender.com/api/update/moderator/${user._id}`,
         {
           method: "PUT",
           headers: {
