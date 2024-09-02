@@ -31,6 +31,7 @@ export default function Home() {
       type="button      "
       />
       </Link>
+      <h1></h1>
     </div>
   
   );
