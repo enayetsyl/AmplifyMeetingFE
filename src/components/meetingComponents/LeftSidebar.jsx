@@ -25,7 +25,7 @@ const LeftSidebar = ({
   waitingRoom,
   acceptParticipant,
   messages,
-  sendMessage,
+  sendMessageParticipant,
   userName,
   meetingId
 }) => {
@@ -213,7 +213,7 @@ const LeftSidebar = ({
               waitingRoom={waitingRoom}
               acceptParticipant={acceptParticipant}
               messages={messages}
-              sendMessage={sendMessage}
+              sendMessageParticipant={sendMessageParticipant}
               userName={userName}
               meetingId={meetingId} 
             />

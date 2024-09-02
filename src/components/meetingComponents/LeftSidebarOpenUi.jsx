@@ -49,7 +49,7 @@ const LeftSidebarOpenUi = ({
   waitingRoom,
   acceptParticipant,
   messages,
-  sendMessage,
+  sendMessageParticipant,
   userName,
   meetingId,
 }) => {
@@ -72,12 +72,11 @@ const LeftSidebarOpenUi = ({
       };
 
       console.log("Sending message:", newMessage);
-      sendMessage(newMessage);
+      sendMessageParticipant(newMessage);
       setInputMessage("");
     }
   };
 
-  console.log('user in left sidebar', users)
   const modalRef = useRef();
 
   const handleSearch = () => {
@@ -359,7 +358,7 @@ const LeftSidebarOpenUi = ({
             {activeTab === "participantChat" &&
               !selectedChat &&
               users
-                .filter((user) => user.name !== userName)
+                ?.filter((user) => user.name !== userName)
                 .map((user) => (
                   <div
                     key={user.name}

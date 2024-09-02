@@ -8,7 +8,8 @@ import { PiLineVerticalBold } from "react-icons/pi";
 import { CgMenuGridR } from "react-icons/cg";
 import { IoIosMicOff } from "react-icons/io";
 
-const OngoingMeeting = ({users}) => {
+const OngoingMeeting = ({users, iframeLink}) => {
+  console.log('iframeLink inside ongoing meeting', iframeLink)
   return (
     <div className="pt-2 bg-black flex-1 rounded-xl flex flex-col justify-center items-center">
         {/* top bar */}
@@ -24,7 +25,16 @@ const OngoingMeeting = ({users}) => {
           </div>
         </div>
         {/* video stream */}
-        <div className="flex-1 py-5 px-10 flex justify-center items-center ">
+        <div className="flex-1 py-5 px-10 flex justify-center items-center mb-5">
+  <iframe
+    src={iframeLink}
+    frameBorder="0"
+    width="100%"
+    height="500px"
+    allowFullScreen
+  ></iframe>
+</div>
+        {/* <div className="flex-1 py-5 px-10 flex justify-center items-center ">
          <div className="grid grid-cols-4 gap-3">
          {
             users && users.map(user => 
@@ -48,9 +58,9 @@ const OngoingMeeting = ({users}) => {
             )
           }
          </div>
-        </div>
+        </div> */}
         {/* control bar */}
-        <div className="bg-[#1b1b1b] py-2 flex justify-center items-center gap-4 w-full rounded-b-xl">
+        {/* <div className="bg-[#1b1b1b] py-2 flex justify-center items-center gap-4 w-full rounded-b-xl">
           <FaHeadphones className="text-custom-gray-2"/>
           <FaVideoSlash className="text-custom-gray-2"/>
           <MdScreenShare className="text-[#2CD95F]"/>
@@ -58,7 +68,7 @@ const OngoingMeeting = ({users}) => {
           <BsThreeDots className="text-custom-gray-2"/>
           <PiLineVerticalBold  className="text-custom-gray-2"/>
           <MdCallEnd className="text-[#CD3B33]"/>
-        </div>
+        </div> */}
       </div>
   )
 }

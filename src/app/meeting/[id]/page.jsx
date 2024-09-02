@@ -14,10 +14,12 @@ const page = () => {
   const { user } = useGlobalContext();
   const [participants, setParticipants] = useState([]);
   const [observers, setObservers] = useState([]);
+  const [participantMessages, setParticipantMessages] = useState([]);
+  const [observersMessages, setObserversMessages] = useState([]);
   const searchParams = useSearchParams();
   const fullName = searchParams.get("fullName");
-  console.log("searchParams:", searchParams.toString());
-  console.log("fullName:", searchParams.get("fullName"));
+  const [iframeLink, setIframeLink] = useState('')
+  
 
   const userRole = searchParams.get("role");
   const [role, setRole] = useState("");
@@ -29,7 +31,7 @@ const page = () => {
   const [isAdmitted, setIsAdmitted] = useState(false);
   const [socket, setSocket] = useState(null);
 
-  console.log("isMeetingOngoing", isMeetingOngoing);
+  
   const meetingStatus = "Ongoing";
   const projectStatus = "Open";
 
@@ -73,6 +75,13 @@ const page = () => {
     setSelectedRoom(room);
   };
 
+  // Use effect for getting meeting link
+  useEffect(() => {
+    
+    getWebRtcMeetingId(params.id);
+   
+  }, [fullName, userRole, params.id]);
+
   // Use effect for getting waiting list
   useEffect(() => {
     let intervalId;
@@ -95,7 +104,7 @@ const page = () => {
     };
   }, [userRole, params.id]);
 
-  // Use effect for getting participant and observer list for moderator
+  // Use effect for getting participant and observer list and participant and observer chat for moderator
   useEffect(() => {
     let intervalId;
 
@@ -103,12 +112,15 @@ const page = () => {
       // Initial call
       getParticipantList(params.id);
       getObserverList(params.id);
-
+      getParticipantChat(params.id);
+      getObserverChat(params.id);
       // Set up interval to call getParticipantList every 10 seconds
       intervalId = setInterval(() => {
         getParticipantList(params.id);
         getObserverList(params.id);
-      }, 10000);
+        getParticipantChat(params.id);
+        getObserverChat(params.id);
+      }, 3000);
     }
 
     // Clean up function to clear the interval when component unmounts or userRole changes
@@ -120,18 +132,19 @@ const page = () => {
   }, [userRole, params.id]);
 
  
-  // Use effect for getting participant list for participant
+  // Use effect for getting participant list and participant chat for participant
   useEffect(() => {
     let intervalId;
 
     if (userRole === "Participant") {
       // Initial call
       getParticipantList(params.id);
-
+      getParticipantChat(params.id);
       // Set up interval to call getParticipantList every 10 seconds
       intervalId = setInterval(() => {
         getParticipantList(params.id);
-      }, 10000);
+        getParticipantChat(params.id);
+      }, 3000);
     }
 
     // Clean up function to clear the interval when component unmounts or userRole changes
@@ -168,8 +181,8 @@ const page = () => {
   // Use effect to check if the participant is in the list and admit them
   useEffect(() => {
     // Check if any participant matches the fullName
-    const participantFound = participants.some(
-      (participant) => participant.name === fullName
+    const participantFound = participants?.some(
+      (participant) => participant?.name === fullName
     );
 
     if (participantFound && !isAdmitted) {
@@ -201,17 +214,18 @@ const page = () => {
     };
   }, [userRole, params.id, isMeetingOngoing]);
 
-  // Use effect for getting observer list for observer
+  // Use effect for getting observer list and chat for observer
   useEffect(() => {
     let intervalId;
 
     if (userRole === "Observer") {
       // Initial call
       getObserverList(params.id);
-
+      getObserverChat(params.id);
       // Set up interval to call getParticipantList every 10 seconds
       intervalId = setInterval(() => {
         getObserverList(params.id);
+        getObserverChat(params.id);
       }, 10000);
     }
 
@@ -222,8 +236,22 @@ const page = () => {
       }
     };
   }, [userRole, params.id]);
-  console.log("participants", participants);
-  console.log("observers", observers);
+  
+  // Use effect for removing user
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = 'Are you sure you want to leave? Your changes may not be saved.';
+      removeParticipant();
+    };
+  
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const getWaitingList = async (meetingId) => {
     try {
@@ -240,12 +268,10 @@ const page = () => {
 
   const getParticipantList = async (meetingId) => {
     try {
-      console.log("getParticipantList called");
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/participant-list/${meetingId}`
       );
       setParticipants(response?.data?.participantsList);
-      console.log("response", response);
     } catch (error) {
       console.log("Error in getting participant list", error);
     }
@@ -253,7 +279,6 @@ const page = () => {
 
   const getObserverList = async (meetingId) => {
     try {
-      console.log("getObserverList called");
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/observer-list/${meetingId}`
       );
@@ -293,10 +318,106 @@ const page = () => {
 
   const addToPeersOrStreams = (participant) => {};
 
+  const getWebRtcMeetingId = async (meetingId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/get-webrtc-meeting-id/${meetingId}`
+      );
+
+      const iframeLink = `https://serverzoom-mpbv.onrender.com/room/${response?.data?.webRtcRoomId}`;
+
+      setIframeLink(iframeLink);
+
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   const startMeeting = () => {};
 
-  const sendMessage = () => {};
+  const sendMessageParticipant = async (message) => {
+    console.log('message', message)
+    try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/send-message-to-participant`,
+      {
+        message: message,
+        meetingId: params.id,
+      }
+    );
+    if (response?.data?.message === "Chat message saved successfully") {
+      setParticipantMessages(response?.data?.participantMessages);
+    }
+    } catch (error) {
+      console.log('error', error)
+    }
+  };
+  const sendMessageObserver = async (message) => {
+    try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/send-message-to-observer`,
+      {
+        message: message,
+        meetingId: params.id,
+      }
+    );
+    if (response?.data?.message === "Chat message saved successfully") {
+      setObserversMessages(response?.data?.observersMessages);
+    }
+    } catch (error) {
+      console.log('error', error)
+    }
+  };
 
+  const getParticipantChat = async(meetingId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/get-participant-chat/${meetingId}`
+      );
+
+      if (response?.data?.message === "Participant chat retrieved successfully") {
+        setParticipantMessages(response?.data?.participantMessages);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const getObserverChat = async(meetingId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/get-observer-chat/${meetingId}`
+      );
+
+      if (response?.data?.message === "Observers chat retrieved successfully") {
+        setObserversMessages(response?.data?.observersMessages);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const removeParticipant = async () => {
+    try {
+      response = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/remove-participant-from-meeting`,
+        {
+          name: fullName,
+          role: userRole,
+          meetingId: params.id,
+        }
+      );
+
+      console.log('remove response', response)
+    } catch (error) {
+        if (error?.response?.data?.message === "Participant not found") {
+        console.log("Participant not found");
+      } else {
+        console.log("Error:", error);
+      }
+    }
+  }
+  
   return (
     <>
       <div className="flex justify-between min-h-screen max-h-screen meeting_bg">
@@ -325,8 +446,8 @@ const page = () => {
                 handleBreakoutRoomChange={handleBreakoutRoomChange}
                 selectedRoom={selectedRoom}
                 setSelectedRoom={setSelectedRoom}
-                messages={messages}
-                sendMessage={sendMessage}
+                messages={participantMessages}
+                sendMessageParticipant={sendMessageParticipant}
                 userName={fullName}
                 meetingId={params.id}
               />
@@ -345,6 +466,7 @@ const page = () => {
                 breakoutRooms={breakoutRooms}
                 setBreakoutRooms={setBreakoutRooms}
                 projectStatus={projectStatus}
+                iframeLink={iframeLink}
               />
             </div>
           </>
@@ -368,8 +490,8 @@ const page = () => {
                 setSelectedRoom={setSelectedRoom}
                 waitingRoom={waitingRoom}
                 acceptParticipant={acceptParticipant}
-                messages={messages}
-                sendMessage={sendMessage}
+                messages={participantMessages}
+                sendMessageParticipant={sendMessageParticipant}
                 userName={fullName}
                 meetingId={params.id}
               />
@@ -388,6 +510,7 @@ const page = () => {
                 breakoutRooms={breakoutRooms}
                 setBreakoutRooms={setBreakoutRooms}
                 projectStatus={projectStatus}
+                iframeLink={iframeLink}
               />
             </div>
             <div className="h-full">
@@ -398,6 +521,10 @@ const page = () => {
                 setIsBreakoutRoom={setIsBreakoutRoom}
                 breakoutRooms={breakoutRooms}
                 setBreakoutRooms={setBreakoutRooms}
+                observersMessages={observersMessages}
+                userName={fullName}
+                meetingId={params.id}
+                sendMessageObserver={sendMessageObserver}
               />
             </div>
           </>
@@ -435,6 +562,7 @@ const page = () => {
                 breakoutRooms={breakoutRooms}
                 setBreakoutRooms={setBreakoutRooms}
                 projectStatus={projectStatus}
+                iframeLink={iframeLink}
               />
             </div>
             <div className="h-full">
@@ -445,6 +573,10 @@ const page = () => {
                 setIsBreakoutRoom={setIsBreakoutRoom}
                 breakoutRooms={breakoutRooms}
                 setBreakoutRooms={setBreakoutRooms}
+                observersMessages={observersMessages}
+                userName={fullName}
+                meetingId={params.id}
+                sendMessageObserver={sendMessageObserver}
               />
             </div>
           </>

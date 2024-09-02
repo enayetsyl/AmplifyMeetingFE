@@ -12,6 +12,11 @@ const RightSidebar = ({
   setIsBreakoutRoom,
   breakoutRooms,
   setBreakoutRooms,
+  observersMessages,
+  userName, 
+  meetingId,
+  sendMessageObserver
+
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -180,6 +185,10 @@ const RightSidebar = ({
             chatParticipants={chatParticipants}
             files={files}
             handleSearch={handleSearch}
+            observersMessages={observersMessages}
+            userName={userName}
+          meetingId={meetingId}
+          sendMessageObserver={sendMessageObserver}
           />
         ) : (
           <RightSidebarCloseUi

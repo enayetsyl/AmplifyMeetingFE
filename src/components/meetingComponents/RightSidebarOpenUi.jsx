@@ -36,8 +36,13 @@ const RightSidebarOpenUi = ({
   chatParticipants,
   files,
   handleSearch,
+  observersMessages,
+  userName,
+  meetingId,
+  sendMessageObserver
 }) => {
   const [fileList, setFileList] = useState(files);
+  const [inputMessage, setInputMessage] = useState("");
 
   useEffect(() => {
     // Fetch initial files
@@ -85,6 +90,21 @@ const RightSidebarOpenUi = ({
     }
   };
 
+
+  const handleSendMessage = () => {
+    if (inputMessage.trim()) {
+      const newMessage = {
+        meetingId: meetingId,
+        senderName: userName,
+        receiverName: selectedChat.name,
+        message: inputMessage.trim(),
+      };
+
+      console.log("Sending message:", newMessage);
+      sendMessageObserver(newMessage);
+      setInputMessage("");
+    }
+  };
   return (
     <>
       {/* Backroom chat and icon */}
@@ -159,28 +179,30 @@ const RightSidebarOpenUi = ({
         {/* observers chat */}
         {activeTab === "observersChat" &&
           !selectedChat &&
-          chatParticipants.map((chat) => (
-            <div
-              key={chat.id}
-              className="bg-custom-gray-2 p-2 flex justify-center items-center gap-2 border-b border-solid border-custom-gray-1 cursor-pointer"
-              onClick={() => setSelectedChat(chat)}
-            >
-              <div className="flex-grow-1 text-xs ">
-                <p className="pb-1 font-bold">{chat.name}</p>
-                <p className={`${chat.unreadCount > 0 ? "font-bold" : ""}`}>
+          observers
+            .filter((observer) => observer.name !== userName)
+            .map((observer) => (
+              <div
+                key={observer.id}
+                className="bg-custom-gray-2 p-2 flex justify-center items-center gap-2 border-b border-solid border-custom-gray-1 cursor-pointer"
+                onClick={() => setSelectedChat(observer)}
+              >
+                <div className="flex-grow-1 text-xs ">
+                  <p className="pb-1 font-bold">{observer.name}</p>
+                  {/* <p className={`${chat.unreadCount > 0 ? "font-bold" : ""}`}>
                   {chat.messagePreview}
-                </p>
-              </div>
-              <div className="flex flex-col justify-end items-end text-xs">
+                </p> */}
+                </div>
+                {/* <div className="flex flex-col justify-end items-end text-xs">
                 <p className="pb-1">{chat.time}</p>
                 {chat.unreadCount > 0 && (
                   <p className="py-0.5 px-1.5 text-white bg-[#ff2b2b] rounded-[50%]">
                     {chat.unreadCount}
                   </p>
                 )}
+              </div> */}
               </div>
-            </div>
-          ))}
+            ))}
 
         {activeTab === "observersChat" && selectedChat && (
           <div className="flex-grow pt-2 rounded-xl flex flex-col justify-center items-center">
@@ -196,23 +218,49 @@ const RightSidebarOpenUi = ({
             </div>
             {/* chat message */}
             <div className="flex flex-col gap-2 flex-grow">
-              {selectedChat.messages.map((message, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between gap-2"
-                >
-                  <p className="text-[#1a1a1a] text-[12px]">
-                    <span className="font-bold">{message.sender}:</span>{" "}
-                    {message.content}
-                  </p>
-                  <p className="text-[#1a1a1a] text-[10px] text-gray-500">
-                    {message.time}
-                  </p>
-                </div>
-              ))}
+              {observersMessages
+                .filter(
+                  (message) =>
+                    (message.senderName === selectedChat.name &&
+                      message.receiverName === userName) ||
+                    (message.senderName === userName &&
+                      message.receiverName === selectedChat.name)
+                )
+                .map((message, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-center gap-2 ${
+                      message.senderName === userName
+                        ? "justify-start"
+                        : "justify-end"
+                    }`}
+                  >
+                    <div
+                      className={`flex flex-col ${
+                        message.senderName === userName
+                          ? "items-start"
+                          : "items-end"
+                      }`}
+                    >
+                      <p
+                        className={`text-[12px] ${
+                          message.senderName === userName
+                            ? "text-blue-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        <span className="font-bold">{message.senderName}:</span>{" "}
+                        {message.message}
+                      </p>
+                      <p className="text-[#1a1a1a] text-[10px]">
+                        {new Date(message.createdAt).toLocaleTimeString()}
+                      </p>
+                    </div>
+                  </div>
+                ))}
             </div>
             {/* message input */}
-            <div className="flex items-center gap-2 mt-2 bg-custom-gray-2 p-2 rounded-xl">
+            {/* <div className="flex items-center gap-2 mt-2 bg-custom-gray-2 p-2 rounded-xl">
               <MdInsertEmoticon className="text-custom-gray-4" />
               <input
                 type="text"
@@ -222,7 +270,27 @@ const RightSidebarOpenUi = ({
               <button className="bg-custom-teal text-white p-2 rounded-full">
                 <IoSend />
               </button>
-            </div>
+            </div> */}
+              {/* send message */}
+              <div className="flex justify-between items-center gap-2 relative">
+                  <input
+                    type="text"
+                    placeholder="Type Message"
+                    className="rounded-lg py-1 px-2 placeholder:text-[10px]"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                  />
+                  <div className="absolute right-11 cursor-pointer">
+                    <MdInsertEmoticon />
+                  </div>
+                  <div
+                    className="py-1.5 px-1.5 bg-custom-orange-2 rounded-[50%] text-white cursor-pointer text-sm"
+                    onClick={handleSendMessage}
+                  >
+                    <IoSend />
+                  </div>
+                </div>
           </div>
         )}
       </div>

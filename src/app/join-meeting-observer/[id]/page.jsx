@@ -40,12 +40,12 @@ const page = () => {
   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/join-meeting-observer`, {name: formData.fullName, role:"observer", passcode: formData.passcode, meetingId: meetingId});
 
   if(response?.data?.message === "Observer added to the meeting"){
-    router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(fullName)}&role=Observer`);
+    router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);
   }  
  } catch (error) {
 
   if(error?.response?.data?.message === "Observer already added to the meeting" ){
-    router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(fullName)}&role=Observer`);
+    router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);
   } else{
     console.log('Received error from backend', error?.response?.data?.message)
   }

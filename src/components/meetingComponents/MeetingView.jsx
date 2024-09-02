@@ -32,7 +32,8 @@ const MeetingView = ({
   setIsBreakoutRoom,
   breakoutRooms,
   setBreakoutRooms,
-  projectStatus
+  projectStatus,
+  iframeLink
 }) => {
 
   return (
@@ -90,8 +91,8 @@ const MeetingView = ({
               <WhiteBoard role={role} users={users} />
             </div>
           ) : (
-            <div className="flex-1">
-              <OngoingMeeting users={users} />
+            <div className="flex-1 h-full">
+              <OngoingMeeting users={users} iframeLink={iframeLink}/>
             </div>
           )}
         </>
