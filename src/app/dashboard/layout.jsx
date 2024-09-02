@@ -23,7 +23,6 @@ export default function DashboardLayout({ children }) {
   useEffect(() => {
     // Check if user is defined and if it's an empty object
     if (!user || Object.keys(user).length === 0) {
-      console.log("User is empty or undefined, navigating to login page");
       // Navigate to the login page
       router.push("/login");
     }

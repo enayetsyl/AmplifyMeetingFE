@@ -85,7 +85,6 @@ const LeftSidebarOpenUi = ({
   const [selectedReceiverId, setSelectedReceiverId] = useState(null);
 
   const handleUserClick = (userId) => {
-    console.log(userId);
     setSelectedReceiverId(userId);
   };
   const toggleRemoveAndWaitingOptionModal = (event, user) => {

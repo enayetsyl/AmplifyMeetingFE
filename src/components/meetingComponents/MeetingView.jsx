@@ -92,7 +92,7 @@ const MeetingView = ({
             </div>
           ) : (
             <div className="flex-1 h-full">
-              <OngoingMeeting users={users} iframeLink={iframeLink}/>
+              <OngoingMeeting users={users} iframeLink={iframeLink} role={role}/>
             </div>
           )}
         </>

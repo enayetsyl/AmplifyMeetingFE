@@ -186,7 +186,6 @@ const page = () => {
     );
 
     if (participantFound && !isAdmitted) {
-      console.log("participant matched with fullName", fullName);
       setIsAdmitted(true);
     }
   }, [participants, fullName, isAdmitted]);
@@ -255,12 +254,10 @@ const page = () => {
 
   const getWaitingList = async (meetingId) => {
     try {
-      console.log("getWaitingList called");
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/waiting-list/${meetingId}`
       );
       setWaitingRoom(response?.data?.waitingRoom);
-      console.log("response", response);
     } catch (error) {
       console.log(error?.response?.data?.message);
     }
@@ -323,8 +320,9 @@ const page = () => {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/get-webrtc-meeting-id/${meetingId}`
       );
-
-      const iframeLink = `https://serverzoom-mpbv.onrender.com/room/${response?.data?.webRtcRoomId}`;
+      // https://serverzoom-mpbv.onrender.com/room/
+      // https://testing--inspiring-cendol-60afd6.netlify.app
+      const iframeLink = `https://testing--inspiring-cendol-60afd6.netlify.app/room/${response?.data?.webRtcRoomId}`;
 
       setIframeLink(iframeLink);
 
@@ -336,7 +334,6 @@ const page = () => {
   const startMeeting = () => {};
 
   const sendMessageParticipant = async (message) => {
-    console.log('message', message)
     try {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/api/live-meeting/send-message-to-participant`,
@@ -408,7 +405,6 @@ const page = () => {
         }
       );
 
-      console.log('remove response', response)
     } catch (error) {
         if (error?.response?.data?.message === "Participant not found") {
         console.log("Participant not found");
