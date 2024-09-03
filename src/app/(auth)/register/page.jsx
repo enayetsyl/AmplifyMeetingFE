@@ -50,7 +50,7 @@ const Register = () => {
     if (!validateForm()) return;
 console.log('form data', formData)
     try {
-      const response = await axios.post(`https://amplifybe.onrender.com/api/users/create`, {
+      const response = await axios.post(`http://89.116.159.133:8008/api/users/create`, {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,

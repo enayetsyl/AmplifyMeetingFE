@@ -21,7 +21,7 @@ const Page = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`https://amplifybe.onrender.com/api/users/find-by-id`, {
+        const response = await axios.get(`http://89.116.159.133:8008/api/users/find-by-id`, {
           params: { id },
         });
         setUser(response.data.result);
@@ -47,7 +47,7 @@ const Page = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`https://amplifybe.onrender.com/api/users/update`, user);
+      await axios.put(`http://89.116.159.133:8008/api/users/update`, user);
       alert('Profile updated successfully');
       // Optionally redirect or refresh the page
     } catch (error) {

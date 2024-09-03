@@ -9,7 +9,7 @@ import "./style.css";
 const WhiteBoard = ({ role, users }) => {
   const drawonCanvas = () => {
     const root = {};
-    root.socket = io.connect("https://amplifybe.onrender.com");
+    root.socket = io.connect("http://89.116.159.133:8008");
   
     root.socket.on("canvas-data", (data) => {
       const image = new window.Image();  
