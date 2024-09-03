@@ -36,7 +36,7 @@ const AddMeetingModal = ({ onClose, project, user, refetchMeetings }) => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://89.116.159.133:8008/api/get-all/contact/${user._id}`
+        `https://amplifyresearch.shop/api/get-all/contact/${user._id}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch contacts: ${response.statusText}`);
@@ -95,7 +95,7 @@ const AddMeetingModal = ({ onClose, project, user, refetchMeetings }) => {
     };
     console.log("Meeting Data:", updatedFormData);
     try {
-      const response = await axios.post(`http://89.116.159.133:8008/api/create/meeting`, updatedFormData);
+      const response = await axios.post(`https://amplifyresearch.shop/api/create/meeting`, updatedFormData);
       
       if (response.status === 201) { 
         refetchMeetings(); 

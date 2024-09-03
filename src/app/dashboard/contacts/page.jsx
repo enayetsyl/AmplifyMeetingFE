@@ -29,7 +29,7 @@ const page = () => {
   const fetchContacts = async () => {
     try {
       const response = await fetch(
-       `http://89.116.159.133:8008/api/get-all/contact/${user._id}`
+       `https://amplifyresearch.shop/api/get-all/contact/${user._id}`
       );
       const data = await response.json();
       console.log(data);

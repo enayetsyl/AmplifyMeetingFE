@@ -27,7 +27,7 @@ const Page = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://89.116.159.133:8008/api/get-all/project/${user._id}`,
+        `https://amplifyresearch.shop/api/get-all/project/${user._id}`,
         {
           params: { page, limit: 10 },
         }

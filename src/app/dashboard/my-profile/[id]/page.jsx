@@ -90,7 +90,7 @@ const Page = () => {
 
   const deleteUser = async () => {
     try {
-      await axios.delete(`http://89.116.159.133:8008/api/users/delete-by-id`, {
+      await axios.delete(`https://amplifyresearch.shop/api/users/delete-by-id`, {
         params: { id: id }, // replace with actual user ID
       });
       console.log("User deleted successfully");
@@ -111,7 +111,7 @@ const Page = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://89.116.159.133:8008/api/users/find-by-id`,
+          `https://amplifyresearch.shop/api/users/find-by-id`,
           {
             params: { id: id }, // replace 'user-id' with actual user ID
           }

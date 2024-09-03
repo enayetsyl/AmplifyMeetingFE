@@ -48,7 +48,7 @@ const RightSidebarOpenUi = ({
 
   const fetchFiles = async () => {
     try {
-      const response = await axios.get(`http://89.116.159.133:8008/api/files`);
+      const response = await axios.get(`https://amplifyresearch.shop/api/files`);
       console.log('get uploaded file.........................................now......................................................................', response.data); // Debug log
       setFileList(response.data);
     } catch (error) {
@@ -73,12 +73,12 @@ const RightSidebarOpenUi = ({
       formData.append("file", file);
 
       try {
-        await axios.post(`http://89.116.159.133:8008/api/upload`, formData, {
+        await axios.post(`https://amplifyresearch.shop/api/upload`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        const response = await axios.get(`http://89.116.159.133:8008/api/files`);
+        const response = await axios.get(`https://amplifyresearch.shop/api/files`);
         setFileList(response.data);
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -88,8 +88,8 @@ const RightSidebarOpenUi = ({
 
   const handleDeleteFile = async (fileId) => {
     try {
-      await axios.delete(`http://89.116.159.133:8008/api/files/${fileId}`);
-      const response = await axios.get(`http://89.116.159.133:8008/api/files`);
+      await axios.delete(`https://amplifyresearch.shop/api/files/${fileId}`);
+      const response = await axios.get(`https://amplifyresearch.shop/api/files`);
       setFileList(response.data);
     } catch (error) {
       console.error("Error deleting file:", error);

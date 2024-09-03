@@ -37,7 +37,7 @@ const page = () => {
 
  try {
 
-  const response = await axios.post(`http://89.116.159.133:8008/api/live-meeting/join-meeting-observer`, {name: formData.fullName, role:"observer", passcode: formData.passcode, meetingId: meetingId});
+  const response = await axios.post(`https://amplifyresearch.shop/api/live-meeting/join-meeting-observer`, {name: formData.fullName, role:"observer", passcode: formData.passcode, meetingId: meetingId});
 
   if(response?.data?.message === "Observer added to the meeting"){
     router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);

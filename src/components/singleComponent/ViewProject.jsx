@@ -31,7 +31,7 @@ const ViewProject = ({ project, onClose, user }) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `http://89.116.159.133:8008/api/get-all/meeting/${project._id}`,
+        `https://amplifyresearch.shop/api/get-all/meeting/${project._id}`,
         // {
         //   params: { page, limit: 10 },
         // }

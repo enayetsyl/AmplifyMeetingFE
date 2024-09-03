@@ -36,7 +36,7 @@ const EditModeratorModal = ({
 
     try {
       const response = await fetch(
-        `http://89.116.159.133:8008/api/update/moderator/${user._id}`,
+        `https://amplifyresearch.shop/api/update/moderator/${user._id}`,
         {
           method: "PUT",
           headers: {

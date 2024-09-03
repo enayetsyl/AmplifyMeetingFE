@@ -107,7 +107,7 @@ const ContactTable = ({contacts, setContacts, currentContact, setCurrentContact,
 
   const handleDeleteContact = async (contactId) => {
     try {
-      const response = await fetch(`http://89.116.159.133:8008/api/delete/contact/${contactId}`, {
+      const response = await fetch(`https://amplifyresearch.shop/api/delete/contact/${contactId}`, {
         method: 'DELETE',
       });
       const data = await response.json();

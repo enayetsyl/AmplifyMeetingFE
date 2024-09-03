@@ -21,7 +21,7 @@ const ForgotPasswordUI = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://89.116.159.133:8008/api/users/forgotPassword`, {
+      const response = await axios.post(`https://amplifyresearch.shop/api/users/forgotPassword`, {
         email: email,
       });
       setMessage('Reset link sent to your email');

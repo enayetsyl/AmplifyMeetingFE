@@ -16,7 +16,7 @@ const EditPoolModal = ({ onClose, formData, setFormData, pools }) => {
   useEffect(() => {
     const fetchPollById = async () => {
       try {
-        const response = await axios.get(`http://89.116.159.133:8008/api/get/poll-id/${pools}`);
+        const response = await axios.get(`https://amplifyresearch.shop/api/get/poll-id/${pools}`);
         setPool(response.data);
         setLoading(false);
       } catch (error) {
@@ -110,7 +110,7 @@ const EditPoolModal = ({ onClose, formData, setFormData, pools }) => {
     try {
         console.log(pools)
       const response = await axios.put(
-        `http://89.116.159.133:8008/api/update-poll/${pools}`,
+        `https://amplifyresearch.shop/api/update-poll/${pools}`,
         {
           pollName: newPool.name,
           isActive: newPool.active,
