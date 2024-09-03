@@ -33,6 +33,9 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
       {/* video stream */}
       <div className="flex-1 py-5 px-10 flex justify-center items-center mb-5">
         {
+          role === "Observer" ? (<iframe src={iframeLink} allow="fullscreen; autoplay; clipboard-write"></iframe>) : (<iframe src={iframeLink} allow="microphone; camera; display-capture; fullscreen; autoplay; clipboard-write"></iframe>)
+        }
+        {/* {
           role === "Observer" ? (<iframe
             src={iframeLink}
             frameBorder="0"
@@ -48,8 +51,8 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
             allowFullScreen
             allow="microphone; camera; display-capture"
           ></iframe>)
-        }
-        
+        } */}
+        <iframe src="your-webrtc-app-url" allow="microphone; camera; display-capture; fullscreen; autoplay; clipboard-write"></iframe>
       </div>
       {/* <div className="flex-1 py-5 px-10 flex justify-center items-center ">
          <div className="grid grid-cols-4 gap-3">
