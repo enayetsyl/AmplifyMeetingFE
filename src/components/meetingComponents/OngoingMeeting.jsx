@@ -52,7 +52,7 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
             allow="microphone; camera; display-capture"
           ></iframe>)
         } */}
-        <iframe src="your-webrtc-app-url" allow="microphone; camera; display-capture; fullscreen; autoplay; clipboard-write"></iframe>
+        
       </div>
       {/* <div className="flex-1 py-5 px-10 flex justify-center items-center ">
          <div className="grid grid-cols-4 gap-3">
