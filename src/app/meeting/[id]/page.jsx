@@ -344,7 +344,7 @@ const page = () => {
       );
       // https://serverzoom-mpbv.onrender.com/room/
       // https://testing--inspiring-cendol-60afd6.netlify.app
-      console.log('iframe at frontend', response?.data)
+      // console.log('iframe at frontend', response?.data)
       // const iframeLink = `https://testing--inspiring-cendol-60afd6.netlify.app/room/${response?.data?.webRtcRoomId}`;
 
       setIframeLink(response?.data?.iframeLink);
