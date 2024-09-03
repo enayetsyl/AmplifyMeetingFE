@@ -5,14 +5,11 @@ import { FaHeadphones, FaUserFriends, FaVideoSlash } from "react-icons/fa";
 import { IoIosMicOff } from "react-icons/io";
 import { MdCallEnd, MdScreenShare } from "react-icons/md";
 import io from "socket.io-client";
-
-import { PiLineVerticalBold } from "react-icons/pi";
-import whiteboardImage from "../../../public/white-board.jpg";
 import "./style.css";
 const WhiteBoard = ({ role, users }) => {
   const drawonCanvas = () => {
     const root = {};
-    root.socket = io.connect("http://localhost:8008");
+    root.socket = io.connect("https://amplifybe.onrender.com");
   
     root.socket.on("canvas-data", (data) => {
       const image = new window.Image();  // Ensure using 'new'
@@ -121,8 +118,8 @@ const WhiteBoard = ({ role, users }) => {
   return (
     <div className="bg-white board-container flex justify-start items-center  w-full h-full rounded-xl relative">
       {/* video */}
-      <div className="w-1/5 bg-black border-2 border-black  grid-cols-1 p-2  gap-2 items-center overflow-y-auto max-h-full rounded-l-xl ">
-        {users &&
+      {/* <div className="w-1/5 bg-black border-2 border-black  grid-cols-1 p-2  gap-2 items-center overflow-y-auto max-h-full rounded-l-xl "> */}
+        {/* {users &&
           users?.map((user) => (
             <div className="relative">
               <Image
@@ -141,9 +138,9 @@ const WhiteBoard = ({ role, users }) => {
                 <p className="text-white text-[8px]">{user.name}</p>
               </div>
             </div>
-          ))}
+          ))} */}
         {/* control bar */}
-        <div className="bg-[#1b1b1b] py-2 flex justify-center items-center gap-2  w-1/5 rounded-bl-xl absolute bottom-0 left-0 ">
+        {/* <div className="bg-[#1b1b1b] py-2 flex justify-center items-center gap-2  w-1/5 rounded-bl-xl absolute bottom-0 left-0 ">
           <FaHeadphones className="text-custom-gray-2" />
           <FaVideoSlash className="text-custom-gray-2" />
 
@@ -164,8 +161,8 @@ const WhiteBoard = ({ role, users }) => {
               />
             </div>
           )}
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
       {/* White board */}
       <div id="sketch" className="sketch absolute border-2 border-black">
         <canvas className="board" id="board"></canvas>
