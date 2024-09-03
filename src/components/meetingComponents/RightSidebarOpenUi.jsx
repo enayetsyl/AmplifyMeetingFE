@@ -48,7 +48,7 @@ const RightSidebarOpenUi = ({
 
   const fetchFiles = async () => {
     try {
-      const response = await axios.get(`http://localhost:8008/api/files`);
+      const response = await axios.get(`https://amplifybe.onrender.com/api/files`);
       console.log('get uploaded file.........................................now......................................................................', response.data); // Debug log
       setFileList(response.data);
     } catch (error) {
@@ -73,12 +73,12 @@ const RightSidebarOpenUi = ({
       formData.append("file", file);
 
       try {
-        await axios.post(`http://localhost:8008/api/upload`, formData, {
+        await axios.post(`https://amplifybe.onrender.com/api/upload`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        const response = await axios.get(`http://localhost:8008/api/files`);
+        const response = await axios.get(`https://amplifybe.onrender.com/api/files`);
         setFileList(response.data);
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -88,8 +88,8 @@ const RightSidebarOpenUi = ({
 
   const handleDeleteFile = async (fileId) => {
     try {
-      await axios.delete(`http://localhost:8008/api/files/${fileId}`);
-      const response = await axios.get(`http://localhost:8008/api/files`);
+      await axios.delete(`https://amplifybe.onrender.com/api/files/${fileId}`);
+      const response = await axios.get(`https://amplifybe.onrender.com/api/files`);
       setFileList(response.data);
     } catch (error) {
       console.error("Error deleting file:", error);

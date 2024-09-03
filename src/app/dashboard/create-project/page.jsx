@@ -63,7 +63,7 @@ const Page = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:8008/api/get-all/contact/${user._id}`
+        `https://amplifybe.onrender.com/api/get-all/contact/${user._id}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch contacts: ${response.statusText}`);
@@ -97,7 +97,7 @@ const Page = () => {
     console.log(updatedFormData);
   
     try {
-      const response = await axios.post(`http://localhost:8008/api/create/project`, updatedFormData);
+      const response = await axios.post(`https://amplifybe.onrender.com/api/create/project`, updatedFormData);
       console.log(response);
       alert('Project created successfully!');
       router.push('/dashboard/project')
