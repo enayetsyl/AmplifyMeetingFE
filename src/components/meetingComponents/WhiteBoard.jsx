@@ -12,7 +12,7 @@ const WhiteBoard = ({ role, users }) => {
     root.socket = io.connect("http://localhost:8008");
   
     root.socket.on("canvas-data", (data) => {
-      const image = new window.Image();  // Ensure using 'new'
+      const image = new window.Image();  
       const canvas = document.querySelector("#board");
       const ctx = canvas.getContext("2d");
   
@@ -39,8 +39,9 @@ const WhiteBoard = ({ role, users }) => {
       (e) => {
         lastMouse.x = mouse.x;
         lastMouse.y = mouse.y;
-        mouse.x = e.pageX - canvas.offsetLeft;
-        mouse.y = e.pageY - canvas.offsetTop;
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
       },
       false
     );
