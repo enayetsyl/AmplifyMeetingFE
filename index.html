@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Viewer Integration with postMessage</title>
+    <style>
+        .iframe-container {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            position: relative;
+        }
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #log-container {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            height: 200px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebRTC Viewer Integration with postMessage</h1>
+    <div class="iframe-container">
+      <iframe
+        id="webrtc-iframe"
+        src="https://testing--inspiring-cendol-60afd6.netlify.app/room/111"
+        allow="autoplay; fullscreen; microphone; camera"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <div id="log-container"></div>
+
+    <script>
+        function log(message) {
+            const logContainer = document.getElementById('log-container');
+            const logEntry = document.createElement('p');
+            logEntry.textContent = ${new Date().toISOString()}: ${message};
+            logContainer.appendChild(logEntry);
+            console.log(message);
+        }
+
+        log('Page loaded. Starting iframe monitoring...');
+
+        const iframe = document.getElementById('webrtc-iframe');
+        
+        iframe.onload = function() {
+            log('Iframe loaded');
+            // Send a message to the iframe
+            iframe.contentWindow.postMessage('Hello from parent', '*');
+        };
+
+        // Listen for messages from the iframe
+        window.addEventListener('message', function(event) {
+            // Make sure the message is from your Netlify app
+            if (event.origin !== "https://testing--inspiring-cendol-60afd6.netlify.app") return;
+            
+            log(Received message from iframe: ${JSON.stringify(event.data)});
+        }, false);
+
+        // Periodically send a message to the iframe
+        setInterval(() => {
+            iframe.contentWindow.postMessage('Ping from parent', '*');
+        }, 5000);
+
+        window.addEventListener('error', function(event) {
+            log(Global error: ${event.message} at ${event.filename}:${event.lineno});
+        });
+
+        setInterval(() => {
+            log(Network status: ${navigator.onLine ? 'online' : 'offline'});
+        }, 10000);
+
+        log('Monitoring setup complete');
+    </script>
+</body>
+</html>

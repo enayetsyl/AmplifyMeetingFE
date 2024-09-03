@@ -78,7 +78,7 @@ const page = () => {
   // Use effect for getting meeting link
   useEffect(() => {
     
-    getWebRtcMeetingId(params.id);
+    getIframeLinkMeetingId(params.id);
    
   }, [fullName, userRole, params.id]);
 
@@ -114,12 +114,14 @@ const page = () => {
       getObserverList(params.id);
       getParticipantChat(params.id);
       getObserverChat(params.id);
+      getIframeLinkMeetingId(params.id);
       // Set up interval to call getParticipantList every 10 seconds
       intervalId = setInterval(() => {
         getParticipantList(params.id);
         getObserverList(params.id);
         getParticipantChat(params.id);
         getObserverChat(params.id);
+        getIframeLinkMeetingId(params.id);
       }, 3000);
     }
 
@@ -140,10 +142,12 @@ const page = () => {
       // Initial call
       getParticipantList(params.id);
       getParticipantChat(params.id);
+      getIframeLinkMeetingId(params.id);
       // Set up interval to call getParticipantList every 10 seconds
       intervalId = setInterval(() => {
         getParticipantList(params.id);
         getParticipantChat(params.id);
+        getIframeLinkMeetingId(params.id);
       }, 3000);
     }
 
@@ -167,7 +171,8 @@ const page = () => {
       // Set up interval to call getWaitingList every 10 seconds
       intervalId = setInterval(() => {
         getParticipantList(params.id);
-      }, 10000);
+        
+      }, 5000);
     }
 
     // Clean up function to clear the interval when component unmounts or userRole changes
@@ -322,9 +327,27 @@ const page = () => {
       );
       // https://serverzoom-mpbv.onrender.com/room/
       // https://testing--inspiring-cendol-60afd6.netlify.app
+      console.log('room id at frontend', response?.data?.webRtcRoomId)
       const iframeLink = `https://testing--inspiring-cendol-60afd6.netlify.app/room/${response?.data?.webRtcRoomId}`;
 
       setIframeLink(iframeLink);
+
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const getIframeLinkMeetingId = async (meetingId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8008/api/live-meeting/get-iframe-link/${meetingId}`
+      );
+      // https://serverzoom-mpbv.onrender.com/room/
+      // https://testing--inspiring-cendol-60afd6.netlify.app
+      console.log('iframe at frontend', response?.data)
+      // const iframeLink = `https://testing--inspiring-cendol-60afd6.netlify.app/room/${response?.data?.webRtcRoomId}`;
+
+      setIframeLink(response?.data?.iframeLink);
 
     } catch (error) {
       console.log("Error:", error);
@@ -414,6 +437,8 @@ const page = () => {
     }
   }
   
+console.log('iframeLink', iframeLink)
+  console.log('my iframe link that i am watching', iframeLink)
   return (
     <>
       <div className="flex justify-between min-h-screen max-h-screen meeting_bg">
