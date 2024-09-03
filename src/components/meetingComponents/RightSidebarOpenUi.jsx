@@ -44,23 +44,29 @@ const RightSidebarOpenUi = ({
   const [fileList, setFileList] = useState(files);
   const [inputMessage, setInputMessage] = useState("");
 
-  useEffect(() => {
-    // Fetch initial files
-    const fetchFiles = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8008/api/files`);
-        setFileList(response.data);
-      } catch (error) {
-        console.error("Error fetching files:", error);
-      }
-    };
+ 
 
+  const fetchFiles = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8008/api/files`);
+      console.log('get uploaded file.........................................now......................................................................', response.data); // Debug log
+      setFileList(response.data);
+    } catch (error) {
+      console.error("Error fetching files:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("useEffect triggered");
     fetchFiles();
   }, []);
+  
+  console.log('file lsit', fileList)
 
   const handleFileUpload = async (event) => {
-    console.log("File upload triggered"); // Debug log
+    console.log("File upload triggered.........................................................replace........."); // Debug log
     const file = event.target.files[0];
+    console.log('first file', file); // Debug log
     if (file) {
       console.log(file); // Debug log
       const formData = new FormData();
@@ -323,7 +329,7 @@ const RightSidebarOpenUi = ({
             >
               <div className="flex items-center space-x-2">
                 <FaFolder className="h-3 w-3 text-custom-gray-3" />
-                <span className="text-xs text-custom-gray-3">{file.name}</span>
+                <span className="text-xs text-custom-gray-3">{file.filename}</span>
               </div>
               <div className="flex items-center space-x-4">
                 <span className="text-xs text-custom-gray-3">{file.size}</span>

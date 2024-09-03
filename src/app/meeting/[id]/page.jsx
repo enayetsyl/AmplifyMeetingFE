@@ -255,7 +255,7 @@ const page = () => {
   const getWaitingList = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifybe.onrender.com/api/live-meeting/waiting-list/${meetingId}`
+        `http://localhost:8008/api/live-meeting/waiting-list/${meetingId}`
       );
       setWaitingRoom(response?.data?.waitingRoom);
     } catch (error) {
@@ -266,7 +266,7 @@ const page = () => {
   const getParticipantList = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifybe.onrender.com/api/live-meeting/participant-list/${meetingId}`
+        `http://localhost:8008/api/live-meeting/participant-list/${meetingId}`
       );
       setParticipants(response?.data?.participantsList);
     } catch (error) {
@@ -277,7 +277,7 @@ const page = () => {
   const getObserverList = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifybe.onrender.com/api/live-meeting/observer-list/${meetingId}`
+        `http://localhost:8008/api/live-meeting/observer-list/${meetingId}`
       );
       setObservers(response?.data?.observersList);
     } catch (error) {
@@ -288,7 +288,7 @@ const page = () => {
   const acceptParticipant = async (participant) => {
     try {
       const response = await axios.put(
-        `https://amplifybe.onrender.com/api/live-meeting/accept-from-waiting-list`,
+        `http://localhost:8008/api/live-meeting/accept-from-waiting-list`,
         {
           participant: participant,
           meetingId: params.id,
@@ -302,7 +302,7 @@ const page = () => {
   const getMeetingStatus = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifybe.onrender.com/api/live-meeting/get-meeting-status/${meetingId}`
+        `http://localhost:8008/api/live-meeting/get-meeting-status/${meetingId}`
       );
 
       if (response?.data?.meetingStatus === true) {
@@ -318,7 +318,7 @@ const page = () => {
   const getWebRtcMeetingId = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifybe.onrender.com/api/live-meeting/get-webrtc-meeting-id/${meetingId}`
+        `http://localhost:8008/api/live-meeting/get-webrtc-meeting-id/${meetingId}`
       );
       // https://serverzoom-mpbv.onrender.com/room/
       // https://testing--inspiring-cendol-60afd6.netlify.app
@@ -336,7 +336,7 @@ const page = () => {
   const sendMessageParticipant = async (message) => {
     try {
     const response = await axios.post(
-      `https://amplifybe.onrender.com/api/live-meeting/send-message-to-participant`,
+      `http://localhost:8008/api/live-meeting/send-message-to-participant`,
       {
         message: message,
         meetingId: params.id,
@@ -352,7 +352,7 @@ const page = () => {
   const sendMessageObserver = async (message) => {
     try {
     const response = await axios.post(
-      `https://amplifybe.onrender.com/api/live-meeting/send-message-to-observer`,
+      `http://localhost:8008/api/live-meeting/send-message-to-observer`,
       {
         message: message,
         meetingId: params.id,
@@ -369,7 +369,7 @@ const page = () => {
   const getParticipantChat = async(meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifybe.onrender.com/api/live-meeting/get-participant-chat/${meetingId}`
+        `http://localhost:8008/api/live-meeting/get-participant-chat/${meetingId}`
       );
 
       if (response?.data?.message === "Participant chat retrieved successfully") {
@@ -383,7 +383,7 @@ const page = () => {
   const getObserverChat = async(meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifybe.onrender.com/api/live-meeting/get-observer-chat/${meetingId}`
+        `http://localhost:8008/api/live-meeting/get-observer-chat/${meetingId}`
       );
 
       if (response?.data?.message === "Observers chat retrieved successfully") {
@@ -397,7 +397,7 @@ const page = () => {
   const removeParticipant = async () => {
     try {
       response = await axios.put(
-        `https://amplifybe.onrender.com/api/live-meeting/remove-participant-from-meeting`,
+        `http://localhost:8008/api/live-meeting/remove-participant-from-meeting`,
         {
           name: fullName,
           role: userRole,

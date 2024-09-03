@@ -42,7 +42,7 @@ const ModeratorTable = () => {
   };
   const fetchModerators = async () => {
     try {
-      const response = await fetch(`https://amplifybe.onrender.com/api/get-all/moderator?page=1&limit=10`);
+      const response = await fetch(`http://localhost:8008/api/get-all/moderator?page=1&limit=10`);
       const data = await response.json();
       setModerators(data.moderators);
       console.log("mod",data)
@@ -125,7 +125,7 @@ const ModeratorTable = () => {
   const handleDeleteModerator = async (moderatorId) => {
     console.log(moderatorId)
     try {
-      const response = await fetch(`https://amplifybe.onrender.com/api/delete/moderator?id=${moderatorId}`, {
+      const response = await fetch(`http://localhost:8008/api/delete/moderator?id=${moderatorId}`, {
         method: 'DELETE',
       });
       const data = await response.json();
@@ -156,7 +156,7 @@ const ModeratorTable = () => {
   };
   const handleInviteModerator = async () => {
     try {
-      const response = await fetch(`https://amplifybe.onrender.com/api/moderator-invitation/link'`, {
+      const response = await fetch(`http://localhost:8008/api/moderator-invitation/link'`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -53,7 +53,7 @@ const MeetingTab = ({ meetings }) => {
       if(meeting.moderator.email === user.email){
       const fullName = `${user.firstName} ${user.lastName}`;
 
-      const response = await axios.post(`https://amplifybe.onrender.com/api/live-meeting/start-meeting`, {user, meetingId: meeting._id})
+      const response = await axios.post(`http://localhost:8008/api/live-meeting/start-meeting`, {user, meetingId: meeting._id})
 
       if(response?.data?.liveMeeting?.ongoing){
         router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Moderator`);

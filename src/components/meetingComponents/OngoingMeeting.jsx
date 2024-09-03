@@ -14,8 +14,7 @@ import { CgMenuGridR } from "react-icons/cg";
 import { IoIosMicOff } from "react-icons/io";
 
 const OngoingMeeting = ({ users, iframeLink, role }) => {
-  console.log("iframeLink inside ongoing meeting", iframeLink);
-  console.log("role ongoing meeting", role);
+
   return (
     <div className="pt-2 bg-black flex-1 rounded-xl flex flex-col justify-center items-center">
       {/* top bar */}
@@ -32,9 +31,17 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
       </div>
       {/* video stream */}
       <div className="flex-1 py-5 px-10 flex justify-center items-center mb-5">
-        {
-          role === "Observer" ? (<iframe src={iframeLink} allow="fullscreen; autoplay; clipboard-write"></iframe>) : (<iframe src={iframeLink} allow="microphone; camera; display-capture; fullscreen; autoplay; clipboard-write"></iframe>)
-        }
+        {role === "Observer" ? (
+          <iframe
+            src={iframeLink}
+            allow="fullscreen; autoplay; clipboard-write"
+          ></iframe>
+        ) : (
+          <iframe
+            src={iframeLink}
+            allow="microphone; camera; display-capture; fullscreen; autoplay; clipboard-write"
+          ></iframe>
+        )}
         {/* {
           role === "Observer" ? (<iframe
             src={iframeLink}
@@ -52,7 +59,6 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
             allow="microphone; camera; display-capture"
           ></iframe>)
         } */}
-        
       </div>
       {/* <div className="flex-1 py-5 px-10 flex justify-center items-center ">
          <div className="grid grid-cols-4 gap-3">
