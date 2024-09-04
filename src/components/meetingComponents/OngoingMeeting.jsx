@@ -1,79 +1,124 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
-const OngoingMeeting = ({users, iframeLink, role}) => {
-    const iframeRef = useRef(null);
-    const logContainerRef = useRef(null);
+const OngoingMeeting = ({ users, iframeLink, role }) => {
+  const iframeRef = useRef(null);
+  const logContainerRef = useRef(null);
+  const [fullName, setFullName] = useState("");
 
-    const log = (message) => {
-        const logContainer = logContainerRef.current;
-        if (logContainer) {
-            const logEntry = document.createElement('p');
-            logEntry.textContent = `${new Date().toISOString()}: ${message}`;
-            logContainer.appendChild(logEntry);
-            console.log(message);
-        }
+  const log = (message) => {
+    const logContainer = logContainerRef.current;
+    if (logContainer) {
+      const logEntry = document.createElement("p");
+      logEntry.textContent = `${new Date().toISOString()}: ${message}`;
+      logContainer.appendChild(logEntry);
+      console.log(message);
+    }
+  };
+
+  const getFullNameFromQuery = () => {
+    // Get the query string part from the URL (e.g., "?fullName=user%202%20fn%20user%202%20ln&role=Moderator")
+    const queryString = window.location.search;
+
+    // Remove the '?' at the beginning and split by '&' to get each key-value pair
+    const queryParams = queryString.substring(1).split("&");
+
+    // Iterate through the key-value pairs
+    for (let param of queryParams) {
+      // Split each key-value pair by '='
+      const [key, value] = param.split("=");
+
+      // If the key is 'fullName', return the decoded value
+      if (key === "fullName") {
+        return decodeURIComponent(value); // Decode to handle URL-encoded characters (e.g., %20 -> space)
+      }
+    }
+
+    return "Guest"; // Default value if fullName is not found
+  };
+
+  useEffect(() => {
+    // Extract fullName from the query string
+    const extractedFullName = getFullNameFromQuery();
+    setFullName(extractedFullName);
+    console.log(`Extracted fullName: ${extractedFullName}`);
+  }, []); // This runs once when the component mounts
+
+  useEffect(() => {
+    log("OngoingMeeting component loaded. Starting iframe monitoring...");
+
+    const iframe = iframeRef.current;
+
+    if (iframe) {
+      iframe.onload = () => {
+        log("Iframe loaded");
+        iframe.contentWindow.postMessage("Hello from parent", "*");
+      };
+    }
+
+    const messageListener = (event) => {
+      if (
+        event.origin !== "https://testing--inspiring-cendol-60afd6.netlify.app"
+      )
+        return;
+      log(`Received message from iframe: ${JSON.stringify(event.data)}`);
     };
 
-    useEffect(() => {
-        log('OngoingMeeting component loaded. Starting iframe monitoring...');
+    window.addEventListener("message", messageListener);
 
-        const iframe = iframeRef.current;
+    const pingInterval = setInterval(() => {
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage("Ping from parent", "*");
+      }
+    }, 5000);
 
-        if (iframe) {
-            iframe.onload = () => {
-                log('Iframe loaded');
-                iframe.contentWindow.postMessage('Hello from parent', '*');
-            };
-        }
+    const networkStatusInterval = setInterval(() => {
+      log(`Network status: ${navigator.onLine ? "online" : "offline"}`);
+    }, 10000);
 
-        const messageListener = (event) => {
-            if (event.origin !== "https://testing--inspiring-cendol-60afd6.netlify.app") return;
-            log(`Received message from iframe: ${JSON.stringify(event.data)}`);
-        };
+    const errorListener = (event) => {
+      log(
+        `Global error: ${event.message} at ${event.filename}:${event.lineno}`
+      );
+    };
 
-        window.addEventListener('message', messageListener);
+    window.addEventListener("error", errorListener);
 
-        const pingInterval = setInterval(() => {
-            if (iframe && iframe.contentWindow) {
-                iframe.contentWindow.postMessage('Ping from parent', '*');
-            }
-        }, 5000);
+    log("Monitoring setup complete");
 
-        const networkStatusInterval = setInterval(() => {
-            log(`Network status: ${navigator.onLine ? 'online' : 'offline'}`);
-        }, 10000);
+    return () => {
+      clearInterval(pingInterval);
+      clearInterval(networkStatusInterval);
+      window.removeEventListener("message", messageListener);
+      window.removeEventListener("error", errorListener);
+    };
+  }, []);
 
-        const errorListener = (event) => {
-            log(`Global error: ${event.message} at ${event.filename}:${event.lineno}`);
-        };
+  return (
+    <div>
+      {/* Show the extracted fullName */}
+      <h1>Welcome, {fullName}</h1>
 
-        window.addEventListener('error', errorListener);
-
-        log('Monitoring setup complete');
-
-        return () => {
-            clearInterval(pingInterval);
-            clearInterval(networkStatusInterval);
-            window.removeEventListener('message', messageListener);
-            window.removeEventListener('error', errorListener);
-        };
-    }, []);
-
-    return (
-        <div>
-            {/* <h1>WebRTC Viewer Integration with postMessage</h1> */}
-            <div className="iframe-container" style={{ width: '100%', paddingBottom: '56.25%', position: 'relative' }}>
-                <iframe
-                    ref={iframeRef}
-                    src={iframeLink}
-                    allow="autoplay; fullscreen; microphone; camera"
-                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
-                    allowFullScreen
-                ></iframe>
-            </div>
-            {/* <div ref={logContainerRef} id="log-container" style={{ marginTop: '20px', padding: '10px', border: '1px solid #ccc', height: '200px', overflowY: 'scroll', display: 'none'}}></div> */}
-        </div>
-    );
+      <div
+        className="iframe-container"
+        style={{ width: "100%", paddingBottom: "56.25%", position: "relative" }}
+      >
+        <iframe
+          ref={iframeRef}
+          src={`https://testing--inspiring-cendol-60afd6.netlify.app?fullName=${getFullNameFromQuery()}`}
+          allow="autoplay; fullscreen; microphone; camera"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            border: "none",
+          }}
+          allowFullScreen
+        ></iframe>
+      </div>
+    </div>
+  );
 };
 
 export default OngoingMeeting;
