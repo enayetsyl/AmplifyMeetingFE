@@ -105,7 +105,7 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
         <iframe
           ref={iframeRef}
           src={`https://testing--inspiring-cendol-60afd6.netlify.app?fullName=${getFullNameFromQuery()}`}
-          allow="autoplay; fullscreen; microphone; camera"
+          allow="autoplay; fullscreen; microphone; camera; display-capture"
           style={{
             position: "absolute",
             top: 0,
