@@ -134,7 +134,9 @@ const LeftSidebarOpenUi = ({
   }, [isModeratorPopupModalOpen]);
 
   const handleRemoveUser = (userId) => {
+    console.log('user id for remove', userId)
     const userName = users.find((user) => user.id === userId);
+    console.log('user name for remove', userName)
     notify("success", "Success", `${userName.name} has been removed`);
 
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
@@ -315,12 +317,16 @@ const LeftSidebarOpenUi = ({
                     <BsChatSquareDotsFill
                       onClick={() => handleUserClick(user?.id)}
                     />
-                    <BsThreeDotsVertical
+                    {
+                      role === "Moderator" && (
+                        <BsThreeDotsVertical
                       onClick={(event) =>
                         toggleRemoveAndWaitingOptionModal(event, user)
                       }
                       className="cursor-pointer"
                     />
+                      )
+                    }
                   </div>
                 ))}
                 {isModeratorPopupModalOpen && currentUser && (
