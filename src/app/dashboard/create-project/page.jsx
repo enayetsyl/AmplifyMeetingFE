@@ -47,7 +47,6 @@ const Page = () => {
   const router = useRouter()
 
   
-  // console.log('form data', formData)
   const user = {
     _id : '66bb5b41e7e451974c1734c6'
   }
@@ -69,7 +68,6 @@ const Page = () => {
         throw new Error(`Failed to fetch contacts: ${response.statusText}`);
       }
       const data = await response.json();
-      console.log('contact data', data)
       setContacts(data);
     } catch (error) {
       console.error("Error fetching contacts:", error);
@@ -94,11 +92,9 @@ const Page = () => {
       createdBy: user._id,
     };
   
-    console.log(updatedFormData);
   
     try {
       const response = await axios.post(`https://amplifyresearch.shop/api/create/project`, updatedFormData);
-      console.log(response);
       alert('Project created successfully!');
       router.push('/dashboard/project')
     } catch (error) {

@@ -48,7 +48,6 @@ const ChatDashboard = ({ receiverId }) => {
     });
 
     newSocket.on("loadNewChat", (data) => {
-      console.log(data);
       // if (user._id === data.receiver_id && receiverId === data.sender_id) {
       setChatHistory((prevChats) => [
         ...prevChats,
@@ -154,7 +153,6 @@ const ChatDashboard = ({ receiverId }) => {
                     : "distance-user-chat"
                 }
               >
-                {console.log(chat,"chat")}
                 <h5 className="bg-black text-white border-2 rounded-full px-2 mr-5 w-52 h-5">
                   {user._id}
                 </h5>

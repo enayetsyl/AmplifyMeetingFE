@@ -108,7 +108,6 @@ const EditPoolModal = ({ onClose, formData, setFormData, pools }) => {
 
   const handleSave = async () => {
     try {
-        console.log(pools)
       const response = await axios.put(
         `https://amplifyresearch.shop/api/update-poll/${pools}`,
         {
@@ -118,7 +117,6 @@ const EditPoolModal = ({ onClose, formData, setFormData, pools }) => {
           choice: null, // or any default value if needed
         }
       );
-console.log(response)
     //   const updatedPools = formData.pools
     //     ? formData.pools.map((p) => (p._id === pools ? response.data : p))
     //     : [response.data];

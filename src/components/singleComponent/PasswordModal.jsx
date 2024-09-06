@@ -15,7 +15,6 @@ const PasswordModal = ({ onClose, id }) => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  console.log(localStorage.getItem("Token"))
   // for showing error message modal
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -37,7 +36,6 @@ const PasswordModal = ({ onClose, id }) => {
           token: token,
           newPassword: newPassword,
         });
-        console.log(response.data)
         alert("Password Updated")
         if (response.status === 200) {
           onClose();

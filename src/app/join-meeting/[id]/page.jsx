@@ -42,7 +42,7 @@ const Page = () => {
   if(error?.response?.data?.message === "Participant already in the meeting" || error?.response?.data?.message === "Participant already in waiting room" ){
     router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Participant`);
   } else{
-    console.log('Received error from backend', error?.response?.data?.message)
+    console.error('Received error from backend', error?.response?.data?.message)
   }
  }
 

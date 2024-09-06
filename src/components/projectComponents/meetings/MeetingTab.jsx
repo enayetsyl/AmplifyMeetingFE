@@ -58,7 +58,7 @@ const MeetingTab = ({ meetings }) => {
       if(response?.data?.liveMeeting?.ongoing){
         router.push(`/meeting/${meeting._id}?fullName=${encodeURIComponent(fullName)}&role=Moderator`);
       }else{
-        console.log('Received error from backend', response?.data?.error)
+        console.error('Received error from backend', response?.data?.error)
       }
     } else{
       const fullName = `${user.firstName} ${user.lastName}`;

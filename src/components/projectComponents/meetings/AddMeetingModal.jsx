@@ -93,7 +93,6 @@ const AddMeetingModal = ({ onClose, project, user, refetchMeetings }) => {
       ...formData,
       projectId: project._id,
     };
-    console.log("Meeting Data:", updatedFormData);
     try {
       const response = await axios.post(`https://amplifyresearch.shop/api/create/meeting`, updatedFormData);
       

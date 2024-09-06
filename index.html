@@ -46,7 +46,6 @@
             const logEntry = document.createElement('p');
             logEntry.textContent = ${new Date().toISOString()}: ${message};
             logContainer.appendChild(logEntry);
-            console.log(message);
         }
 
         log('Page loaded. Starting iframe monitoring...');

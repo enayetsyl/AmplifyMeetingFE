@@ -49,7 +49,6 @@ const RightSidebarOpenUi = ({
   const fetchFiles = async () => {
     try {
       const response = await axios.get(`https://amplifyresearch.shop/api/files`);
-      console.log('get uploaded file.........................................now......................................................................', response.data); // Debug log
       setFileList(response.data);
     } catch (error) {
       console.error("Error fetching files:", error);
@@ -57,18 +56,13 @@ const RightSidebarOpenUi = ({
   };
 
   useEffect(() => {
-    console.log("useEffect triggered");
     fetchFiles();
   }, []);
   
-  console.log('file lsit', fileList)
 
   const handleFileUpload = async (event) => {
-    console.log("File upload triggered.........................................................replace........."); // Debug log
     const file = event.target.files[0];
-    console.log('first file', file); // Debug log
     if (file) {
-      console.log(file); // Debug log
       const formData = new FormData();
       formData.append("file", file);
 
@@ -106,7 +100,6 @@ const RightSidebarOpenUi = ({
         message: inputMessage.trim(),
       };
 
-      console.log("Sending message:", newMessage);
       sendMessageObserver(newMessage);
       setInputMessage("");
     }

@@ -11,7 +11,6 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
       const logEntry = document.createElement("p");
       logEntry.textContent = `${new Date().toISOString()}: ${message}`;
       logContainer.appendChild(logEntry);
-      console.log(message);
     }
   };
 
@@ -40,7 +39,6 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
     // Extract fullName from the query string
     const extractedFullName = getFullNameFromQuery();
     setFullName(extractedFullName);
-    console.log(`Extracted fullName: ${extractedFullName}`);
   }, []); // This runs once when the component mounts
 
   useEffect(() => {

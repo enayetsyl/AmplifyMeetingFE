@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import ViewProject from "./ViewProject";
 
 const ProjectTable = ({ projects, setProjects }) => {
-  console.log("prop", projects);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [selectedProject, setSelectedProject] = useState(null);
@@ -69,31 +68,25 @@ const ProjectTable = ({ projects, setProjects }) => {
     switch (status) {
       case "Draft":
         // Redirect to edit page or open edit modal
-        console.log("Editing project:", project);
         // Implement edit logic here
         break;
       case "Active":
         // Continue project (perhaps redirect to the project page)
-        console.log("Continuing project:", project);
         // Implement continue logic here
         break;
       case "Complete":
         // Close project
-        console.log("Closing project:", project);
         // Implement close logic here
         break;
       case "Inactive":
         // Reactivate project
-        console.log("Reactivating project:", project);
         // Implement reactivate logic here
         break;
       case "Closed":
         // Archive project
-        console.log("Archiving project:", project);
         // Implement archive logic here
         break;
       default:
-        console.log("No action defined for this status");
     }
   };
 

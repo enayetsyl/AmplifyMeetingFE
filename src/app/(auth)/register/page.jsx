@@ -48,7 +48,6 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-console.log('form data', formData)
     try {
       const response = await axios.post(`https://amplifyresearch.shop/api/users/create`, {
         firstName: formData.firstName,
@@ -57,7 +56,6 @@ console.log('form data', formData)
         password: formData.password,
         terms: formData.terms
       });
-      console.log('User created:', response.data);
       router.push('/login');
     } catch (error) {
       console.error('Error creating user:', error);

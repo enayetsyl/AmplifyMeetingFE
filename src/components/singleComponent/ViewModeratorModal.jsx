@@ -9,7 +9,6 @@ import Button from "../shared/button";
 import { FaClock } from "react-icons/fa6";
 
 const ViewModeratorModal = ({ user, onClose }) => {
-  console.log(user);
   // Format the date to yy-mm-dd
   const formattedDate = new Date(user.joinedOn).toISOString().split("T")[0];
 

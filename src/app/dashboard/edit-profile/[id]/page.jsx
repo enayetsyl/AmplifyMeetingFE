@@ -10,7 +10,6 @@ import userImage from '../../../../../public/placeholder-image.png';
 
 const Page = () => {
   const { id } = useParams();
-  console.log("id",id)
   const router = useRouter();
   const [user, setUser] = useState({
     firstName: '',

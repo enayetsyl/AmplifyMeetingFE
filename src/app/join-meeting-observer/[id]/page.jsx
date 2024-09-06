@@ -47,7 +47,7 @@ const page = () => {
   if(error?.response?.data?.message === "Observer already added to the meeting" ){
     router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);
   } else{
-    console.log('Received error from backend', error?.response?.data?.message)
+    console.error('Received error from backend', error?.response?.data?.message)
   }
  }
 

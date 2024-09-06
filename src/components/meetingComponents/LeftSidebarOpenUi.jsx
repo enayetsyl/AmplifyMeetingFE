@@ -52,6 +52,7 @@ const LeftSidebarOpenUi = ({
   sendMessageParticipant,
   userName,
   meetingId,
+  removeParticipant
 }) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -71,7 +72,6 @@ const LeftSidebarOpenUi = ({
         message: inputMessage.trim(),
       };
 
-      console.log("Sending message:", newMessage);
       sendMessageParticipant(newMessage);
       setInputMessage("");
     }
@@ -134,12 +134,14 @@ const LeftSidebarOpenUi = ({
   }, [isModeratorPopupModalOpen]);
 
   const handleRemoveUser = (userId) => {
+    console.log('user to remove', userToRemove)
     console.log('user id for remove', userId)
-    const userName = users.find((user) => user.id === userId);
+    const userName = users.find((user) => user._id === userId);
     console.log('user name for remove', userName)
+    removeParticipant(userName.name, userName.role, meetingId);
     notify("success", "Success", `${userName.name} has been removed`);
 
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+    // setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
     setIsRemoveModalOpen(false);
   };
 
@@ -529,7 +531,7 @@ const LeftSidebarOpenUi = ({
       {isRemoveModalOpen && (
         <RemoveUserModal
           onClose={closeRemoveUserModal}
-          handleRemoveUser={() => handleRemoveUser(userToRemove.id)}
+          handleRemoveUser={() => handleRemoveUser(userToRemove._id)}
           userToRemove={userToRemove}
         />
       )}

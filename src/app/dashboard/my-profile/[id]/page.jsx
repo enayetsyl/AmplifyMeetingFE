@@ -93,7 +93,6 @@ const Page = () => {
       await axios.delete(`https://amplifyresearch.shop/api/users/delete-by-id`, {
         params: { id: id }, // replace with actual user ID
       });
-      console.log("User deleted successfully");
       router.push("/register"); // Redirect to registration page
     } catch (error) {
       console.error("Error deleting user:", error);

@@ -19,7 +19,6 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
   const user = {
     _id : '66bb5b41e7e451974c1734c6'
   }
-  console.log(user);
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
@@ -28,13 +27,10 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
       [name]: checked,
     }));
   };
-  console.log('contact to edit', contactToEdit)
-  console.log('isEditing', isEditing)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const selectedRoles = Object.keys(roles).filter((role) => roles[role]);
-    console.log(firstName, lastName, email, companyName, selectedRoles);
 
     try {
       const response = await fetch(
@@ -58,7 +54,6 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
       );
 
       const responseData = await response.json();
-      console.log('Response Data:', responseData);
 
       if (response.ok) {
         setSuccessMessage(isEditing ? "Contact updated successfully." : "Contact created successfully.");
@@ -69,11 +64,11 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
         setSuccessMessage(null);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setError(error.message);
       setSuccessMessage(null);
     } finally {
-      console.log(error);
+      console.error(error);
       onClose();
     }
   };

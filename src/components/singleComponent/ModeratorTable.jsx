@@ -45,7 +45,6 @@ const ModeratorTable = () => {
       const response = await fetch(`https://amplifyresearch.shop/api/get-all/moderator?page=1&limit=10`);
       const data = await response.json();
       setModerators(data.moderators);
-      console.log("mod",data)
       setFilteredModerators(data.moderators);
     } catch (error) {
       console.error('Error fetching moderators:', error);
@@ -123,7 +122,6 @@ const ModeratorTable = () => {
 
 
   const handleDeleteModerator = async (moderatorId) => {
-    console.log(moderatorId)
     try {
       const response = await fetch(`https://amplifyresearch.shop/api/delete/moderator?id=${moderatorId}`, {
         method: 'DELETE',

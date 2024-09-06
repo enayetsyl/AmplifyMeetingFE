@@ -9,7 +9,6 @@ import Button from "../shared/button";
 import { FaClock } from "react-icons/fa6";
 
 const ViewContactModal = ({ user, onClose }) => {
-  console.log(user);
 
 
   return (

@@ -247,7 +247,7 @@ const page = () => {
     const handleBeforeUnload = (event) => {
       event.preventDefault();
       event.returnValue = 'Are you sure you want to leave? Your changes may not be saved.';
-      removeParticipant();
+      removeParticipant(fullName, userRole, params.id);
     };
   
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -255,7 +255,7 @@ const page = () => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, [fullName, userRole, params.id]);
 
   const getWaitingList = async (meetingId) => {
     try {
@@ -264,7 +264,7 @@ const page = () => {
       );
       setWaitingRoom(response?.data?.waitingRoom);
     } catch (error) {
-      console.log(error?.response?.data?.message);
+      console.error(error?.response?.data?.message);
     }
   };
 
@@ -275,7 +275,7 @@ const page = () => {
       );
       setParticipants(response?.data?.participantsList);
     } catch (error) {
-      console.log("Error in getting participant list", error);
+      console.error("Error in getting participant list", error);
     }
   };
 
@@ -286,7 +286,7 @@ const page = () => {
       );
       setObservers(response?.data?.observersList);
     } catch (error) {
-      console.log("Error in getting observer list", error);
+      console.error("Error in getting observer list", error);
     }
   };
 
@@ -300,7 +300,7 @@ const page = () => {
         }
       );
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -314,7 +314,7 @@ const page = () => {
         setIsMeetingOngoing(true);
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -327,13 +327,12 @@ const page = () => {
       );
       // https://serverzoom-mpbv.onrender.com/room/
       // https://testing--inspiring-cendol-60afd6.netlify.app
-      console.log('room id at frontend', response?.data?.webRtcRoomId)
       const iframeLink = `https://testing--inspiring-cendol-60afd6.netlify.app/room/${response?.data?.webRtcRoomId}`;
 
       setIframeLink(iframeLink);
 
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -344,13 +343,12 @@ const page = () => {
       );
       // https://serverzoom-mpbv.onrender.com/room/
       // https://testing--inspiring-cendol-60afd6.netlify.app
-      // console.log('iframe at frontend', response?.data)
       // const iframeLink = `https://testing--inspiring-cendol-60afd6.netlify.app/room/${response?.data?.webRtcRoomId}`;
 
       setIframeLink(response?.data?.iframeLink);
 
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -369,7 +367,7 @@ const page = () => {
       setParticipantMessages(response?.data?.participantMessages);
     }
     } catch (error) {
-      console.log('error', error)
+      console.error('error', error)
     }
   };
   const sendMessageObserver = async (message) => {
@@ -385,7 +383,7 @@ const page = () => {
       setObserversMessages(response?.data?.observersMessages);
     }
     } catch (error) {
-      console.log('error', error)
+      console.error('error', error)
     }
   };
 
@@ -399,7 +397,7 @@ const page = () => {
         setParticipantMessages(response?.data?.participantMessages);
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -413,32 +411,31 @@ const page = () => {
         setObserversMessages(response?.data?.observersMessages);
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
     }
   };
 
-  const removeParticipant = async () => {
+  const removeParticipant = async (name, role, meetingId) => {
     try {
       response = await axios.put(
         `https://amplifyresearch.shop/api/live-meeting/remove-participant-from-meeting`,
         {
-          name: fullName,
-          role: userRole,
-          meetingId: params.id,
+          name: name,
+          role: role,
+          meetingId: meetingId,
         }
       );
 
     } catch (error) {
         if (error?.response?.data?.message === "Participant not found") {
-        console.log("Participant not found");
+        console.error("Participant not found");
       } else {
-        console.log("Error:", error);
+        console.error("Error:", error);
       }
     }
   }
   
-console.log('iframeLink', iframeLink)
-  console.log('my iframe link that i am watching', iframeLink)
+
   return (
     <>
       <div className="flex justify-between min-h-screen max-h-screen meeting_bg">
@@ -471,6 +468,7 @@ console.log('iframeLink', iframeLink)
                 sendMessageParticipant={sendMessageParticipant}
                 userName={fullName}
                 meetingId={params.id}
+                removeParticipant={removeParticipant}
               />
             </div>
             <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
@@ -515,6 +513,7 @@ console.log('iframeLink', iframeLink)
                 sendMessageParticipant={sendMessageParticipant}
                 userName={fullName}
                 meetingId={params.id}
+                removeParticipant={removeParticipant}
               />
             </div>
             <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
