@@ -61,7 +61,7 @@ const LeftSidebarOpenUi = ({
   const [userToMove, setUserToMove] = useState(null);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [inputMessage, setInputMessage] = useState("");
-
+// this for handling the message input
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
       const newMessage = {
