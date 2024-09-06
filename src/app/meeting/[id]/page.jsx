@@ -247,7 +247,7 @@ const page = () => {
     const handleBeforeUnload = (event) => {
       event.preventDefault();
       event.returnValue = 'Are you sure you want to leave? Your changes may not be saved.';
-      removeParticipant(fullName, userRole, params.id);
+      participantLeft(fullName, userRole, params.id);
     };
   
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -267,7 +267,7 @@ const page = () => {
       console.error(error?.response?.data?.message);
     }
   };
-
+console.log('participants', participants);
   const getParticipantList = async (meetingId) => {
     try {
       const response = await axios.get(
@@ -416,6 +416,25 @@ const page = () => {
   };
 
   const removeParticipant = async (name, role, meetingId) => {
+    try {
+      response = await axios.put(
+        `https://amplifyresearch.shop/api/live-meeting/participant-left-from-meeting`,
+        {
+          name: name,
+          role: role,
+          meetingId: meetingId,
+        }
+      );
+
+    } catch (error) {
+        if (error?.response?.data?.message === "Participant not found") {
+        console.error("Participant not found");
+      } else {
+        console.error("Error:", error);
+      }
+    }
+  }
+  const participantLeft = async (name, role, meetingId) => {
     try {
       response = await axios.put(
         `https://amplifyresearch.shop/api/live-meeting/remove-participant-from-meeting`,
