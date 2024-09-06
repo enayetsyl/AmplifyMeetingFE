@@ -9,7 +9,7 @@ import "./style.css";
 const WhiteBoard = ({ role, users }) => {
   const drawonCanvas = () => {
     const root = {};
-    root.socket = io.connect("https://amplifyresearch.shop");
+    root.socket = io.connect("http://localhost:8008");
   
     root.socket.on("canvas-data", (data) => {
       const image = new window.Image();  

@@ -35,8 +35,8 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
     try {
       const response = await fetch(
         isEditing
-          ? `https://amplifyresearch.shop/api/update-contact/${contactToEdit._id}`
-          : `https://amplifyresearch.shop/api/create/contact`,
+          ? `http://localhost:8008/api/update-contact/${contactToEdit._id}`
+          : `http://localhost:8008/api/create/contact`,
         {
           method: isEditing ? "PUT" : "POST",
           headers: {

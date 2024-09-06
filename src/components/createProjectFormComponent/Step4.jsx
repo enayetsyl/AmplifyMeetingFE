@@ -22,7 +22,7 @@ const Step4 = ({ formData, setFormData }) => {
   useEffect(() => {
     const fetchBreakoutRooms = async () => {
       try {
-        const response = await axios.get(`https://amplifyresearch.shop/get-all-breakout-rooms`, {
+        const response = await axios.get(`http://localhost:8008/get-all-breakout-rooms`, {
           params: { page: 1, limit: 10 },
         });
         setFormData((prevData) => ({
@@ -61,7 +61,7 @@ const Step4 = ({ formData, setFormData }) => {
   const removeBreakoutRoom = async (index) => {
     const roomToDelete = formData.breakoutRooms[index];
     try {
-      await axios.delete(`https://amplifyresearch.shop/delete-breakout-room/${roomToDelete._id}`);
+      await axios.delete(`http://localhost:8008/delete-breakout-room/${roomToDelete._id}`);
       const updatedBreakoutRooms = formData.breakoutRooms.filter(
         (_, i) => i !== index
       );

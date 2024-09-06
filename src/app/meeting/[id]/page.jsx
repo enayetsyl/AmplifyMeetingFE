@@ -5,25 +5,27 @@ import RightSidebar from "@/components/meetingComponents/RightSidebar";
 import React, { useEffect, useState } from "react";
 import userImage from "../../../../public/user.jpg";
 import axios from "axios";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import io from "socket.io-client";
 import { useGlobalContext } from "@/context/GlobalContext";
 
 const page = () => {
+  const searchParams = useSearchParams();
+  const params = useParams();
+  const router = useRouter();
+
   const [users, setUsers] = useState([]);
   const { user } = useGlobalContext();
   const [participants, setParticipants] = useState([]);
   const [observers, setObservers] = useState([]);
   const [participantMessages, setParticipantMessages] = useState([]);
+  const [removedParticipants, setRemovedParticipants] = useState([]);
   const [observersMessages, setObserversMessages] = useState([]);
-  const searchParams = useSearchParams();
   const fullName = searchParams.get("fullName");
-  const [iframeLink, setIframeLink] = useState('')
-  
+  const [iframeLink, setIframeLink] = useState("");
 
   const userRole = searchParams.get("role");
   const [role, setRole] = useState("");
-  const params = useParams();
 
   const [isMeetingOngoing, setIsMeetingOngoing] = useState(false);
 
@@ -31,7 +33,6 @@ const page = () => {
   const [isAdmitted, setIsAdmitted] = useState(false);
   const [socket, setSocket] = useState(null);
 
-  
   const meetingStatus = "Ongoing";
   const projectStatus = "Open";
 
@@ -77,9 +78,7 @@ const page = () => {
 
   // Use effect for getting meeting link
   useEffect(() => {
-    
     getIframeLinkMeetingId(params.id);
-   
   }, [fullName, userRole, params.id]);
 
   // Use effect for getting waiting list
@@ -133,8 +132,7 @@ const page = () => {
     };
   }, [userRole, params.id]);
 
- 
-  // Use effect for getting participant list and participant chat for participant
+  // Use effect for getting participant list, participant chat and removed participant list for participant
   useEffect(() => {
     let intervalId;
 
@@ -159,7 +157,6 @@ const page = () => {
     };
   }, [userRole, params.id]);
 
- 
   // Use effect for admitting participant into meeting after acceptance
   useEffect(() => {
     let intervalId;
@@ -171,7 +168,6 @@ const page = () => {
       // Set up interval to call getWaitingList every 10 seconds
       intervalId = setInterval(() => {
         getParticipantList(params.id);
-        
       }, 5000);
     }
 
@@ -240,49 +236,85 @@ const page = () => {
       }
     };
   }, [userRole, params.id]);
-  
-  // Use effect for removing user
+
+  // Use effect for removing user if click close button
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       event.preventDefault();
-      event.returnValue = 'Are you sure you want to leave? Your changes may not be saved.';
+      event.returnValue =
+        "Are you sure you want to leave? Your changes may not be saved.";
       participantLeft(fullName, userRole, params.id);
     };
-  
-    window.addEventListener('beforeunload', handleBeforeUnload);
-  
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [fullName, userRole, params.id]);
+
+  // Use effect for removing user when moderator remove user
+
+  useEffect(() => {
+    const getRemovedParticipantsList = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8008/api/live-meeting/get-removed-participants-list/${params.id}`
+        );
+  
+        // Check if the current user has been removed
+        const participantMatched = response?.data?.removedParticipantsList?.some(
+          (participant) => participant.name === fullName
+        );
+  
+        if (participantMatched) {
+          // Redirect to the "remove participant" page if the user is removed
+          router.push("/remove-participant");
+        }
+      } catch (error) {
+        console.error("Error in getting removed participants list", error);
+      }
+    };
+  
+    // Set up an interval to call the function every 3 seconds (3000ms)
+    const intervalId = setInterval(getRemovedParticipantsList, 3000);
+  
+    // Clean up function to clear the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [fullName, params.id, router]);
+  
+  
 
   const getWaitingList = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifyresearch.shop/api/live-meeting/waiting-list/${meetingId}`
+        `http://localhost:8008/api/live-meeting/waiting-list/${meetingId}`
       );
       setWaitingRoom(response?.data?.waitingRoom);
     } catch (error) {
       console.error(error?.response?.data?.message);
     }
   };
-console.log('participants', participants);
+  console.log("participants", participants);
   const getParticipantList = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifyresearch.shop/api/live-meeting/participant-list/${meetingId}`
+        `http://localhost:8008/api/live-meeting/participant-list/${meetingId}`
       );
       setParticipants(response?.data?.participantsList);
     } catch (error) {
       console.error("Error in getting participant list", error);
     }
   };
+ 
 
   const getObserverList = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifyresearch.shop/api/live-meeting/observer-list/${meetingId}`
+        `http://localhost:8008/api/live-meeting/observer-list/${meetingId}`
       );
       setObservers(response?.data?.observersList);
     } catch (error) {
@@ -293,7 +325,7 @@ console.log('participants', participants);
   const acceptParticipant = async (participant) => {
     try {
       const response = await axios.put(
-        `https://amplifyresearch.shop/api/live-meeting/accept-from-waiting-list`,
+        `http://localhost:8008/api/live-meeting/accept-from-waiting-list`,
         {
           participant: participant,
           meetingId: params.id,
@@ -307,7 +339,7 @@ console.log('participants', participants);
   const getMeetingStatus = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifyresearch.shop/api/live-meeting/get-meeting-status/${meetingId}`
+        `http://localhost:8008/api/live-meeting/get-meeting-status/${meetingId}`
       );
 
       if (response?.data?.meetingStatus === true) {
@@ -323,14 +355,13 @@ console.log('participants', participants);
   const getWebRtcMeetingId = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifyresearch.shop/api/live-meeting/get-webrtc-meeting-id/${meetingId}`
+        `http://localhost:8008/api/live-meeting/get-webrtc-meeting-id/${meetingId}`
       );
       // https://serverzoom-mpbv.onrender.com/room/
       // https://testing--inspiring-cendol-60afd6.netlify.app
       const iframeLink = `https://testing--inspiring-cendol-60afd6.netlify.app/room/${response?.data?.webRtcRoomId}`;
 
       setIframeLink(iframeLink);
-
     } catch (error) {
       console.error("Error:", error);
     }
@@ -339,14 +370,13 @@ console.log('participants', participants);
   const getIframeLinkMeetingId = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifyresearch.shop/api/live-meeting/get-iframe-link/${meetingId}`
+        `http://localhost:8008/api/live-meeting/get-iframe-link/${meetingId}`
       );
       // https://serverzoom-mpbv.onrender.com/room/
       // https://testing--inspiring-cendol-60afd6.netlify.app
       // const iframeLink = `https://testing--inspiring-cendol-60afd6.netlify.app/room/${response?.data?.webRtcRoomId}`;
 
       setIframeLink(response?.data?.iframeLink);
-
     } catch (error) {
       console.error("Error:", error);
     }
@@ -356,44 +386,46 @@ console.log('participants', participants);
 
   const sendMessageParticipant = async (message) => {
     try {
-    const response = await axios.post(
-      `https://amplifyresearch.shop/api/live-meeting/send-message-to-participant`,
-      {
-        message: message,
-        meetingId: params.id,
+      const response = await axios.post(
+        `http://localhost:8008/api/live-meeting/send-message-to-participant`,
+        {
+          message: message,
+          meetingId: params.id,
+        }
+      );
+      if (response?.data?.message === "Chat message saved successfully") {
+        setParticipantMessages(response?.data?.participantMessages);
       }
-    );
-    if (response?.data?.message === "Chat message saved successfully") {
-      setParticipantMessages(response?.data?.participantMessages);
-    }
     } catch (error) {
-      console.error('error', error)
+      console.error("error", error);
     }
   };
   const sendMessageObserver = async (message) => {
     try {
-    const response = await axios.post(
-      `https://amplifyresearch.shop/api/live-meeting/send-message-to-observer`,
-      {
-        message: message,
-        meetingId: params.id,
+      const response = await axios.post(
+        `http://localhost:8008/api/live-meeting/send-message-to-observer`,
+        {
+          message: message,
+          meetingId: params.id,
+        }
+      );
+      if (response?.data?.message === "Chat message saved successfully") {
+        setObserversMessages(response?.data?.observersMessages);
       }
-    );
-    if (response?.data?.message === "Chat message saved successfully") {
-      setObserversMessages(response?.data?.observersMessages);
-    }
     } catch (error) {
-      console.error('error', error)
+      console.error("error", error);
     }
   };
 
-  const getParticipantChat = async(meetingId) => {
+  const getParticipantChat = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifyresearch.shop/api/live-meeting/get-participant-chat/${meetingId}`
+        `http://localhost:8008/api/live-meeting/get-participant-chat/${meetingId}`
       );
 
-      if (response?.data?.message === "Participant chat retrieved successfully") {
+      if (
+        response?.data?.message === "Participant chat retrieved successfully"
+      ) {
         setParticipantMessages(response?.data?.participantMessages);
       }
     } catch (error) {
@@ -401,10 +433,10 @@ console.log('participants', participants);
     }
   };
 
-  const getObserverChat = async(meetingId) => {
+  const getObserverChat = async (meetingId) => {
     try {
       const response = await axios.get(
-        `https://amplifyresearch.shop/api/live-meeting/get-observer-chat/${meetingId}`
+        `http://localhost:8008/api/live-meeting/get-observer-chat/${meetingId}`
       );
 
       if (response?.data?.message === "Observers chat retrieved successfully") {
@@ -418,42 +450,39 @@ console.log('participants', participants);
   const removeParticipant = async (name, role, meetingId) => {
     try {
       response = await axios.put(
-        `https://amplifyresearch.shop/api/live-meeting/participant-left-from-meeting`,
+        `http://localhost:8008/api/live-meeting/remove-participant-from-meeting`,
         {
           name: name,
           role: role,
           meetingId: meetingId,
         }
       );
-
     } catch (error) {
-        if (error?.response?.data?.message === "Participant not found") {
+      if (error?.response?.data?.message === "Participant not found") {
         console.error("Participant not found");
       } else {
         console.error("Error:", error);
       }
     }
-  }
+  };
   const participantLeft = async (name, role, meetingId) => {
     try {
       response = await axios.put(
-        `https://amplifyresearch.shop/api/live-meeting/remove-participant-from-meeting`,
+        `http://localhost:8008/api/live-meeting/remove-participant-from-meeting`,
         {
           name: name,
           role: role,
           meetingId: meetingId,
         }
       );
-
     } catch (error) {
-        if (error?.response?.data?.message === "Participant not found") {
+      if (error?.response?.data?.message === "Participant not found") {
         console.error("Participant not found");
       } else {
         console.error("Error:", error);
       }
     }
-  }
-  
+  };
 
   return (
     <>

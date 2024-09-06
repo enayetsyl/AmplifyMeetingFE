@@ -22,7 +22,7 @@ const ChatDashboard = ({ receiverId }) => {
 
   useEffect(() => {
     // Fetch users from the database
-    fetch("https://amplifyresearch.shop/api/users")
+    fetch("http://localhost:8008/api/users")
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -35,7 +35,7 @@ const ChatDashboard = ({ receiverId }) => {
   }, []);
 
   useEffect(() => {
-    const newSocket = io("https://amplifyresearch.shop/user-namespace", {
+    const newSocket = io("http://localhost:8008/user-namespace", {
       auth: {
         token: user._id,
       },
@@ -73,7 +73,7 @@ const ChatDashboard = ({ receiverId }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://amplifyresearch.shop/save-chat", {
+    fetch("http://localhost:8008/save-chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

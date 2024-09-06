@@ -49,7 +49,7 @@ const Register = () => {
     e.preventDefault();
     if (!validateForm()) return;
     try {
-      const response = await axios.post(`https://amplifyresearch.shop/api/users/create`, {
+      const response = await axios.post(`http://localhost:8008/api/users/create`, {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,

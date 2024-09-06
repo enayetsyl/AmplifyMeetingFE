@@ -14,7 +14,7 @@ const InviteModeratorModal = ({ onClose, projectId }) => {
 
     try {
       const response = await fetch(
-        `https://amplifyresearch.shop/api/moderator-invitation/link`,
+        `http://localhost:8008/api/moderator-invitation/link`,
         {
           method: "POST",
           headers: {

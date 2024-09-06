@@ -62,7 +62,7 @@ const Page = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `https://amplifyresearch.shop/api/get-all/contact/${user._id}`
+        `http://localhost:8008/api/get-all/contact/${user._id}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch contacts: ${response.statusText}`);
@@ -94,7 +94,7 @@ const Page = () => {
   
   
     try {
-      const response = await axios.post(`https://amplifyresearch.shop/api/create/project`, updatedFormData);
+      const response = await axios.post(`http://localhost:8008/api/create/project`, updatedFormData);
       alert('Project created successfully!');
       router.push('/dashboard/project')
     } catch (error) {
