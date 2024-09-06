@@ -167,7 +167,7 @@ const RightSidebarOpenUi = ({
               iconClassName="!bg-[#EBEBEB]"
             />
             {/* participant container */}
-            {observers?.map((observer) => (
+            {observers?.filter(observer => observer.name !== userName).map((observer) => (
               <div
                 className="flex justify-center items-center gap-2 py-1"
                 key={observer?.id}

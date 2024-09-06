@@ -303,8 +303,13 @@ const LeftSidebarOpenUi = ({
                   inputClassName="!bg-[#F3F4F5] !rounded-xl "
                   iconClassName="!bg-[#EBEBEB]"
                 />
-                {/* participant continer */}
-                {users?.map((user) => (
+                {/* participant container */}
+                {/* !selectedChat &&
+              users
+                ?.filter((user) => user.name !== userName)
+                .map((user) */}
+                {users?.filter((user) => user.name !== userName)               
+                .map((user) => (
                   <div
                     className="flex justify-center items-center gap-2 py-1"
                     key={user?.name}
