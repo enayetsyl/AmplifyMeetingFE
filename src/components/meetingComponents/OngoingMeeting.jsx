@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import WebRtc from "../WebRtc/src/WebRTC";
+import Main from "../WebRtc/src/components/Main/Main";
 
 const OngoingMeeting = ({ users, iframeLink, role }) => {
   const iframeRef = useRef(null);
@@ -100,20 +102,7 @@ const OngoingMeeting = ({ users, iframeLink, role }) => {
         className="iframe-container"
         style={{ width: "100%", paddingBottom: "56.25%", position: "relative" }}
       >
-        <iframe
-          ref={iframeRef}
-          src={`https://testing--inspiring-cendol-60afd6.netlify.app?fullName=${getFullNameFromQuery()}`}
-          allow="autoplay; fullscreen; microphone; camera; display-capture"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            border: "none",
-          }}
-          allowFullScreen
-        ></iframe>
+        <Main />
       </div>
     </div>
   );
