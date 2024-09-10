@@ -59,9 +59,9 @@ const ViewProject = ({ project, onClose, user }) => {
   
 
   return (
-    <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center ">
+    <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center w-full">
       {/* navbar */}
-      <div className="bg-white h-24 w-full px-10 flex justify-between items-center ">
+      <div className="pt-5 w-full px-10 flex justify-between items-center ">
         <div>
           <HeadingBlue25px children="View Project Details" />
         </div>
@@ -81,7 +81,7 @@ const ViewProject = ({ project, onClose, user }) => {
           </Link>
         </div>
         {/*  general information  div*/}
-        <div className="bg-white shadow-[0px_0px_12px_#00000029] rounded-xl p-5">
+        <div className="bg-white shadow-[0px_0px_12px_#00000029] rounded-xl p-5 w-full">
           <div className="flex justify-start items-center gap-5">
             <HeadingLg children="Project Name" />
             <ParagraphBlue2 children={project?.name} />

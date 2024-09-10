@@ -3,11 +3,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Button from "@/components/shared/button";
-import Dropdown from "@/components/shared/Dropdown";
+
 import Search from "@/components/singleComponent/Search";
 import { MdAdd } from "react-icons/md";
-import { FiRefreshCw } from "react-icons/fi";
-import { statusOptions } from "@/constant/Index";
+
 import NoSearchResult from "@/components/singleComponent/NoSearchResult";
 import ProjectTable from "@/components/singleComponent/ProjectTable";
 import { useRouter } from "next/navigation";
@@ -95,7 +94,7 @@ const Page = () => {
       </div>
 
 
-      <div className="flex-grow mx-auto md">
+      <div className="flex-grow mx-auto w-full">
         {loading ? (
           <p>Loading...</p>
         ) : projects && projects.length > 0 ? (
