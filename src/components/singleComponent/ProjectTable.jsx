@@ -5,27 +5,29 @@ import Button from "../shared/button";
 import TableHead from "../shared/TableHead";
 import TableData from "../shared/TableData";
 import { BsFillEnvelopeAtFill, BsThreeDotsVertical } from "react-icons/bs";
-import { FaUser } from "react-icons/fa";
+import { FaShareAlt, FaUser } from "react-icons/fa";
 import { RiPencilFill } from "react-icons/ri";
 import { IoTrashSharp } from "react-icons/io5";
 import ViewProject from "./ViewProject";
+import { useGlobalContext } from "@/context/GlobalContext";
+import ShareProjectModal from "../projectComponents/ShareProjectModal";
 
 const ProjectTable = ({ projects, setProjects }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [selectedProject, setSelectedProject] = useState(null);
   const [viewProject, setViewProject] = useState(false);
+  const [isShareProjectModalOpen, setIsShareProjectModalOpen] = useState(false);
   const modalRef = useRef();
-
-  const user = {
-    _id : '66bb5b41e7e451974c1734c6'  
-  };
+  const { user } = useGlobalContext()
+  
+  console.log('isShareProjectModalOpen', isShareProjectModalOpen)
 
   const getRole = (project) => {
     if (project.createdBy === user._id) {
       return "Admin";
     } else {
-      const person = project.people.find(p => p.userId === user._id);
+      const person = project?.people?.find(p => p.userId === user._id);
       return person ? person.role : "No Role";
     }
   };
@@ -88,6 +90,12 @@ const ProjectTable = ({ projects, setProjects }) => {
     }
   };
 
+  const handleShareProject =  (project) => {
+    setSelectedProject(project)
+    setIsShareProjectModalOpen(true);
+    closeModal();
+  
+};
 
   const handleView = (project) => {
     setSelectedProject(project);
@@ -130,11 +138,7 @@ const ProjectTable = ({ projects, setProjects }) => {
     };
   }, [isModalOpen]);
 
-  const handleShareProject =  () => {
-   
-      closeModal();
-    
-  };
+  
 
   return (
     <div className="overflow-hidden">
@@ -245,9 +249,9 @@ const ProjectTable = ({ projects, setProjects }) => {
             </li>
             <li
               className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-              onClick={handleShareProject}
+              onClick={() => handleShareProject(selectedProject)}
             >
-              <IoTrashSharp />
+              <FaShareAlt />
               <span>Share</span>
             </li>
             <li
@@ -259,6 +263,13 @@ const ProjectTable = ({ projects, setProjects }) => {
             </li>
           </ul>
         </div>
+      )}
+
+{isShareProjectModalOpen && (
+        <ShareProjectModal
+          project={selectedProject}
+          onClose={() => setIsShareProjectModalOpen(false)}
+        />
       )}
     </div>
   );
