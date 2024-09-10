@@ -39,9 +39,16 @@ const page = () => {
 
   const response = await axios.post(`http://localhost:8008/api/live-meeting/join-meeting-observer`, {name: formData.fullName, role:"observer", passcode: formData.passcode, meetingId: meetingId});
 
-  if(response?.data?.message === "Observer added to the meeting"){
-    router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);
-  }  
+  if (response?.data?.message === "Observer added to the meeting") {
+    const { isStreaming } = response.data;
+
+    // Redirect based on `isStreaming` status
+    if (isStreaming) {
+      router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);
+    } else {
+      router.push(`/observer-waiting-room/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Observer`);
+    }
+  } 
  } catch (error) {
 
   if(error?.response?.data?.message === "Observer already added to the meeting" ){

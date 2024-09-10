@@ -52,7 +52,9 @@ const LeftSidebarOpenUi = ({
   sendMessageParticipant,
   userName,
   meetingId,
-  removeParticipant
+  removeParticipant,
+  isStreaming,
+  setStartStreaming
 }) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -256,6 +258,18 @@ const LeftSidebarOpenUi = ({
               }
               onClick={toggleRecordingButton}
             />
+            {
+              role === "Moderator" && !isStreaming && (
+                <Button
+                  children="Start Streaming"
+                  variant="meeting"
+                  type="submit"
+                  className="w-full py-2 rounded-xl !justify-start pl-2 mb-2"
+                  onClick={() => setStartStreaming(meetingId)}
+                />
+              )
+            }
+
           </div>
 
           {/* Backroom chat and icon */}

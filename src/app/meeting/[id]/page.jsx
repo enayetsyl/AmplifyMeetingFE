@@ -13,22 +13,19 @@ const page = () => {
   const searchParams = useSearchParams();
   const params = useParams();
   const router = useRouter();
-
-  const [users, setUsers] = useState([]);
   const { user } = useGlobalContext();
+  const fullName = searchParams.get("fullName");
+  const userRole = searchParams.get("role");
+  
+  const [users, setUsers] = useState([]);
   const [participants, setParticipants] = useState([]);
   const [observers, setObservers] = useState([]);
   const [participantMessages, setParticipantMessages] = useState([]);
   const [removedParticipants, setRemovedParticipants] = useState([]);
   const [observersMessages, setObserversMessages] = useState([]);
   const [iframeLink, setIframeLink] = useState("");
-  
-  const fullName = searchParams.get("fullName");
-  const userRole = searchParams.get("role");
   const [role, setRole] = useState("");
-
   const [isMeetingOngoing, setIsMeetingOngoing] = useState(false);
-
   const [waitingRoom, setWaitingRoom] = useState([]);
   const [isAdmitted, setIsAdmitted] = useState(false);
   const [socket, setSocket] = useState(null);
@@ -38,7 +35,7 @@ const page = () => {
 
   const [isWhiteBoardOpen, setIsWhiteBoardOpen] = useState(false);
   const [isRecordingOpen, setIsRecordingOpen] = useState(false);
-
+  const [isStreaming, setIsStreaming] = useState(false);
   const [isBreakoutRoom, setIsBreakoutRoom] = useState(false);
   const [breakoutRooms, setBreakoutRooms] = useState([
     {
@@ -298,7 +295,7 @@ const page = () => {
       console.error(error?.response?.data?.message);
     }
   };
-  console.log("participants", participants);
+
   const getParticipantList = async (meetingId) => {
     try {
       const response = await axios.get(
@@ -484,6 +481,35 @@ const page = () => {
     }
   };
 
+  const setStartStreaming = async (meetingId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8008/api/live-meeting/start-streaming`,
+        {
+          meetingId: meetingId,
+        }
+      );
+      
+      if(response.data.message === "Meeting streaming started successfully"){
+        setIsStreaming(true)
+      }
+
+      // Log the success response
+      console.log("Streaming started successfully:", response.data);
+    } catch (error) {
+      // Check for a specific error message
+      if (error?.response?.data?.message === "Participant not found") {
+        console.error("Error: Participant not found");
+      } else if (error?.response?.status === 404) {
+        console.error("Error: Meeting not found");
+      } else {
+        // General error handler
+        console.error("Error starting streaming:", error.message);
+      }
+    }
+  };
+  
+
   return (
     <>
       <div className="flex justify-between min-h-screen max-h-screen meeting_bg">
@@ -562,6 +588,8 @@ const page = () => {
                 userName={fullName}
                 meetingId={params.id}
                 removeParticipant={removeParticipant}
+              isStreaming={isStreaming}
+              setStartStreaming={setStartStreaming}
               />
             </div>
             <div className="flex-1 w-full max-h-[100vh] overflow-hidden">
