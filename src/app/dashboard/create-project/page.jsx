@@ -9,6 +9,7 @@ import { PiNotebookFill } from "react-icons/pi";
 import { FaUserClock, FaUsers } from "react-icons/fa";
 import { HiOutlineMinus } from "react-icons/hi2";
 import { useRouter } from 'next/navigation';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 const Page = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -45,11 +46,8 @@ const Page = () => {
     }
   });
   const router = useRouter()
-
+  const { user } = useGlobalContext()
   
-  const user = {
-    _id : '66bb5b41e7e451974c1734c6'
-  }
   
   const [contacts, setContacts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +60,7 @@ const Page = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:8008/api/get-all/contact/${user._id}`
+        `http://localhost:8008/api/get-all/contact/${user?._id}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch contacts: ${response.statusText}`);
@@ -139,11 +137,15 @@ const Page = () => {
           formData.endDate !== "" &&
           formData.projectPasscode !== ""
         );
-      case 2:
-        // Ensure every person in the people array has a name, email, and role
-        return formData.members.every(
-          (person) =>  person.role !== ""
-        );
+        case 2:
+          return true
+          // return formData.members.length === 0 || 
+          //   formData.members.every(
+          //     (person) => 
+          //       (person.role === "" && person.name === "" && person.email === "") || 
+          //       (person.role !== "" && person.name !== "" && person.email !== "")
+          //   );
+        
       case 3:
         return (
           formData.meeting.title !== "" &&

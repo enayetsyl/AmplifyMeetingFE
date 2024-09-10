@@ -7,6 +7,7 @@ const GlobalContext = createContext()
 export function GlobalContextProvider({ children }) {
   const [user, setUser] = useState(null);
 
+
   useEffect(() => {
     // Retrieve user from local storage
     const storedUser = localStorage.getItem("user");
