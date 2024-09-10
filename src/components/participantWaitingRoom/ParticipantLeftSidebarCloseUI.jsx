@@ -1,6 +1,5 @@
 import { BsChatSquareFill } from "react-icons/bs";
-import Button from "../shared/button";
-import { LuClipboardSignature } from "react-icons/lu";
+
 
 const participant = [
   {

@@ -4,10 +4,58 @@ import ParticipantLeftSideBar from "@/components/participantWaitingRoom/Particip
 import Button from "@/components/shared/button";
 import HeadingBlue25px from "@/components/shared/HeadingBlue25px";
 import Logo from "@/components/shared/Logo";
+import axios from "axios";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
 import { FaVideo } from "react-icons/fa";
 import { IoLogOutSharp } from "react-icons/io5";
 
 const page = () => {
+  const searchParams = useSearchParams();
+  const params = useParams();
+  const router = useRouter();
+  const fullName = searchParams.get("fullName");
+  const userRole = searchParams.get("role");
+  const [participants, setParticipants] = useState([]);
+
+  console.log('params id', params.id, 'fullName', fullName, 'userRole', userRole, 'participants', participants);
+
+  const getParticipantList = async (meetingId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8008/api/live-meeting/participant-list/${meetingId}`
+      );
+      setParticipants(response?.data?.participantsList);
+
+      // Check if any participant matches the fullName and userRole
+      const matchedParticipant = response?.data?.participantsList.some(
+        (participant) =>
+          participant.name === fullName && participant.role === userRole
+      );
+
+      if (matchedParticipant) {
+        router.push(`/meeting/${params.id}?fullName=${encodeURIComponent(fullName)}&role=${encodeURIComponent(userRole)}`);
+      }
+    } catch (error) {
+      console.error("Error in getting participant list", error);
+    }
+  };
+
+
+  useEffect(() => {
+    const meetingId = params?.id; // Ensure params id is used correctly
+    if (meetingId) {
+      // Set an interval to fetch participant list every 3 seconds
+      const intervalId = setInterval(() => {
+        getParticipantList(meetingId);
+      }, 3000);
+
+      // Cleanup interval when the component is unmounted
+      return () => clearInterval(intervalId);
+    }
+  }, [params?.id]);
+
   return (
     <div className="flex justify-between min-h-screen max-h-screen meeting_bg">
       {/* Left Sidebar */}

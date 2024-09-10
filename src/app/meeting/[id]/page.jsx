@@ -21,9 +21,9 @@ const page = () => {
   const [participantMessages, setParticipantMessages] = useState([]);
   const [removedParticipants, setRemovedParticipants] = useState([]);
   const [observersMessages, setObserversMessages] = useState([]);
-  const fullName = searchParams.get("fullName");
   const [iframeLink, setIframeLink] = useState("");
-
+  
+  const fullName = searchParams.get("fullName");
   const userRole = searchParams.get("role");
   const [role, setRole] = useState("");
 

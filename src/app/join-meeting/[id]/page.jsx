@@ -36,7 +36,7 @@ const Page = () => {
 
 
   if(response?.data?.message === "Participant added to waiting room"){
-    router.push(`/meeting/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Participant`);
+    router.push(`/participant-waiting-room/${meetingId}?fullName=${encodeURIComponent(formData.fullName)}&role=Participant`);
   }  
  } catch (error) {
   if(error?.response?.data?.message === "Participant already in the meeting" || error?.response?.data?.message === "Participant already in waiting room" ){
