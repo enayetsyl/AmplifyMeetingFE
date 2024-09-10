@@ -15,10 +15,10 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
   });
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  // const { user } = useGlobalContext();
-  const user = {
-    _id : '66bb5b41e7e451974c1734c6'
-  }
+  const { user } = useGlobalContext();
+  // const user = {
+  //   _id : '66bb5b41e7e451974c1734c6'
+  // }
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
@@ -59,10 +59,19 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
         setSuccessMessage(isEditing ? "Contact updated successfully." : "Contact created successfully.");
         setError(null);
       } else {
-        const errorMessage = await response.text();
-        setError(errorMessage);
-        setSuccessMessage(null);
+         // Handle different types of errors returned from the server
+      if (response.status === 400) {
+        setError(responseData.message || "Invalid data provided. Please check your input.");
+      } else if (response.status === 401) {
+        setError("Unauthorized access. Please verify your credentials.");
+      } else if (response.status === 500) {
+        setError("Internal server error. Please try again later.");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
       }
+      setSuccessMessage(null);
+    }
+      
     } catch (error) {
       console.error(error);
       setError(error.message);
