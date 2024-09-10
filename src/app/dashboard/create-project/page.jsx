@@ -69,7 +69,7 @@ const Page = () => {
       setContacts(data);
     } catch (error) {
       console.error("Error fetching contacts:", error);
-      alert(`Error fetching contacts: ${error.message}. Please try again later.`);
+      // alert(`Error fetching contacts: ${error.message}. Please try again later.`);
     } finally {
       setIsLoading(false);
     }
@@ -90,14 +90,23 @@ const Page = () => {
       createdBy: user._id,
     };
   
-  
     try {
       const response = await axios.post(`http://localhost:8008/api/create/project`, updatedFormData);
-      alert('Project created successfully!');
-      router.push('/dashboard/project')
+      
+      // Handle success response
+      if (response.status === 201) {
+        alert('Project created successfully!');
+        router.push('/dashboard/project');
+      }
     } catch (error) {
       console.error('Error creating project:', error);
-      alert('Failed to create project. Please try again.');
+      
+      // Check if the error response contains a message related to email verification
+      if (error.response && error.response.data.message === 'Email needs to be verified before creating a project.') {
+        alert('Your email is not verified. Please verify your email to create a project.');
+      } else {
+        alert('Failed to create project. Please try again.');
+      }
     }
   };
   
