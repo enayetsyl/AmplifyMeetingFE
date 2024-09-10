@@ -10,6 +10,8 @@ import { BsEnvelopeCheckFill } from "react-icons/bs";
 import ModeratorTable from "@/components/singleComponent/ModeratorTable";
 import ContactTable from "@/components/singleComponent/ContactTable";
 import AddContactModal from "@/components/singleComponent/AddContactModal";
+import { useGlobalContext } from "@/context/GlobalContext";
+import HeadingBlue25px from "@/components/shared/HeadingBlue25px";
 
 const page = () => {
   const [selectedStatus, setSelectedStatus] = useState("Active");
@@ -17,25 +19,21 @@ const page = () => {
   const [contacts, setContacts] = useState([]);
   const [currentContact, setCurrentContact] = useState(null);
   const [isEditing, setIsEditing] = useState(false)
+  const { user } = useGlobalContext()
 
   useEffect(() => {
-    fetchContacts();
-  }, []);
+    fetchContacts(user?._id);
+  }, [user]);
 
-  const user = {
-    _id : '66bb5b41e7e451974c1734c6'
-  }
 
-  const fetchContacts = async () => {
+  const fetchContacts = async (userId) => {
     try {
       const response = await fetch(
-       `http://localhost:8008/api/get-all/contact/${user._id}`
+       `http://localhost:8008/api/get-all/contact/${userId}`
       );
       const data = await response.json();
-      console.log(data);
       setContacts(data);
 
-      // setFilteredModerators(data.moderators);
     } catch (error) {
       console.error("Error fetching moderators:", error);
     }
@@ -107,16 +105,26 @@ const page = () => {
 
       {/* Body */}
       <div className="flex-grow w-full ">
-        <ContactTable contacts={contacts} setContacts={setContacts}
-        currentContact={currentContact}
-        setCurrentContact={setCurrentContact}
-        isEditing={isEditing}
-        setIsEditing={setIsEditing}
-        />
+       {
+        contacts.length > 0 ? (
+          <ContactTable contacts={contacts} setContacts={setContacts}
+          currentContact={currentContact}
+          setCurrentContact={setCurrentContact}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          />
+        ) : (
+          <div className="flex-grow w-full h-full flex justify-center items-center pt-20" >
+            <HeadingBlue25px>You have no contacts.</HeadingBlue25px>
+          </div>
+        )
+       }
       </div>
       {showAddContactModal && <AddContactModal onClose={handleModalClose} 
       contactToEdit={currentContact}
       isEditing={isEditing}
+      fetchContacts={fetchContacts}
+      userId={user._id}
       />}
     </div>
   );

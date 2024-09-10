@@ -3,23 +3,30 @@ import InputField from "../shared/InputField";
 import Button from "../shared/button";
 import { useGlobalContext } from "@/context/GlobalContext";
 
-const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
+const AddContactModal = ({
+  onClose,
+  contactToEdit,
+  isEditing,
+  fetchContacts,
+  userId,
+}) => {
   const [firstName, setFirstName] = useState(contactToEdit?.firstName || "");
   const [lastName, setLastName] = useState(contactToEdit?.lastName || "");
   const [email, setEmail] = useState(contactToEdit?.email || "");
-  const [companyName, setCompanyName] = useState(contactToEdit?.companyName || "");
+  const [companyName, setCompanyName] = useState(
+    contactToEdit?.companyName || ""
+  );
+
   const [roles, setRoles] = useState({
-    Admin: contactToEdit?.roles?.includes('Admin') || false,
-    Moderator: contactToEdit?.roles?.includes('Moderator') || false,
-    Observer: contactToEdit?.roles?.includes('Observer') || false,
+    Admin: contactToEdit?.roles?.includes("Admin") || false,
+    Moderator: contactToEdit?.roles?.includes("Moderator") || false,
+    Observer: contactToEdit?.roles?.includes("Observer") || false,
   });
+
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const { user } = useGlobalContext();
-  // const user = {
-  //   _id : '66bb5b41e7e451974c1734c6'
-  // }
-
+ 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setRoles((prevRoles) => ({
@@ -56,22 +63,29 @@ const AddContactModal = ({ onClose, contactToEdit, isEditing }) => {
       const responseData = await response.json();
 
       if (response.ok) {
-        setSuccessMessage(isEditing ? "Contact updated successfully." : "Contact created successfully.");
+        setSuccessMessage(
+          isEditing
+            ? "Contact updated successfully."
+            : "Contact created successfully."
+        );
         setError(null);
+        fetchContacts(userId)
       } else {
-         // Handle different types of errors returned from the server
-      if (response.status === 400) {
-        setError(responseData.message || "Invalid data provided. Please check your input.");
-      } else if (response.status === 401) {
-        setError("Unauthorized access. Please verify your credentials.");
-      } else if (response.status === 500) {
-        setError("Internal server error. Please try again later.");
-      } else {
-        setError("An unexpected error occurred. Please try again.");
+        // Handle different types of errors returned from the server
+        if (response.status === 400) {
+          setError(
+            responseData.message ||
+              "Invalid data provided. Please check your input."
+          );
+        } else if (response.status === 401) {
+          setError("Unauthorized access. Please verify your credentials.");
+        } else if (response.status === 500) {
+          setError("Internal server error. Please try again later.");
+        } else {
+          setError("An unexpected error occurred. Please try again.");
+        }
+        setSuccessMessage(null);
       }
-      setSuccessMessage(null);
-    }
-      
     } catch (error) {
       console.error(error);
       setError(error.message);
