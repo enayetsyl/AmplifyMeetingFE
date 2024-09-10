@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { BsCheckCircle } from "react-icons/bs";
 
-const ShareProjectModal = ({ project, onClose }) => {
+const ShareMeetingModal = ({ meeting, onClose }) => {
   const [accessLevel, setAccessLevel] = useState("Observer Access");
 
   const handleCopyInvite = () => {
     const inviteText =
       accessLevel === "Observer Access"
-        ? `Nancy Jones has just created a Project named ${project.name}. The project is now accessible to you as an observer.\n\nJoin Project\nhttps://amplify.us/j/${project._id}\nPasscode: ${project.projectPasscode}\n\nOr\n\nCreate an account\nhttps://amplify.us/register`
-        : `Nancy Jones has invited you to a scheduled meeting for the project ${project.name}.\n\nTitle: Focus Group Meeting\nJoin Meeting\nhttps://amplify.us/j/${project._id}`;
+        ? `Nancy Jones has just created a Project named ${meeting.name}. The project is now accessible to you as an observer.\n\nJoin Project\nhttps://amplify.us/j/${meeting._id}\nPasscode: ${meeting.meetingPasscode}\n\nOr\n\nCreate an account\nhttps://amplify.us/register`
+        : `Nancy Jones has invited you to a scheduled meeting for the project ${meeting.name}.\n\nTitle: Focus Group Meeting\nJoin Meeting\nhttps://amplify.us/j/${meeting._id}`;
 
     navigator.clipboard.writeText(inviteText);
     alert("Project invite copied to clipboard!");
@@ -29,14 +29,9 @@ const ShareProjectModal = ({ project, onClose }) => {
 
         {/* Title and message */}
         <h2 className="text-2xl font-semibold text-center text-gray-800">
-          Project is successfully created!
+          Share Meeting Details
         </h2>
-        <h3 className="text-md text-center text-gray-500 mb-4">
-          {accessLevel === "Observer Access"
-            ? "Share project"
-            : "Generate link to share"}
-        </h3>
-
+     
         {/* Dropdown for access level */}
         <div className="mb-4 flex justify-center">
           <select
@@ -53,52 +48,52 @@ const ShareProjectModal = ({ project, onClose }) => {
         {accessLevel === "Observer Access" ? (
           <div className="p-4 border rounded-md mb-4">
             <p className="text-sm">
-              Nancy Jones has just created a Project named{" "}
-              <strong>{project.name}</strong>. The project is now accessible to
-              you as an observer.
-            </p>
+              Nancy Jones has just created a meeting named {meeting.name}. The meeting is now accessible to you as an observer.
+                          </p>
             <p className="mt-2 text-sm">
-              <strong>Join Project</strong>
+              <strong>Join Meeting</strong>
               <br />
               <a
-                href={`https://amplify.us/j/${project._id}`}
+                href={`https://amplify.us/j/${meeting._id}`}
                 className="text-blue-500"
               >
-                https://amplify.us/j/{project._id}
+                https://amplify.us/j/{meeting._id}
               </a>
             </p>
             <p className="mt-2 text-sm">
-              <strong>Passcode:</strong> {project.projectPasscode}
+              <strong>Passcode:</strong> {meeting.meetingPasscode}
             </p>
             <p className="mt-4 text-sm">Or</p>
             <p className="mt-2 text-sm">
               <strong>Create an account</strong>
               <br />
               <a
-                href={`https://amplify.us/register/${project._id}`}
+                href={`https://amplify.us/register`}
                 className="text-blue-500"
               >
-                https://amplify.us/register/{project._id}
+                https://amplify.us/register
               </a>
             </p>
           </div>
         ) : (
           <div className="p-4 border rounded-md mb-4">
             <p className="text-sm">
-              Nancy Jones has invited you to a scheduled meeting for the project{" "}
-              <strong>{project.name}</strong>.
+              Nancy Jones has invited you to a scheduled Amplify Meeting
             </p>
             <p className="mt-2 text-sm">
-              <strong>Title:</strong> Focus Group Meeting
+              <strong>Title:</strong> {meeting.title}
+            </p>
+            <p className="mt-2 text-sm">
+              <strong>Time:</strong> {meeting.startDate + " " + meeting.startTime}
             </p>
             <p className="mt-2 text-sm">
               <strong>Join Meeting</strong>
               <br />
               <a
-                href={`https://amplify.us/j/${project._id}/meet12`}
+                href={`https://amplify.us/j/${meeting._id}`}
                 className="text-blue-500"
               >
-                https://amplify.us/j/{project._id}/meet12
+                https://amplify.us/j/{meeting._id}
               </a>
             </p>
           </div>
@@ -110,7 +105,7 @@ const ShareProjectModal = ({ project, onClose }) => {
           className="bg-custom-teal text-white w-full py-2 rounded-md hover:bg-teal-700"
         >
           {accessLevel === "Observer Access"
-            ? "Copy Project Invite"
+            ? "Copy Meeting Invite"
             : "Copy Meeting Invite"}
         </button>
       </div>
@@ -118,4 +113,4 @@ const ShareProjectModal = ({ project, onClose }) => {
   );
 };
 
-export default ShareProjectModal;
+export default ShareMeetingModal;

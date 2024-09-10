@@ -6,9 +6,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { BsFillEnvelopeAtFill, BsThreeDotsVertical } from "react-icons/bs";
-import { FaUser } from "react-icons/fa";
+import { FaShareAlt, FaUser } from "react-icons/fa";
 import { IoTrashSharp } from "react-icons/io5";
 import { RiPencilFill } from "react-icons/ri";
+import ShareMeetingModal from "./ShareMeetingModal";
 
 const MeetingTab = ({ meetings }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,6 +17,8 @@ const MeetingTab = ({ meetings }) => {
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const modalRef = useRef();
   const {user} = useGlobalContext()
+  const [isShareMeetingModalOpen, setIsShareMeetingModalOpen] = useState(false);
+
   const toggleModal = (event, meeting) => {
     const { top, left } = event.currentTarget.getBoundingClientRect();
     setModalPosition({ top, left });
@@ -45,8 +48,17 @@ const MeetingTab = ({ meetings }) => {
     setIsModalOpen(false);
    };
 
-   const handleShareMeeting = () => {
-     closeModal()
+   const handleShareMeeting = (meeting) => {
+    console.log('share meeting', meeting)
+    setSelectedMeeting(meeting);
+    setIsShareMeetingModalOpen(true);
+    closeModal()
+  }
+  
+  const handleView =(meeting) => {
+     console.log('view meeting', meeting)
+    closeModal()
+    
    }
    
    const handleJoinMeeting = async (meeting) => {
@@ -156,9 +168,9 @@ const MeetingTab = ({ meetings }) => {
             </li>
             <li
               className="py-2 px-4 hover:bg-gray-200 cursor-pointer text-[#697e89] flex justify-start items-center gap-2"
-              onClick={handleShareMeeting}
+              onClick={() =>handleShareMeeting(selectedMeeting)}
             >
-              <IoTrashSharp/>
+              <FaShareAlt/>
               <span>Share</span>
             </li>
             <li
@@ -170,6 +182,13 @@ const MeetingTab = ({ meetings }) => {
             </li>
           </ul>
         </div>
+      )}
+
+      {isShareMeetingModalOpen && (
+        <ShareMeetingModal
+          closeModal={() => setIsShareMeetingModalOpen(false)}
+          meeting={selectedMeeting}
+        />
       )}
     </div>
   );
