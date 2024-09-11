@@ -18,7 +18,7 @@ const Page = () => {
   const [contacts, setContacts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  
+
   const [formData, setFormData] = useState({
     // Step 1: General Information
     name: "",
@@ -28,6 +28,7 @@ const Page = () => {
     projectPasscode: "",
     createdBy: "",
     tags: [],
+    status: "",
     // Step 2: Add People
     members: [
       {
@@ -51,10 +52,7 @@ const Page = () => {
       meetingPasscode: "",
     },
   });
-  
-  
 
-  
 
   useEffect(() => {
     fetchContacts();
@@ -88,12 +86,27 @@ const Page = () => {
   };
 
   const handleFormSubmit = async () => {
+    // Filter out any members with empty userId (indicating they were not properly added)
+    const validMembers = formData.members.filter((member) => member.userId);
+
+    // Determine the project status based on the conditions
+  const status =
+  validMembers.length > 0 && formData.meeting.moderator
+    ? 'Active'
+    : 'Draft';
+
     // Add the createdBy field to the formData
     const updatedFormData = {
       ...formData,
       createdBy: user._id,
+      members: validMembers,
+      meeting: {
+        ...formData.meeting,
+        moderator: formData.meeting.moderator || null,
+      },
+      status,
     };
-
+console.log('updated form data', updatedFormData)
     try {
       const response = await axios.post(
         `http://localhost:8008/api/create/project`,
@@ -167,7 +180,6 @@ const Page = () => {
       case 3:
         return (
           formData.meeting.title !== "" &&
-          formData.meeting.moderator !== "" &&
           formData.meeting.startDate !== "" &&
           formData.meeting.startTime !== "" &&
           formData.meeting.timeZone !== "" &&
