@@ -33,7 +33,7 @@ const Page = () => {
     members: [
       {
         userId: "",
-        role: "",
+        roles: [], // Array to store multiple roles
         email: "",
       },
     ],
@@ -52,7 +52,7 @@ const Page = () => {
       meetingPasscode: "",
     },
   });
-
+console.log('form data', formData)
 
   useEffect(() => {
     fetchContacts();
