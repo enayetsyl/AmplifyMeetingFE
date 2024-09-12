@@ -4,9 +4,7 @@ import HeadingBlue25px from "@/components/shared/HeadingBlue25px";
 import HeadingLg from "@/components/shared/HeadingLg";
 import Pagination from "@/components/shared/Pagination";
 import ParagraphLg from "@/components/shared/ParagraphLg";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { RiPencilFill } from "react-icons/ri";
 import ParagraphBlue2 from "../shared/ParagraphBlue2";
 import axios from "axios";
 import MeetingTab from "../projectComponents/meetings/MeetingTab";
@@ -111,8 +109,6 @@ const handleStatusChange = async (e) => {
     }
   }
 };
-
-
 
   return (
     <div className="my_profile_main_section_shadow bg-[#fafafb] bg-opacity-90 h-full min-h-screen flex flex-col justify-center items-center w-full">
