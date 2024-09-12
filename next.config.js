@@ -4,5 +4,6 @@ module.exports = {
       domains: ['th.bing.com'], 
     },
     distDir: 'dist',
+    output: 'export',
   };
   
